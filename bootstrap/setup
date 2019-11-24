@@ -1,0 +1,22 @@
+#! /bin/bash
+
+set -eu
+
+echo "Installing dependencies..."
+sudo yum install -y jq
+sudo python36 -m pip install requests
+echo "Fetching CloudFormation outputs..."
+bootstrap/fetch-outputs
+echo "Populating DynamoDB table..."
+bootstrap/ddb/load-ddb
+echo "Success!"
+echo "Building Docker containers"
+bootstrap/docker/build-containers
+bootstrap/docker/update-service-json
+bootstrap/docker/create-fargate-service
+echo "Cloning git repo like service"
+bootstrap/codecommit/clone
+echo "Push like service code to repo"
+bootstrap/codecommit/push
+echo "Assigning Instance Profile"
+bootstrap/associate-profile

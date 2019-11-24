@@ -1,0 +1,137 @@
+AWSTemplateFormatVersion: '2010-09-09'
+
+
+Parameters:
+  PrimaryRegionALBFullName:
+    Type: String
+  MythicalEcsCluster:
+    Type: String
+  CoreServiceName:
+    Type: String
+  LikeServiceName:
+    Type: String
+  DDBTable:
+   Type: String
+
+Resources:
+
+    MultiRegionWorkShopDashboard:
+      Type: AWS::CloudWatch::Dashboard
+      Properties:
+        DashboardName: MyDashboard
+        DashboardBody: !Sub
+            - |       
+              {
+                "widgets": [
+                    {
+                        "type": "metric",
+                        "x": 0,
+                        "y": 1,
+                        "width": 6,
+                        "height": 6,
+                        "properties": {
+                            "metrics": [
+                                [ "AWS/ApplicationELB", "RequestCount", "LoadBalancer", "${PrimaryRegionALBFullName}", { "label": "us-west-2 ALB" } ]
+                            ],
+                            "view": "timeSeries",
+                            "stacked": true,
+                            "region": "us-west-2",
+                            "stat": "Sum",
+                            "period": 60,
+                            "title": "ALB Requests Per Minute"
+                        }
+                    },
+                    {
+                        "type": "metric",
+                        "x": 6,
+                        "y": 1,
+                        "width": 9,
+                        "height": 3,
+                        "properties": {
+                            "metrics": [
+                                [ "AWS/ECS", "CPUUtilization", "ServiceName", "${CoreServiceName}", "ClusterName", "${MythicalEcsCluster}" ],
+                                [ ".", "MemoryUtilization", ".", ".", ".", "." ]
+                            ],
+                            "view": "singleValue",
+                            "region": "us-west-2",
+                            "title": "us-west-2 Core Service Metrics",
+                            "stat": "Average",
+                            "period": 60
+                        }
+                    },
+                    {
+                        "type": "metric",
+                        "x": 0,
+                        "y": 7,
+                        "width": 6,
+                        "height": 6,
+                        "properties": {
+                            "metrics": [
+                                [ "AWS/ApplicationELB", "HTTPCode_Target_4XX_Count", "LoadBalancer", "${PrimaryRegionALBFullName}", { "label": "us-west-2 ALB 4XX" } ],
+                                [ ".", "HTTPCode_Target_5XX_Count", ".", ".", { "label": "us-west-2 ALB 5XX" } ],
+                                [ ".", "HTTPCode_Target_2XX_Count", ".", ".", { "label": "us-west-2 ALB 2XX" } ]
+                            ],
+                            "view": "timeSeries",
+                            "stacked": true,
+                            "title": "ALB HTTP Responses",
+                            "region": "us-west-2",
+                            "stat": "Sum",
+                            "period": 60
+                        }
+                    },
+                    {
+                        "type": "text",
+                        "x": 3,
+                        "y": 0,
+                        "width": 6,
+                        "height": 1,
+                        "properties": {
+                            "markdown": "\n# Multi-Region BCDR Workshop\n"
+                        }
+                    },
+                    {
+                        "type": "metric",
+                        "x": 6,
+                        "y": 4,
+                        "width": 9,
+                        "height": 3,
+                        "properties": {
+                            "metrics": [
+                                [ "AWS/ECS", "CPUUtilization", "ServiceName", "${LikeServiceName}", "ClusterName", "${MythicalEcsCluster}" ],
+                                [ ".", "MemoryUtilization", ".", ".", ".", "." ]
+                            ],
+                            "view": "singleValue",
+                            "region": "us-west-2",
+                            "title": "us-west-2 Like Service Metrics",
+                            "stat": "Average",
+                            "period": 60
+                        }
+                    },
+                    {
+                        "type": "metric",
+                        "x": 6,
+                        "y": 7,
+                        "width": 6,
+                        "height": 6,
+                        "properties": {
+                            "metrics": [
+                                [ "AWS/DynamoDB", "ConsumedReadCapacityUnits", "TableName", "$(DDBTable)" ],
+                                [ ".", "ConsumedWriteCapacityUnits", ".", "." ]
+                            ],
+                            "view": "timeSeries",
+                            "stacked": true,
+                            "region": "us-west-2",
+                            "stat": "Sum",
+                            "period": 60,
+                            "title": "DynamoDB Read/Write"
+                        }
+                    }
+                                
+                            ]
+              }
+            -
+                PrimaryRegionALBFullName: !Ref PrimaryRegionALBFullName
+                MythicalEcsCluster: !Ref MythicalEcsCluster
+                CoreServiceName: !Ref CoreServiceName
+                LikeServiceName: !Ref LikeServiceName
+                DDBTable: !Ref DDBTable

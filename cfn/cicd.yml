@@ -1,0 +1,499 @@
+---
+AWSTemplateFormatVersion: '2010-09-09'
+Description: This stack deploys the core network infrastructure and IAM resources
+             to be used for a service hosted in Amazon ECS using AWS Fargate.
+
+Parameters:
+  MythicalEcsCluster:
+    Type: String
+  LikeServiceName:
+    Type: String
+  CoreServiceName:
+    Type: String
+  CfnStackName:
+    Type: String
+
+Resources:
+  MythicalLikeGitRepository:
+    Type: AWS::CodeCommit::Repository
+    Properties:
+      RepositoryDescription: Repository for the Mythical Mysfits like service
+      RepositoryName: !Sub like-service-${AWS::StackName}
+  MythicalCoreGitRepository:
+    Type: AWS::CodeCommit::Repository
+    Properties:
+      RepositoryDescription: Repository for the Mythical Mysfits core service
+      RepositoryName: !Sub core-service-${AWS::StackName}
+  MythicalInfraGitRepository:
+    Type: AWS::CodeCommit::Repository
+    Properties:
+      RepositoryDescription: Repository for the Mythical Mysfits infrastructure
+      RepositoryName: !Sub Infra-${AWS::StackName}
+
+
+  # An IAM role that allows the AWS CodePipeline service to perform its
+  # necessary actions. We have intentionally left permissions on this role
+  # that will not be used by the CodePipeline service during this workshop.
+  # This will allow you to more simply use CodePipeline in the future should
+  # you want to use the service for Pipelines that interact with different
+  # AWS services than the ones used in this workshop.
+  MythicalMysfitsServiceCodePipelineServiceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      # RoleName: MythicalMysfitsServiceCodePipelineServiceRole
+      AssumeRolePolicyDocument:
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+            - codepipeline.amazonaws.com
+          Action:
+          - sts:AssumeRole
+      Path: "/"
+      Policies:
+      - PolicyName: MythicalMysfitsService-codepipeline-service-policy
+        PolicyDocument:
+          Statement:
+          - Action:
+            - codecommit:GetBranch
+            - codecommit:GetCommit
+            - codecommit:UploadArchive
+            - codecommit:GetUploadArchiveStatus
+            - codecommit:CancelUploadArchive
+            Resource: "*"
+            Effect: Allow
+          - Action:
+            - s3:GetObject
+            - s3:GetObjectVersion
+            - s3:GetBucketVersioning
+            Resource: "*"
+            Effect: Allow
+          - Action:
+            - s3:PutObject
+            Resource: "*"
+            Effect: Allow
+          - Action:
+            - elasticloadbalancing:*
+            - autoscaling:*
+            - cloudwatch:*
+            - ecs:*
+            - codebuild:*
+            - iam:PassRole
+            - cloudformation:DescribeStacks
+            - cloudformation:UpdateStack
+            Resource: "*"
+            Effect: Allow
+          Version: "2012-10-17"
+
+  # An IAM role that allows the AWS CodeBuild service to perform the actions
+  # required to complete a build of our source code retrieved from CodeCommit,
+  # and push the created image to ECR.
+  MythicalMysfitsServiceCodeBuildServiceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      # RoleName: MythicalMysfitsServiceCodeBuildServiceRole
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          Effect: Allow
+          Principal:
+            Service: codebuild.amazonaws.com
+          Action: sts:AssumeRole
+      Policies:
+      - PolicyName: "MythicalMysfitsService-CodeBuildServicePolicy"
+        PolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+          # - Effect: "Allow"
+          #   Action:
+          #   - "codecommit:ListBranches"
+          #   - "codecommit:ListRepositories"
+          #   - "codecommit:BatchGetRepositories"
+          #   - "codecommit:Get*"
+          #   - "codecommit:GitPull"
+          #   Resource:
+          #   - Fn::Sub: arn:aws:codecommit:${AWS::Region}:${AWS::AccountId}:MythicalMysfitsServiceRepository
+          - Effect: "Allow"
+            Action:
+            - "logs:CreateLogGroup"
+            - "logs:CreateLogStream"
+            - "logs:PutLogEvents"
+            Resource: "*"
+          - Effect: "Allow"
+            Action:
+            - "s3:PutObject"
+            - "s3:GetObject"
+            - "s3:GetObjectVersion"
+            - "s3:ListBucket"
+            Resource: "*"
+          - Effect: "Allow"
+            Action:
+            - "ecr:InitiateLayerUpload"
+            - "ecr:GetAuthorizationToken"
+            - "ecr:UploadLayerPart"
+            - "ecr:CompleteLayerUpload"
+            - "ecr:BatchCheckLayerAvailability"
+            - "ecr:PutImage"
+            - "ecr:GetDownloadUrlForLayer"
+            - "ecr:BatchGetImage"
+            Resource: "*"
+
+  # An IAM role that allows the AWS CodeBuild service to perform the actions
+  # required to complete a build of our source code retrieved from CodeCommit,
+  # and push the created image to ECR.
+  InfraCfnServiceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      # RoleName: MythicalMysfitsServiceCodeBuildServiceRole
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          Effect: Allow
+          Principal:
+            Service: cloudformation.amazonaws.com
+          Action: sts:AssumeRole
+      Policies:
+      - PolicyName: "MythicalMysfitsService-InfraServicePolicy"
+        PolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+          # - Effect: "Allow"
+          #   Action:
+          #   - "codecommit:ListBranches"
+          #   - "codecommit:ListRepositories"
+          #   - "codecommit:BatchGetRepositories"
+          #   - "codecommit:Get*"
+          #   - "codecommit:GitPull"
+          #   Resource:
+          #   - Fn::Sub: arn:aws:codecommit:${AWS::Region}:${AWS::AccountId}:MythicalMysfitsServiceRepository
+          - Effect: "Allow"
+            Action: "*"
+            Resource: "*"
+
+  # CodeBuild needs an S3 bucket to store artifacts in the interim.
+  MythicalArtifactBucket:
+    Type: AWS::S3::Bucket
+    DeletionPolicy: Delete
+
+  # Actual CodeBuild project that builds the Docker images and outputs imagedefinitions.json
+
+  DockerBuildCodeBuildProject:
+    Type: AWS::CodeBuild::Project
+    Properties:
+      Artifacts:
+        Type: "CODEPIPELINE"
+      Source:
+        Type: "CODEPIPELINE"
+        BuildSpec: "buildspec_prod.yml"
+      Environment:
+        PrivilegedMode: true
+        ComputeType: "BUILD_GENERAL1_SMALL"
+        Image: "aws/codebuild/docker:17.09.0"
+        Type: "LINUX_CONTAINER"
+        EnvironmentVariables:
+        - Name: AWS_ACCOUNT_ID
+          Value: !Ref AWS::AccountId
+          Type: PLAINTEXT
+      Name: !Sub like-service-build-${AWS::StackName}
+      ServiceRole: !Ref MythicalMysfitsServiceCodeBuildServiceRole
+
+  CoreBuildCodeBuildProject:
+    Type: AWS::CodeBuild::Project
+    Properties:
+      Artifacts:
+        Type: "CODEPIPELINE"
+      Source:
+        Type: "CODEPIPELINE"
+        BuildSpec: "buildspec_prod.yml"
+      Environment:
+        PrivilegedMode: true
+        ComputeType: "BUILD_GENERAL1_SMALL"
+        Image: "aws/codebuild/docker:17.09.0"
+        Type: "LINUX_CONTAINER"
+        EnvironmentVariables:
+        - Name: AWS_ACCOUNT_ID
+          Value: !Ref AWS::AccountId
+          Type: PLAINTEXT
+      Name: !Sub core-service-build-${AWS::StackName}
+      ServiceRole: !Ref MythicalMysfitsServiceCodeBuildServiceRole
+
+  # CodePipeline for deployments. Uses CodeCommit + CodeBuild + ECS, deploying
+  # to an existing ECS service. It looks for imagedefinitions.json as well as
+  # buildspec_prod for this
+
+  MythicalLikeServicePipeline:
+    Type: 'AWS::CodePipeline::Pipeline'
+    Properties:
+      ArtifactStore:
+        Type: S3
+        Location: !Ref MythicalArtifactBucket
+      Name: !Sub LikePipeline-${AWS::StackName}
+      RoleArn: !GetAtt MythicalMysfitsServiceCodePipelineServiceRole.Arn
+      Stages:
+        - Name: 'Source'
+          Actions:
+            - Name: 'Source'
+              ActionTypeId:
+                Category: 'Source'
+                Owner: 'AWS'
+                Version: '1'
+                Provider: 'CodeCommit'
+              OutputArtifacts:
+                - Name: SourceArtifact
+              Configuration:
+                PollForSourceChanges: 'false'
+                BranchName: master
+                RepositoryName: !GetAtt MythicalLikeGitRepository.Name
+              RunOrder: 1
+        - Name: 'Build_Docker_Container'
+          Actions:
+            - Name: CodeBuild
+              ActionTypeId:
+                Category: Build
+                Owner: AWS
+                Version: 1
+                Provider: CodeBuild
+              InputArtifacts:
+                - Name: SourceArtifact
+              OutputArtifacts:
+                - Name: BuildArtifact
+              Configuration:
+                ProjectName: !Ref DockerBuildCodeBuildProject
+              RunOrder: 1
+        - Name: Deploy
+          Actions:
+            - Name: Deploy
+              ActionTypeId:
+                Category: Deploy
+                Owner: AWS
+                Version: 1
+                Provider: ECS
+              InputArtifacts:
+                - Name: BuildArtifact
+              Configuration:
+                ClusterName: !Ref MythicalEcsCluster
+                ServiceName: !Ref LikeServiceName
+                FileName: imagedefinitions_primary.json
+              RunOrder: 1
+
+  MythicalCoreServicePipeline:
+    Type: 'AWS::CodePipeline::Pipeline'
+    Properties:
+      ArtifactStore:
+        Type: S3
+        Location: !Ref MythicalArtifactBucket
+      Name: !Sub CorePipeline-${AWS::StackName}
+      RoleArn: !GetAtt MythicalMysfitsServiceCodePipelineServiceRole.Arn
+      Stages:
+        - Name: 'Source'
+          Actions:
+            - Name: 'Source'
+              ActionTypeId:
+                Category: 'Source'
+                Owner: 'AWS'
+                Version: '1'
+                Provider: 'CodeCommit'
+              OutputArtifacts:
+                - Name: SourceArtifact
+              Configuration:
+                PollForSourceChanges: 'false'
+                BranchName: master
+                RepositoryName: !GetAtt MythicalCoreGitRepository.Name
+              RunOrder: 1
+        - Name: 'Build_Docker_Container'
+          Actions:
+            - Name: CodeBuild
+              ActionTypeId:
+                Category: Build
+                Owner: AWS
+                Version: 1
+                Provider: CodeBuild
+              InputArtifacts:
+                - Name: SourceArtifact
+              OutputArtifacts:
+                - Name: BuildArtifact
+              Configuration:
+                ProjectName: !Ref CoreBuildCodeBuildProject
+              RunOrder: 1
+        - Name: Deploy
+          Actions:
+            - Name: Deploy
+              ActionTypeId:
+                Category: Deploy
+                Owner: AWS
+                Version: 1
+                Provider: ECS
+              InputArtifacts:
+                - Name: BuildArtifact
+              Configuration:
+                ClusterName: !Ref MythicalEcsCluster
+                ServiceName: !Ref CoreServiceName
+                FileName: imagedefinitions_primary.json
+              RunOrder: 1
+
+  # MythicalInfraPipeline:
+  #   Type: 'AWS::CodePipeline::Pipeline'
+  #   Properties:
+  #     ArtifactStore:
+  #       Type: S3
+  #       Location: !Ref MythicalArtifactBucket
+  #     Name: !Sub InfraPipeline-${AWS::StackName}
+  #     RoleArn: !GetAtt MythicalMysfitsServiceCodePipelineServiceRole.Arn
+  #     Stages:
+  #       - Name: 'Source'
+  #         Actions:
+  #           - Name: 'Source'
+  #             ActionTypeId:
+  #               Category: 'Source'
+  #               Owner: 'AWS'
+  #               Version: '1'
+  #               Provider: 'CodeCommit'
+  #             OutputArtifacts:
+  #               - Name: SourceArtifact
+  #             Configuration:
+  #               PollForSourceChanges: 'false'
+  #               BranchName: master
+  #               RepositoryName: !GetAtt MythicalInfraGitRepository.Name
+  #             RunOrder: 1
+  #       - Name: Deploy
+  #         Actions:
+  #           - Name: Deploy
+  #             ActionTypeId:
+  #               Category: Deploy
+  #               Owner: AWS
+  #               Version: 1
+  #               Provider: CloudFormation
+  #             InputArtifacts:
+  #               - Name: SourceArtifact
+  #             Configuration:
+  #               ActionMode: CREATE_UPDATE
+  #               Capabilities: 'CAPABILITY_IAM,CAPABILITY_AUTO_EXPAND'
+  #               StackName: !Ref CfnStackName
+  #               TemplatePath: SourceArtifact::core.yml
+  #               TemplateConfiguration: SourceArtifact::parameters_primary.json
+  #               RoleArn: !GetAtt InfraCfnServiceRole.Arn
+  #             RunOrder: 1
+
+  # CodePipeline does not automatically create this for you as part of
+  # creation, but this role is for the CWE Hook to trigger CodePipeline once
+  # there's an update in CodeCommit. Otherwise, we have to have CodePipeline
+  # poll for changes, which is slower.
+  CodeCommitCloudWatchEventRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          -
+            Effect: Allow
+            Principal:
+              Service:
+                - events.amazonaws.com
+            Action: sts:AssumeRole
+      Path: /
+      Policies:
+        -
+          PolicyName: cwe-pipeline-execution
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              -
+                Effect: Allow
+                Action: codepipeline:StartPipelineExecution
+                Resource:
+                  - !Sub arn:aws:codepipeline:${AWS::Region}:${AWS::AccountId}:${MythicalLikeServicePipeline}
+                  - !Sub arn:aws:codepipeline:${AWS::Region}:${AWS::AccountId}:${MythicalCoreServicePipeline}
+                  # - !Sub arn:aws:codepipeline:${AWS::Region}:${AWS::AccountId}:${MythicalInfraPipeline}
+  # Actual CWE Rule to push changes over to CodePipeline.
+
+  CodeCommitCloudWatchEventRule:
+    Type: AWS::Events::Rule
+    Properties:
+      EventPattern:
+        source:
+          - aws.codecommit
+        detail-type:
+          - 'CodeCommit Repository State Change'
+        resources:
+          - !GetAtt MythicalLikeGitRepository.Arn
+        detail:
+          event:
+            - referenceCreated
+            - referenceUpdated
+          referenceType:
+            - branch
+          referenceName:
+            - master
+      Targets:
+        -
+          Arn: !Sub arn:aws:codepipeline:${AWS::Region}:${AWS::AccountId}:${MythicalLikeServicePipeline}
+          RoleArn: !GetAtt CodeCommitCloudWatchEventRole.Arn
+          Id: codepipeline-LikePipeline
+
+  CoreServiceCodeCommitCloudWatchEventRule:
+    Type: AWS::Events::Rule
+    Properties:
+      EventPattern:
+        source:
+          - aws.codecommit
+        detail-type:
+          - 'CodeCommit Repository State Change'
+        resources:
+          - !GetAtt MythicalCoreGitRepository.Arn
+        detail:
+          event:
+            - referenceCreated
+            - referenceUpdated
+          referenceType:
+            - branch
+          referenceName:
+            - master
+      Targets:
+        -
+          Arn: !Sub arn:aws:codepipeline:${AWS::Region}:${AWS::AccountId}:${MythicalCoreServicePipeline}
+          RoleArn: !GetAtt CodeCommitCloudWatchEventRole.Arn
+          Id: codepipeline-CorePipeline
+
+  # InfraCommitCloudWatchEventRule:
+  #   Type: AWS::Events::Rule
+  #   Properties:
+  #     EventPattern:
+  #       source:
+  #         - aws.codecommit
+  #       detail-type:
+  #         - 'CodeCommit Repository State Change'
+  #       resources:
+  #         - !GetAtt MythicalInfraGitRepository.Arn
+  #       detail:
+  #         event:
+  #           - referenceCreated
+  #           - referenceUpdated
+  #         referenceType:
+  #           - branch
+  #         referenceName:
+  #           - master
+  #     Targets:
+  #       -
+  #         Arn: !Sub arn:aws:codepipeline:${AWS::Region}:${AWS::AccountId}:${MythicalInfraPipeline}
+  #         RoleArn: !GetAtt CodeCommitCloudWatchEventRole.Arn
+  #         Id: codepipeline-InfraPipeline
+
+Outputs:
+  MythicalLikeGitRepositoryCloneUrl:
+    Value: !GetAtt MythicalLikeGitRepository.CloneUrlHttp
+  MythicalLikeGitRepositoryName:
+    Value: !GetAtt MythicalLikeGitRepository.Name
+  MythicalCoreGitRepositoryCloneUrl:
+    Value: !GetAtt MythicalCoreGitRepository.CloneUrlHttp
+  MythicalCoreGitRepositoryName:
+    Value: !GetAtt MythicalCoreGitRepository.Name
+  MythicalInfraGitRepositoryCloneUrl:
+    Value: !GetAtt MythicalInfraGitRepository.CloneUrlHttp
+  MythicalInfraGitRepositoryName:
+    Value: !GetAtt MythicalInfraGitRepository.Name
+  MythicalMysfitsServiceCodeBuildServiceRoleArn:
+    Value: !GetAtt MythicalMysfitsServiceCodeBuildServiceRole.Arn
+  MythicalMysfitsServiceCodePipelineServiceRoleArn:
+    Value: !GetAtt MythicalMysfitsServiceCodePipelineServiceRole.Arn
+  MythicalArtifactBucket:
+    Value: !Ref MythicalArtifactBucket

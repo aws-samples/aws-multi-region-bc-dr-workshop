@@ -1,0 +1,15 @@
+#! /bin/bash
+
+set -eu
+
+TABLE_NAME="$(jq < cfn-output.json -r '.DynamoTable')"
+
+SCRIPTPATH=$(dirname "$0")
+
+sed -i "s/DDB_TABLE_NAME/$TABLE_NAME/g" "$SCRIPTPATH/populate-dynamodb.json"
+
+aws dynamodb batch-write-item --request-items file://$SCRIPTPATH/populate-dynamodb.json
+
+# Revert back to generic
+
+sed -i "s/$TABLE_NAME/DDB_TABLE_NAME/g" "$SCRIPTPATH/populate-dynamodb.json"

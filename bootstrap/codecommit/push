@@ -1,0 +1,41 @@
+#!/bin/bash
+
+LIKE_REPO_NAME=$(jq < cfn-output.json -r '.MythicalLikeGitRepositoryName')
+CORE_REPO_NAME=$(jq < cfn-output.json -r '.MythicalCoreGitRepositoryName')
+# INFRA_REPO_NAME=$(jq < cfn-output.json -r '.MythicalInfraGitRepositoryName')
+
+LIKE_ECR_REPO_URI=$(jq < cfn-output.json -r '.LikeServiceEcrRepo')
+CORE_ECR_REPO_URI=$(jq < cfn-output.json -r '.MythicalServiceEcrRepo')
+XRAY_ECR_REPO=$(jq < cfn-output.json -r '.XrayEcrRepo')
+
+# DDB_TABLE_NAME=$(jq < cfn-output.json -r '.DynamoTable')
+
+cp -R app/like-service/* ~/environment/$LIKE_REPO_NAME/
+sed -i -e 's;REPLACEME_REPO_URI;'"$LIKE_ECR_REPO_URI"';' ~/environment/$LIKE_REPO_NAME/buildspec_prod.yml
+
+cp -R app/mysfits-service/* ~/environment/$CORE_REPO_NAME/
+sed -i -e 's;REPLACEME_REPO_URI;'"$CORE_ECR_REPO_URI"';' ~/environment/$CORE_REPO_NAME/buildspec_prod.yml
+
+# cp cfn/* ~/environment/$INFRA_REPO_NAME
+# sed -i -e 's;REPLACE_ME_DDB_TABLE_NAME;'"$DDB_TABLE_NAME"';' ~/environment/$INFRA_REPO_NAME/parameters_dr.json
+# sed -i -e 's;REPLACE_ME_DDB_TABLE_NAME;'"$DDB_TABLE_NAME"';' ~/environment/$INFRA_REPO_NAME/parameters_prod.json
+
+# Modding hints
+
+sed -i -e 's;REPLACEME_REPO_URI;'"$LIKE_ECR_REPO_URI"';' app/hints/like-buildspec_prod.yml
+sed -i -e 's;REPLACEME_REPO_URI;'"$CORE_ECR_REPO_URI"';' app/hints/mysfits-service-buildspec_prod.yml
+
+cd ~/environment/$LIKE_REPO_NAME/
+git add -A
+git commit -m "Initial Commit of Like Service"
+git push origin master
+
+cd ~/environment/$CORE_REPO_NAME/
+git add -A
+git commit -m "Initial Commit of Core Service"
+git push origin master
+
+# cd ~/environment/$INFRA_REPO_NAME/
+# git add -A
+# git commit -m "Initial Commit of Infra"
+# git push origin master

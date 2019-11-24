@@ -1,0 +1,29 @@
+#!/bin/bash
+
+SERVICE_ECR_REPO=$(jq < cfn-output.json -r '.MythicalServiceEcrRepo')
+LIKE_SERVICE_ECR_REPO=$(jq < cfn-output.json -r '.LikeServiceEcrRepo')
+#XRAY_ECR_REPO=$(jq < cfn-output.json -r '.XrayEcrRepo')
+API_ENDPOINT=$(jq < cfn-output.json -er '.LoadBalancerDNS')
+
+if which gsed; then
+  sed_cmd=gsed
+else
+  sed_cmd=sed
+fi
+
+sed_prog="s|REPLACE_ME_API_ENDPOINT|http://$API_ENDPOINT|;"
+$sed_cmd -i $sed_prog app/mysfits-service/service/mythicalMysfitsService.py
+
+$(aws ecr get-login --no-include-email)
+
+docker build -t service:latest app/mysfits-service
+docker tag service:latest $SERVICE_ECR_REPO:latest
+docker push $SERVICE_ECR_REPO:latest
+
+docker build -t like-service:latest app/like-service
+docker tag like-service:latest $LIKE_SERVICE_ECR_REPO:latest
+docker push $LIKE_SERVICE_ECR_REPO:latest
+
+#docker build -t x-ray-daemon app/xray
+#docker tag x-ray-daemon:latest $XRAY_ECR_REPO:latest
+#docker push $XRAY_ECR_REPO:latest
