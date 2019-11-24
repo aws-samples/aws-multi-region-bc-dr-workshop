@@ -31,14 +31,20 @@ At the beginning of the workshop, you used AWS CloudFormation to create the infr
 First we will replicate the main infrastructure using a new CloudFormation stack. Note that there are a bunch of different ways to do this, like updating a CodePipeline pipeline to deploy to another region or using stacksets. We just make it a bit simpler by running this manually.
 
 <pre>
-$ cd ~/environment/multi-region-workshop
+$ cd ~/environment/aws-multi-region-bc-dr-workshop
 $ aws cloudformation deploy --stack-name mm-secondary-region --template-file cfn/core.yml --capabilities CAPABILITY_NAMED_IAM CAPABILITY_AUTO_EXPAND --parameter-overrides IsDrRegion=true --region us-east-1
 </pre>
 
-Once it says CREATE_COMPLETE, navigate to the Outputs tab of the stack. Note the values of:
-* SecondaryLikeServiceEcrRepo
-* SecondaryMythicalServiceEcrRepo
-* SecondaryLoadBalancerDNS
+<details>
+<summary>Learn more: What did you just do</summary>
+  In Lab-0, we deployed a CloudFormation stack that had all the core components of the infrastructure, such as:
+  * VPC (subnets, route tables, routes, etc)
+  * ECS (task definitions, services, etc)
+  * CICD Stack (AWS CodePipeline, AWS CodeBuild)
+
+What you just did was replicate a portion of that based on the `IsDrRegion=true` flag. We set the flag to true this time to spin up some additional resources and not spin up others.
+</details>
+
 
 ### Database Replication
 

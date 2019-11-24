@@ -17,12 +17,12 @@ sed -i -e 's;REPLACEME_SECONDARY_REPO_URI;'"$SECONDARY_CORE_ECR_REPO_URI"';' ~/e
 sed -i -e 's;REPLACEME_PRIMARY_REPO_URI;'"$CORE_ECR_REPO_URI"';' ~/environment/$CORE_GIT_REPO_NAME/buildspec_prod.yml
 sed -i -e 's;REPLACEME_SECONDARY_REGION;'"$SECONDARY_REGION"';' ~/environment/$CORE_GIT_REPO_NAME/buildspec_prod.yml
 
-cd ~/environment/$LIKE_REPO_NAME/
+cd ~/environment/$LIKE_GIT_REPO_NAME/
 git add -A
 git commit -m "Updating Like Service to upload image to secondary region"
 git push origin master
 
-cd ~/environment/$CORE_REPO_NAME/
+cd ~/environment/$CORE_GIT_REPO_NAME/
 git add -A
 git commit -m "Updating Core Service to upload image to secondary region"
 git push origin master
