@@ -20,3 +20,4 @@ echo "Push like service code to repo"
 bootstrap/codecommit/push
 echo "Assigning Instance Profile"
 bootstrap/associate-profile
+echo "Script completed. Please continue on with Lab-1!"
