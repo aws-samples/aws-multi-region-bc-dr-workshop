@@ -466,7 +466,7 @@ Resources:
           Essential: true
         - Name: xray-daemon
           Image: amazon/aws-xray-daemon
-          PortMappings: 
+          PortMappings:
             - ContainerPort: 2000
               Protocol: udp
           Essential: true
@@ -511,7 +511,7 @@ Resources:
           Essential: true
         - Name: xray-daemon
           Image: amazon/aws-xray-daemon
-          PortMappings: 
+          PortMappings:
             - ContainerPort: 2000
               Protocol: udp
           Essential: true
@@ -554,7 +554,7 @@ Resources:
           Essential: true
         - Name: xray-daemon
           Image: amazon/aws-xray-daemon
-          PortMappings: 
+          PortMappings:
             - ContainerPort: 2000
               Protocol: udp
           Essential: true
@@ -599,7 +599,7 @@ Resources:
           Essential: true
         - Name: xray-daemon
           Image: amazon/aws-xray-daemon
-          PortMappings: 
+          PortMappings:
             - ContainerPort: 2000
               Protocol: udp
           Essential: true
@@ -738,7 +738,7 @@ Resources:
     Type: AWS::CloudFormation::Stack
     Condition: NotDrRegion
     Properties:
-      TemplateURL: "https://multi-region-workshop.s3-us-west-2.amazonaws.com/cicd.yml"
+      TemplateURL: "https://mythical-mysfits-website.s3.amazonaws.com/multi-region-bcdr/cicd.yml"
       Parameters:
         MythicalEcsCluster: !Ref MythicalEcsCluster
         CoreServiceName: !Sub ${AWS::StackName}_Mythical-Service
