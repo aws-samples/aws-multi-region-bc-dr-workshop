@@ -4,7 +4,7 @@
 
 DEFAULT_SECONDARY_REGION='us-east-1'
 # DEFAULT_SECONDARY_STACK_NAME='mm-secondary-region'
-DEFAULT_SECONDARY_STACK_NAME='cfnvpc'
+DEFAULT_SECONDARY_STACK_NAME='mm-secondary-region'
 
 stack=$(aws cloudformation describe-stacks --stack-name $DEFAULT_SECONDARY_STACK_NAME --region $DEFAULT_SECONDARY_REGION)
 

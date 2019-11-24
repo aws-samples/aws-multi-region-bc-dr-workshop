@@ -913,6 +913,12 @@ Outputs:
     Value: !Ref AWS::Region
     Export:
       Name: !Join [ ':', [ !Ref 'AWS::StackName', 'CurrentRegion' ] ]
+  SecondaryRegion:
+    Condition: IsInDrRegionTest
+    Description: REPLACEME_SECONDARY_REGION
+    Value: !Ref AWS::Region
+    Export:
+      Name: !Join [ ':', [ !Ref 'AWS::StackName', 'SecondaryRegion' ] ]
   CurrentAccount:
     Description: REPLACE_ME_ACCOUNT_ID
     Value: !Ref AWS::AccountId

@@ -30,6 +30,8 @@ At the beginning of the workshop, you used AWS CloudFormation to create the infr
 
 First we will replicate the main infrastructure using a new CloudFormation stack. Note that there are a bunch of different ways to do this, like updating a CodePipeline pipeline to deploy to another region or using stacksets. We just make it a bit simpler by running this manually.
 
+Navigate back to the AWS Cloud9 console and access your working environment. Run these commands:
+
 <pre>
 $ cd ~/environment/aws-multi-region-bc-dr-workshop
 $ aws cloudformation deploy --stack-name mm-secondary-region --template-file cfn/core.yml --capabilities CAPABILITY_NAMED_IAM CAPABILITY_AUTO_EXPAND --parameter-overrides IsDrRegion=true --region us-east-1
@@ -45,6 +47,7 @@ $ aws cloudformation deploy --stack-name mm-secondary-region --template-file cfn
 What you just did was replicate a portion of that based on the `IsDrRegion=true` flag. We set the flag to true this time to spin up some additional resources and not spin up others.
 </details>
 
+Once you see **Waiting for changeset to be created..Waiting for stack create/update to complete**, you can continue on. This doesn't mean the stack is done, but you can do the Database Replication portion in parallel. Check back later and make sure you see **Successfully created/updated stack - mm-secondary-region**.
 
 ### Database Replication
 
@@ -152,7 +155,8 @@ Open the two files and replace these variables:
 <details>
 <summary> Click here for a script that will do it for you</summary>
 <pre>
-[TODO] Haven't done this yet. Would have to get the region and then get the stack and then the outpots
+  $ cd ~environment/aws-multi-region-bc-dr-workshop
+  $ bootstrap/secondary-region/setup
 </pre>
 </details>
 

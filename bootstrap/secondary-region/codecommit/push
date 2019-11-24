@@ -7,8 +7,11 @@ SECONDARY_LIKE_ECR_REPO_URI=$(jq < cfn-output-secondary.json -r '.SecondaryLikeS
 SECONDARY_CORE_ECR_REPO_URI=$(jq < cfn-output-secondary.json -r '.SecondaryMythicalServiceEcrRepo')
 SECONDARY_REGION=$(jq < cfn-output-secondary.json -r '.SecondaryRegion')
 
+LIKE_ECR_REPO_URI=$(jq < cfn-output.json -r '.LikeServiceEcrRepo')
+CORE_ECR_REPO_URI=$(jq < cfn-output.json -r '.MythicalServiceEcrRepo')
+
 cp app/hints/like-buildspec_prod.yml ~/environment/$LIKE_GIT_REPO_NAME/buildspec_prod.yml
-sed -i -e 's;REPLACEME_SECONDARY_REPO_URI;'"$LIKE_ECR_REPO_URI"';' ~/environment/$LIKE_GIT_REPO_NAME/buildspec_prod.yml
+sed -i -e 's;REPLACEME_SECONDARY_REPO_URI;'"$SECONDARY_LIKE_ECR_REPO_URI"';' ~/environment/$LIKE_GIT_REPO_NAME/buildspec_prod.yml
 sed -i -e 's;REPLACEME_PRIMARY_REPO_URI;'"$LIKE_ECR_REPO_URI"';' ~/environment/$LIKE_GIT_REPO_NAME/buildspec_prod.yml
 sed -i -e 's;REPLACEME_SECONDARY_REGION;'"$SECONDARY_REGION"';' ~/environment/$LIKE_GIT_REPO_NAME/buildspec_prod.yml
 
