@@ -4,15 +4,15 @@ phases:
   pre_build:
     commands:
       - echo Assigning variables for repositories and regions
-      - PRIMARY_CORE_REPO_URI=REPLACEME_REPO_URI
-      - SECONDARY_CORE_REPO_URI=REPLACEME_CORE_REPOURI_SECONDARY
+      - PRIMARY_CORE_REPO_URI=REPLACEME_PRIMARY_REPO_URI
+      - SECONDARY_CORE_REPO_URI=REPLACEME_SECONDARY_REPO_URI
       - PRIMARY_REGION=$AWS_DEFAULT_REGION
       # [Todo]: Change the name of your secondary region based on the region you selected as a secondary site.
       - SECONDARY_REGION=REPLACEME_SECONDARY_REGION
   build:
     commands:
       - echo Build started on `date`
-      - echo Building the core-service Docker image
+      - echo Building the core-service Docker image...
       - docker build -t core-service:$CODEBUILD_RESOLVED_SOURCE_VERSION . # Here, we are using the environment variable passed in via CodeBuild IMAGE_REPO_NAME
       - echo Tagging Image for primary region
       - docker tag core-service:$CODEBUILD_RESOLVED_SOURCE_VERSION $PRIMARY_CORE_REPO_URI:$CODEBUILD_RESOLVED_SOURCE_VERSION

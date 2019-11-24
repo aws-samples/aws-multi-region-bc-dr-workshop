@@ -4,7 +4,7 @@ phases:
   pre_build:
     commands:
       - echo Assigning variables for repositories and regions
-      - PRIMARY_LIKE_REPO_URI=REPLACEME_REPO_URI
+      - PRIMARY_LIKE_REPO_URI=REPLACEME_PRIMARY_REPO_URI
       - PRIMARY_REGION=$AWS_DEFAULT_REGION
   build:
     commands:
