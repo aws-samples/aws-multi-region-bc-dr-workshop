@@ -132,10 +132,9 @@ CLI:
 
 Find the buildspec_prod file in both mysfits-service and like-service. Update them to push your conainers and application to both regions. Within both of the buildspecs there are [TODO] lines to guide you through what you'll need to do. It's your choice if you want to understand how the build process works. Otherwise...
 
-[TODO:] mod bootstrap to change these buildspecs
-
 <details>
-<summary>Click here for a completed buildspec and commands to copy them in:</summary>
+<summary> [TODO]: UPDATE MANUAL INSTRUCTIONS. Don't follow this. </summary>
+<!-- <summary>Click here for a completed buildspec and commands to copy them in:</summary> -->
 We have created some completed buildspec files if you want to skip this portion. They are in the app/hints folder.
 <pre>
   $ cd ~/environment/core-service-[PRESS TAB TO AUTO COMPLETE AND PRESS ENTER]
@@ -150,15 +149,6 @@ Open the two files and replace these variables:
 
 *Note that in these labs we are hard coding values, but best practice is to use environment variables instead. This just simplifies the process for illustrative purposes.*
 </pre>
-</details>
-
-<details>
-<summary> Click here for a script that will do it for you</summary>
-<pre>
-  $ cd ~environment/aws-multi-region-bc-dr-workshop
-  $ bootstrap/secondary-region/setup
-</pre>
-</details>
 
 ### Trigger deployment again
 
@@ -174,6 +164,18 @@ Finally, add all the files to both repos and trigger deployments:
   $ git commit -m "Updating like buildspec for multi-region deploy"
   $ git push origin master
 </pre>
+
+</details>
+
+<details>
+<summary>WORKING! Click here for a script that will do it for you</summary>
+<pre>
+  $ cd ~environment/aws-multi-region-bc-dr-workshop
+  $ bootstrap/secondary-region/setup
+</pre>
+Script will update everything and push.
+
+</details>
 
 ### Enabling Cloudwatch Dashboard to show multi-region metrics
 
