@@ -30,15 +30,24 @@ At the beginning of the workshop, you used AWS CloudFormation to create the infr
 
 First we will replicate the main infrastructure using a new CloudFormation stack. Note that there are a bunch of different ways to do this, like updating a CodePipeline pipeline to deploy to another region or using stacksets. We just make it a bit simpler by running this manually.
 
+Navigate back to the AWS Cloud9 console and access your working environment. Run these commands:
+
 <pre>
-$ cd ~/environment/multi-region-workshop
+$ cd ~/environment/aws-multi-region-bc-dr-workshop
 $ aws cloudformation deploy --stack-name mm-secondary-region --template-file cfn/core.yml --capabilities CAPABILITY_NAMED_IAM CAPABILITY_AUTO_EXPAND --parameter-overrides IsDrRegion=true --region us-east-1
 </pre>
 
-Once it says CREATE_COMPLETE, navigate to the Outputs tab of the stack. Note the values of:
-* SecondaryLikeServiceEcrRepo
-* SecondaryMythicalServiceEcrRepo
-* SecondaryLoadBalancerDNS
+<details>
+<summary>Learn more: What did you just do</summary>
+  In Lab-0, we deployed a CloudFormation stack that had all the core components of the infrastructure, such as:
+  * VPC (subnets, route tables, routes, etc)
+  * ECS (task definitions, services, etc)
+  * CICD Stack (AWS CodePipeline, AWS CodeBuild)
+
+What you just did was replicate a portion of that based on the `IsDrRegion=true` flag. We set the flag to true this time to spin up some additional resources and not spin up others.
+</details>
+
+Once you see **Waiting for changeset to be created..Waiting for stack create/update to complete**, you can continue on. This doesn't mean the stack is done, but you can do the Database Replication portion in parallel. Check back later and make sure you see **Successfully created/updated stack - mm-secondary-region**.
 
 ### Database Replication
 
@@ -123,10 +132,9 @@ CLI:
 
 Find the buildspec_prod file in both mysfits-service and like-service. Update them to push your conainers and application to both regions. Within both of the buildspecs there are [TODO] lines to guide you through what you'll need to do. It's your choice if you want to understand how the build process works. Otherwise...
 
-[TODO:] mod bootstrap to change these buildspecs
-
 <details>
-<summary>Click here for a completed buildspec and commands to copy them in:</summary>
+<summary> [TODO]: UPDATE MANUAL INSTRUCTIONS. Don't follow this. </summary>
+<!-- <summary>Click here for a completed buildspec and commands to copy them in:</summary> -->
 We have created some completed buildspec files if you want to skip this portion. They are in the app/hints folder.
 <pre>
   $ cd ~/environment/core-service-[PRESS TAB TO AUTO COMPLETE AND PRESS ENTER]
@@ -141,14 +149,6 @@ Open the two files and replace these variables:
 
 *Note that in these labs we are hard coding values, but best practice is to use environment variables instead. This just simplifies the process for illustrative purposes.*
 </pre>
-</details>
-
-<details>
-<summary> Click here for a script that will do it for you</summary>
-<pre>
-[TODO] Haven't done this yet. Would have to get the region and then get the stack and then the outpots
-</pre>
-</details>
 
 ### Trigger deployment again
 
@@ -164,6 +164,18 @@ Finally, add all the files to both repos and trigger deployments:
   $ git commit -m "Updating like buildspec for multi-region deploy"
   $ git push origin master
 </pre>
+
+</details>
+
+<details>
+<summary>WORKING! Click here for a script that will do it for you</summary>
+<pre>
+  $ cd ~environment/aws-multi-region-bc-dr-workshop
+  $ bootstrap/secondary-region/setup
+</pre>
+Script will update everything and push.
+
+</details>
 
 ### Enabling Cloudwatch Dashboard to show multi-region metrics
 

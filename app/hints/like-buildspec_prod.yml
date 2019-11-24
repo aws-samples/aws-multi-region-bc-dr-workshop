@@ -4,8 +4,8 @@ phases:
   pre_build:
     commands:
       - echo Assigning variables for repositories and regions
-      - PRIMARY_LIKE_REPO_URI=REPLACEME_REPO_URI
-      - SECONDARY_LIKE_REPO_URI=REPLACEME_LIKE_REPOURI_SECONDARY
+      - PRIMARY_LIKE_REPO_URI=REPLACEME_PRIMARY_REPO_URI
+      - SECONDARY_LIKE_REPO_URI=REPLACEME_SECONDARY_REPO_URI
       - PRIMARY_REGION=$AWS_DEFAULT_REGION
       # [Todo]: Change the name of your secondary region based on the region you selected as a secondary region
       - SECONDARY_REGION=REPLACEME_SECONDARY_REGION

@@ -1,0 +1,4 @@
+#!/bin/bash
+
+bootstrap/secondary-region/fetch-outputs
+bootstrap/secondary-region/codecommit/push

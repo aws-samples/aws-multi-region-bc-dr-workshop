@@ -1,0 +1,25 @@
+#!/bin/bash
+
+# First, we will see if the user is using default parameters. See if they are 1) in us-east-1, and 2) using the stack mm-secondary-region name
+
+DEFAULT_SECONDARY_REGION='us-east-1'
+# DEFAULT_SECONDARY_STACK_NAME='mm-secondary-region'
+DEFAULT_SECONDARY_STACK_NAME='mm-secondary-region'
+
+stack=$(aws cloudformation describe-stacks --stack-name $DEFAULT_SECONDARY_STACK_NAME --region $DEFAULT_SECONDARY_REGION)
+
+if [ $? -eq 0 ]; then
+  echo 'Looks like you are using the defaults values of' $DEFAULT_SECONDARY_REGION 'and' $DEFAULT_SECONDARY_STACK_NAME '...'
+  echo 'Populating cfn-output-secondary.json...'
+  echo $stack | jq -r '[.Stacks[0].Outputs[] | {key: .OutputKey, value: .OutputValue}] | from_entries' > cfn-output-secondary.json
+else
+  echo 'Looks like you are NOT using the defaults values of' $DEFAULT_SECONDARY_REGION 'and' $DEFAULT_SECONDARY_STACK_NAME '...'
+
+  read -p 'Please enter the secondary region you chose earlier: ' s_region
+  read -p 'Please enter the name of the CloudFormation stack you created: ' s_cfn_name
+
+  newStack=$(aws cloudformation describe-stacks --stack-name $s_cfn_name --region $s_region)
+
+  echo $newStack | jq -r '[.Stacks[0].Outputs[] | {key: .OutputKey, value: .OutputValue}] | from_entries' > cfn-output-secondary.json
+
+fi
