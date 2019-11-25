@@ -85,7 +85,7 @@ Resources:
                         "type": "text",
                         "x": 3,
                         "y": 0,
-                        "width": 6,
+                        "width": 9,
                         "height": 1,
                         "properties": {
                             "markdown": "\n# Multi-Region BCDR Workshop\n"
@@ -117,7 +117,7 @@ Resources:
                         "height": 6,
                         "properties": {
                             "metrics": [
-                                [ "AWS/DynamoDB", "ConsumedReadCapacityUnits", "TableName", "$(DDBTable)" ],
+                                [ "AWS/DynamoDB", "ConsumedReadCapacityUnits", "TableName", "${DDBTable}" ],
                                 [ ".", "ConsumedWriteCapacityUnits", ".", "." ]
                             ],
                             "view": "timeSeries",
