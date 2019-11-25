@@ -745,7 +745,20 @@ Resources:
         LikeServiceName: !Sub ${AWS::StackName}_Like-Service
         CfnStackName: !Sub ${AWS::StackName}
 
-
+  MultiRegionCwDashboard:
+    Type: AWS::CloudFormation::Stack
+    DependsOn: MythicalCiCdStack
+    Condition: NotDrRegion
+    Properties:
+      TemplateURL: "https://mythical-mysfits-website.s3.amazonaws.com/multi-region-bcdr/cwdashboard.yml"
+      Parameters:
+        MythicalEcsCluster: !Ref MythicalEcsCluster
+        CoreServiceName: !Sub ${AWS::StackName}_Mythical-Service
+        CoreServiceName: !Sub ${AWS::StackName}_Mythical-Service
+        LikeServiceName: !Sub ${AWS::StackName}_Like-Service
+        PrimaryRegionALBFullName: !GetAtt MythicalLoadBalancer.LoadBalancerFullName
+        DDBTable: !Ref DDBTableName
+        DashboardName: !Sub ${AWS::StackName}_Dashboard
 
   # Working on a function to delete all extra stuff - disregard for now
   CleanDeletionCustomResource:
