@@ -51,22 +51,26 @@ Once you see **Waiting for changeset to be created..Waiting for stack create/upd
 
 ### Database Replication
 
-The most difficult part of a multi-region application is typically data synchronization. Now that you have a separate stack, we need to set up DynamoDB so that it automatically replicates any data created using the app in the primary region.
+The most difficult part of a multi-region application is typically data synchronization. Now that you have a separate stack in the Secondary region, we need to set up DynamoDB so that it automatically replicates any data created using the app in the primary region.
 
 There's an easy way to do this - DynamoDB Global Tables. This feature will ensure we always have a copy of our data in both our primary and failover region by continuously replicating changes using DynamoDB Streams. We'll set this up now.
 
-## Given this was only released recently, these instructions are quick and dirty (for now).
 [TODO - Add screenshots]
 
-In your source region (double check this) DynamoDB, select the table. It will be named 'MythicalMysfits-DDB-\*' followed by your chosen stack name.
+1. Open up the [DynamoDB console](https://console.aws.amazon.com/dynamodb/) and ensure the region selected is your Primary region
+2. Select **Tables** from the menu on the left and select the table **MythicalMysfits-DDBTable**
+3. Select the tab marked **Global Tables** and then press **Enable Streams**. Wait for this to complete (about 2 mins).
+4. Add the Secondary region by selecting **Add region**, select the Secondary region from the list and click **Create replica**. *If you receive an error during this phase, try the Add replica step again - this error may occue if step 3 has not completed fully*.
+5. The replica will take a few minutes to create and populate in the Secondary region. While this is happening, you can proceed to the next step.
 
-![Configure DynamoDB with Global Tables](../images/03-ddb-global-tables-screen.png_DELIBERATEBREAK)
-
-Next, choose the Global Tables tab from the top, click **Enable Streams**. Once Streams have been enabled, under **Global Table Regions**, click Add region and add the US-East region and click Create replica. (This will take about 5 minutes so proceed with the rest of this lab and it'll work away in the background).
-
-![Configure DynamoDB with Global Tables](images/03-ddb-create-gt.png_DELIBERATEBREAK)
-
-Take a look at DynamoDB in your **Primary Region** and also in your **Secondary Region**. You should see that the objects have already been propagated.
+<details>
+ <summary> What did I just do?</summary>
+ You have just converted a regional DynamoDB table to a Global DynamoDB table. Doing this will automatically replicate the items in the table to any region that has a replica table configured using the above process. This ensures that our database tier (our DynamoDB table in this case) will remain in sync between the regions and is both writable and readable from any region that has a replica configured.
+ 
+ * [Blog - converting a Single-Regional DynamoDB table to a Global Table](https://aws.amazon.com/blogs/aws/new-convert-your-single-region-amazon-dynamodb-tables-to-global-tables/)
+ * [DynamoDB Core Components](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.CoreComponents.html)
+ * [DynamoDB Global Tables](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/GlobalTables.html)
+ </details>
 
 ### Deployment Replication
 
@@ -206,11 +210,11 @@ As we are now adding in metrics from two different regions, we must navigate to 
 
 Modify the ALB Requests Per Minute widget to show the metrics from the ALB in the secondary region:
 
-* Open up the [Cloudwatch Dashboards](https://us-west-2.console.aws.amazon.com/cloudwatch/home?region=us-west-2#dashboards:) page and select the dashboard you created in the previous lab
+* Open up the [Cloudwatch Dashboards](https://console.aws.amazon.com/cloudwatch/) page and select the dashboard from the previous lab
 * Change the region (top right of screen) to your Secondary region
-* Change the widget to a stacked area
 * Add in the **RequestCount** metric to this widget from the ALB
-* Change the metric labels to identify the correct region for that metric
+* Add in the **ALB 2XX, 4XX and 5XX** metrics to this widget from the ALB
+* Change the metric labels to identify the correct region for specified metric
 
 <details>
     <summary>Hint with screenshots:</summary>
