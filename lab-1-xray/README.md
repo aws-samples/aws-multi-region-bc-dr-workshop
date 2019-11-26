@@ -1,4 +1,6 @@
-## Distributed Tracing with AWS X-Ray
+# Mythical Mysfits: Multi-Region-Workshop
+
+## LAB 1 - Distributed Tracing with AWS X-Ray
 
 Observability helps quantify how we are able to meet our availability requirements. An important aspect of observability especially in a microservices architecture is distributed tracing. This enables the ability to profile a request as it passes through our application architecture which may involve one or more services and potentially interactions with backend data stores. Data captured from traces helps teams understand how the application behaves under various conditions and can be incredibly helpful when issues arise. For example, developers can use the data to identify inefficiencies in code and prioritize their sprints. Operations or SRE teams can use the data to diagnose or triage unusual latencies or failures. Infrastructure engineers can use the data to make adjustments to resident scaling policies or resources supporting particular services.
 
@@ -23,12 +25,12 @@ When you instrument an application with the X-Ray SDK to enable tracing, trace d
 
 <details>
 <summary>Learn more: What is the X-Ray daemon?</summary>
-The AWS X-Ray daemon is an open source software application that listens for traffic on UDP port 2000. It gathers raw segment data and relays it to the AWS X-Ray API. When deployed as a sidecar container with Fargate, the Task IAM role is what authorizes it to communicate with the X-Ray API. The workshop CloudFormation template you ran earlier already created a role that has the necessary permissions. Also, AWS X-Ray provides a managed Docker container image of the X-Ray daemon that you can run as a sidecar. If you'd like to customize the software or container image, you can find the source code on github and a sample Dockerfile in our documentation to build from.
+The AWS X-Ray daemon is an open source software application that listens for traffic on UDP port 2000. It gathers raw segment data and relays it to the AWS X-Ray API. When deployed as a sidecar container with Fargate, the Task IAM role is what authorizes it to communicate with the X-Ray API. The workshop CloudFormation template you ran earlier already created a role that has the necessary permissions. Also, AWS X-Ray provides a managed Docker container image of the X-Ray daemon that you can run as a sidecar. If you'd like to customize the software or container image, you can find the source code on GitHub and a sample Dockerfile in our documentation to build from.
 
 Further reading:
 
 * [X-Ray daemon documentation](https://docs.aws.amazon.com/xray/latest/devguide/xray-daemon.html)
-* [X-Ray daemon github repo](https://github.com/aws/aws-xray-daemon)
+* [X-Ray daemon GitHub repo](https://github.com/aws/aws-xray-daemon)
 * [X-Ray daemon permissions](https://docs.aws.amazon.com/xray/latest/devguide/xray-daemon.html#xray-daemon-permissions)
 * [X-Ray sample dockerfile](https://docs.aws.amazon.com/xray/latest/devguide/xray-daemon-ecs.html#xray-daemon-ecs-build)
 * [Application Tracing on Fargate with AWS X-Ray](https://github.com/aws-samples/aws-xray-fargate)
@@ -462,11 +464,11 @@ Congratulations!!!  You've successfully instrumented the Like service to enable 
 
 Proceed to [Lab 2](../lab-2-agg)!
 
-[*^ back to top*](#distributed-tracing-with-AWS-X-Ray)
+[*^ back to top*](#lab-1-distributed-tracing-with-AWS-X-Ray)
 
 ## Participation
 
-We encourage participation; if you find anything, please submit an [issue](https://github.com/aws-samples/amazon-ecs-mythicalmysfits-workshop-STAGING/issues). However, if you want to help raise the bar, submit a [PR](https://github.com/aws-samples/amazon-ecs-mythicalmysfits-workshop-STAGING/pulls)!
+We encourage participation; if you find anything, please submit an [issue](https://github.com/aws-samples/aws-multi-region-bc-dr-workshop/issues). However, if you want to help raise the bar, submit a [PR](https://github.com/aws-samples/aws-multi-region-bc-dr-workshop/pulls)!
 
 ## License
 
