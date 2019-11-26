@@ -200,7 +200,8 @@ We have created some completed buildspec files if you want to skip this portion.
   * REPLACEME_LIKE_REPOURI_SECONDARY with the value of <b>SecondaryLikeServiceEcrRepo</b>
     from the CloudFormation outputs in the Like service buildspec_prod.yml
 
-  <b>Note that in these labs we are hard coding values, but best practice is to use environment variables instead. This just simplifies the process for illustrative purposes.</b>
+  <b>Note that in these labs we are hard coding values, but best practice is to use environment variables
+  instead. This just simplifies the process for illustrative purposes.</b>
 </pre>
 
 ### Trigger deployment again
