@@ -152,6 +152,7 @@ In the previous section, we automated the deployments into another region. Now w
 
 <details>
 <summary>Learn more: What is a buildspec file?</summary>
+
 In this workshop, we created an <a href="https://aws.amazon.com/codepipeline/">AWS CodePipeline</a> stage that calls <a href="https://aws.amazon.com/codebuild/">AWS CodeBuild</a>, [AWS CodePipeline](https://aws.amazon.com/codepipeline/) which is a fully managed continuous integration service that compiles source code, runs tests, and produces software packages that are ready to deploy.
 
 AWS CodeBuild uses a definition file called a buildspec yaml file. The contents of the buildspec will determine what AWS actions CodeBuild should perform. The key parts of the buildspec are Environment Variables, Phases, and Artifacts. See <a href="http://docs.aws.amazon.com/codebuild/latest/userguide/build-spec-ref.html">Build Specification Reference for AWS CodeBuild</a>.
