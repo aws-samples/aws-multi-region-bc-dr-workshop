@@ -27,23 +27,28 @@ Here's what you'll be doing:
 
 1. Navigate to the Amazon [Cloudwatch service](https://console.aws.amazon.com/cloudwatch/) from the Management Console
 2. Select **Dashboards** from the menu on the left
-3. Select the Cloudwatch dashboard named **<stackname>_Dashboard**
+3. Select the Cloudwatch dashboard that contains the name **Dashboard**
 
 ### 2.2 Add metrics to the dashboard for X-Ray Errors and Faults
 
-X-Ray - In the previous Lab, you instrumented the Like service with AWS X-Ray. You also created a Trace Group that will filter out the faults and errors that X-Ray has captured from the application. Create a widget on the Cloudwatch dashboard to show the number of errors and faults that X-Ray has observed from the trace information. X-Ray pushes these metrics to Cloudwatch so that we can display them on the dashboard. Use the step by step instructions below if required.
+In the previous Lab, you instrumented the Like service with AWS X-Ray which provides greater visibility into individual requests passing through the Like service. You also created a Trace Group that will filter out the faults and errors that X-Ray has captured from the application. Create a widget on the Cloudwatch dashboard to show the number of errors and faults that X-Ray has observed from the trace information. X-Ray pushes these metrics to Cloudwatch so that we can display them on the dashboard. Use the step by step instructions below if required.
 
+Reminder: [What is an AWS X-Ray trace?](https://docs.aws.amazon.com/xray/latest/devguide/xray-concepts.html#xray-concepts-traces)
 
 <details>
 <summary>Step by step instructions:</summary>
+  
 1. Click on the **Add Widget** button in the Cloudwatch dashboard
   ![image](https://user-images.githubusercontent.com/23423809/69609253-e9a03080-0fdd-11ea-9090-40568a536874.png)
 
 2. Select **Stacked area** and press **configure**
+
 3. Select **X-Ray** followed by **Group Metrics** and select the Group created in the X-Ray lab previously
 ![image](https://user-images.githubusercontent.com/23423809/69609559-a8f4e700-0fde-11ea-89aa-9375ce0db044.png)
+
 4. Select the tab maked **Graphed metrics** and change the Statistic to **Sum**. Press **Create widget**
 ![image](https://user-images.githubusercontent.com/23423809/69609745-1acd3080-0fdf-11ea-9958-70416f6408f0.png)
+
 5. Move the widget to whereever you want to on the dashboard
 6. Save the dashboard by pressing **Save dashboard**
 
