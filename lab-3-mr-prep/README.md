@@ -47,7 +47,7 @@ What you are about to do is quite likely the simplest way of deploying another C
 There are a number of different ways to achieve this, like using [AWS CloudFormation Stacksets](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/what-is-cfnstacksets.html) or using [AWS CodePipeline to trigger CloudFormation in a CI/CD pipeline](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/continuous-delivery-codepipeline.html). Both of these are a much more automated way of deploying into multiple regions, but for simplicity's sake, in this lab you will use the simplest method of using the CLI.
 </details>
 
-Navigate back to the [AWS Cloud9 console])(http://console.aws.amazon.com/cloud9) and access your working environment. Run these commands:
+Navigate back to the [AWS Cloud9 console](http://console.aws.amazon.com/cloud9) and access your working environment. Run these commands:
 
 <pre>
 $ cd ~/environment/aws-multi-region-bc-dr-workshop
@@ -155,7 +155,7 @@ In the previous section, we automated the deployments into another region. Now w
 In this workshop, we created an [AWS CodePipeline](https://aws.amazon.com/codepipeline/) stage that calls [AWS CodeBuild](https://aws.amazon.com/codebuild/), which is a fully managed continuous integration service that compiles source code, runs tests, and produces software packages that are ready to deploy.
 
 AWS CodeBuild uses a definition file called a buildspec yaml file. The contents of the buildspec will determine what AWS actions CodeBuild should perform. The key parts of the buildspec are Environment Variables, Phases, and Artifacts. See [Build Specification Reference for AWS CodeBuild](http://docs.aws.amazon.com/codebuild/latest/userguide/build-spec-ref.html) for more details.
-</summary>
+</details>
 
 You have (2) options at this point:
 
@@ -215,12 +215,19 @@ Finally, add all the files to both repos and trigger deployments:
 
 <details>
 <summary>Option 2: Skip this step</summary>
+
+Navigate back to the [AWS Cloud9 console](http://console.aws.amazon.com/cloud9) and access your working environment if you're not already there. Run these commands:
+
 <pre>
   $ cd ~environment/aws-multi-region-bc-dr-workshop
   $ bootstrap/secondary-region/setup
 </pre>
 
 </details>
+
+The last step of both of the options above will commit and push your new application code. Take a look at your pipelines in the AWS CodePipeline Console and you should see the deployments start. Wait until all deployments are complete.
+
+![Todo: screenshot of finished cp deploy multi-region](images/03-cp-stuff.png)
 
 ### Enabling Cloudwatch Dashboard to show multi-region metrics
 
