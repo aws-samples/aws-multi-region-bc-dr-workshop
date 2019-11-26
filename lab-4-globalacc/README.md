@@ -1,5 +1,12 @@
 # Mythical Mysfits: Multi-Region-Workshop
 
+**To do list:**<br>
+✅ Distributed Tracing with AWS X-Ray<br>
+✅ Gather AWS Metrics<br>
+✅ Prepare for multi-region deployments<br>
+---- Implement Global Accelerator<br>
+---- Load test and failover<br>
+
 ## Lab 4 - Global Accelerator
 
 AWS Global Accelerator is a network layer service that directs traffic to optimal regional endpoints based on health, client location, and policies that you configure. It provides you with static IP addresses that you associate with your accelerator which will act as a fixed entry point to your application endpoints in one or more AWS Regions.
