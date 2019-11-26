@@ -1,7 +1,14 @@
 # Mythical Mysfits: Multi-Region-Workshop
 
+**To do list:**<br>
+✅ Distributed Tracing with AWS X-Ray<br>
+✅ Gather AWS Metrics<br>
+---- Prepare for multi-region deployments<br>
+---- Implement Global Accelerator<br>
+---- Load test and failover<br>
+
+
 ## Lab 3 - Preparing for multi-region deployments
-<!-- **steve has slides on this - things u may have forgotten** - it's in chat -->
 
 In this section, you will begin preparations for moving your application to multiple regions. It's very common to forget a number of steps along the way as many people will mainly think of infrastructure and the application itself to move over, but there are a number of assets that also need to be referenced.
 
