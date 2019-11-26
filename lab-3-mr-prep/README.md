@@ -1,11 +1,19 @@
 # Mythical Mysfits: Multi-Region-Workshop
 
-**To do list:**<br>
-✅ Distributed Tracing with AWS X-Ray<br>
-✅ Gather AWS Metrics<br>
----- Prepare for multi-region deployments<br>
----- Implement Global Accelerator<br>
----- Load test and failover<br>
+**Workshop progress:**<br>
+✅ Implement observability<p>
+ - Distributed Tracing with AWS X-Ray<br>
+ - Create metric dashboards<br>
+ 
+---- Prepare for multi-region deployments<p>
+ - Replicate Data Tier <br>
+ - Cross-Region Builds<br>
+ - Update Dashboard<br>
+---- Implement Traffic Management<br>
+ ---- Build Global Accelerator<br>
+- Load test and failover<br>
+  - Artificially break app<br>
+  - Inject failure<br>
 
 
 ## Lab 3 - Preparing for Multi-Region Deployments
@@ -20,6 +28,7 @@ These are the things that we will need to replicate and/or also automate:
   * Docker Repositories
   * ECS
   * Monitoring
+* Data tier
 * Container images
 * Application Deployment Pipeline
 * Application(s)
