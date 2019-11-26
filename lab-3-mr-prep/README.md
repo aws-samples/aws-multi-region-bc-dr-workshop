@@ -167,25 +167,27 @@ OR
 
 Run the `bootstrap/secondary-region/setup` script. If you're short on time or would rather focus on the traffic management bits later in the workshop, reveal and follow the Option 2 step by step below.
 
-Choose your adventure!
+**Choose your adventure!**
 
 <details>
 <summary>Option 1: Step-by-step manual instructions</summary>
 
-First, we will update the **core-service** app. Navigate to the <b>core-service</b> codecommit repo. We can do this in the side navigation pane or via CLI.
+First, we will update the **core-service** app. Navigate to the **core-service** CodeCommit repo. We can do this in the side navigation pane or via CLI.
 
 Console:
 ![Find file on nav pane](images/03-core-service_buildspec.png)
 
 CLI:
 ```
-  $ cd ~/environment/core-service-[PRESS TAB TO AUTO COMPLETE AND PRESS ENTER]
+$ cd ~/environment/core-service-[PRESS TAB TO AUTO COMPLETE AND PRESS ENTER]
 ```
 
-Find the buildspec_prod file in both mysfits-service and like-service. Update them to push your conainers and application to both regions. Within both of the buildspecs there are [TODO] lines to guide you through what you'll need to do. It's your choice if you want to understand how the build process works. Otherwise...
+Find the **buildspec_prod** file in both core-service and like-service. Update them to push your built containers  to both your primary and secondary regions. Within both of the buildspec files there are [TODO] lines to guide you through what you'll need to do. It's your choice if you want to understand how the build process works. Otherwise...
 
 We have created some completed buildspec files if you want to skip this portion. They are in the app/hints folder.
-```<pre>
+
+```markdown
+<pre>
 $ cd ~/environment/core-service-[PRESS TAB TO AUTO COMPLETE AND PRESS ENTER]
 $ cp ~/environment/multi-region-workshop/app/hints/core-buildspec_prod.yml buildspec_prod.yml
 $ cd ~/environment/like-service-[PRESS TAB TO AUTO COMPLETE AND PRESS ENTER]
@@ -196,7 +198,7 @@ Open the two files and replace these variables:
 * REPLACEME_CORE_REPOURI_SECONDARY with the value of **SecondaryMythicalServiceEcrRepo** from the Cloudformation outputs in the Core service buildspec_prod.yml
 * REPLACEME_LIKE_REPOURI_SECONDARY with the value of **SecondaryLikeServiceEcrRepo** from the CloudFormation outputs in the Like service buildspec_prod.yml
 
-*Note that in these labs we are hard coding values, but best practice is to use environment variables instead. This just simplifies the process for illustrative purposes.*
+**Note that in these labs we are hard coding values, but best practice is to use environment variables instead. This just simplifies the process for illustrative purposes.**
 ```
 
 ### Trigger deployment again
