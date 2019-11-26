@@ -186,18 +186,18 @@ Find the **buildspec_prod** file in both core-service and like-service. Update t
 
 We have created some completed buildspec files if you want to skip this portion. They are in the app/hints folder.
 
-```markdown
-$ cd ~/environment/core-service-[PRESS TAB TO AUTO COMPLETE AND PRESS ENTER]
+```
+$ cd ~/environment/<b>core-service-[PRESS TAB TO AUTO COMPLETE AND PRESS ENTER]</b>
 $ cp ~/environment/multi-region-workshop/app/hints/core-buildspec_prod.yml buildspec_prod.yml
-$ cd ~/environment/like-service-[PRESS TAB TO AUTO COMPLETE AND PRESS ENTER]
+$ cd ~/environment/<b>like-service-[PRESS TAB TO AUTO COMPLETE AND PRESS ENTER]</b>
 $ cp ~/environment/multi-region-workshop/app/hints/like-buildspec_prod.yml buildspec_prod.yml
 
 Open the two files and replace these variables:
-* REPLACEME_SECONDARY_REGION with your secondary region (default **us-east-1**) in both buildspec_prod.yml files
-* REPLACEME_CORE_REPOURI_SECONDARY with the value of **SecondaryMythicalServiceEcrRepo** from the Cloudformation outputs in the Core service buildspec_prod.yml
-* REPLACEME_LIKE_REPOURI_SECONDARY with the value of **SecondaryLikeServiceEcrRepo** from the CloudFormation outputs in the Like service buildspec_prod.yml
+* REPLACEME_SECONDARY_REGION with your secondary region (default <b>us-east-1</b>) in both buildspec_prod.yml files
+* REPLACEME_CORE_REPOURI_SECONDARY with the value of <b>SecondaryMythicalServiceEcrRepo</b> from the Cloudformation outputs in the Core service buildspec_prod.yml
+* REPLACEME_LIKE_REPOURI_SECONDARY with the value of <b>SecondaryLikeServiceEcrRepo</b> from the CloudFormation outputs in the Like service buildspec_prod.yml
 
-**Note that in these labs we are hard coding values, but best practice is to use environment variables instead. This just simplifies the process for illustrative purposes.**
+<b>Note that in these labs we are hard coding values, but best practice is to use environment variables instead. This just simplifies the process for illustrative purposes.</b>
 ```
 
 ### Trigger deployment again
