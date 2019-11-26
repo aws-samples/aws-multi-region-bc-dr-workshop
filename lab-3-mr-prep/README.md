@@ -182,7 +182,7 @@ CLI:
 $ cd ~/environment/core-service-[PRESS TAB TO AUTO COMPLETE AND PRESS ENTER]
 ```
 
-Find the **buildspec_prod** file in both **core-service** and **like-service** git repos. Update them to push your built containers  to both your primary and secondary regions. Within both of the buildspec files there are [TODO] lines to guide you through what you'll need to do. It's your choice if you want to understand how the build process works. 
+Find the **buildspec_prod** file in both **core-service** and **like-service** git repos. Update them to push your built containers  to both your primary and secondary regions. Within both of the buildspec files there are [TODO] lines to guide you through what you'll need to do. It's your choice if you want to understand how the build process works.
 
 We have created some completed buildspec files if you want to skip this portion. They are in the app/hints folder.
 
@@ -193,9 +193,12 @@ We have created some completed buildspec files if you want to skip this portion.
   $ cp ~/environment/multi-region-workshop/app/hints/like-buildspec_prod.yml buildspec_prod.yml
 
   Open the two files and replace these variables:
-  * REPLACEME_SECONDARY_REGION with your secondary region (default <b>us-east-1</b>) in both buildspec_prod.yml files
-  * REPLACEME_CORE_REPOURI_SECONDARY with the value of <b>SecondaryMythicalServiceEcrRepo</b> from the Cloudformation outputs in the Core service buildspec_prod.yml
-  * REPLACEME_LIKE_REPOURI_SECONDARY with the value of <b>SecondaryLikeServiceEcrRepo</b> from the CloudFormation outputs in the Like service buildspec_prod.yml
+  * REPLACEME_SECONDARY_REGION with your secondary region (default <b>us-east-1</b>) in
+    both buildspec_prod.yml files
+  * REPLACEME_CORE_REPOURI_SECONDARY with the value of <b>SecondaryMythicalServiceEcrRepo</b>
+    from the Cloudformation outputs in the Core service buildspec_prod.yml
+  * REPLACEME_LIKE_REPOURI_SECONDARY with the value of <b>SecondaryLikeServiceEcrRepo</b>
+    from the CloudFormation outputs in the Like service buildspec_prod.yml
 
   <b>Note that in these labs we are hard coding values, but best practice is to use environment variables instead. This just simplifies the process for illustrative purposes.</b>
 </pre>
