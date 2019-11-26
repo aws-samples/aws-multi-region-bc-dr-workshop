@@ -152,9 +152,11 @@ In the previous section, we automated the deployments into another region. Now w
 
 <details>
 <summary>Learn more: What is a buildspec file?</summary>
-In this workshop, we created an [AWS CodePipeline](https://aws.amazon.com/codepipeline/) stage that calls [AWS CodeBuild](https://aws.amazon.com/codebuild/), which is a fully managed continuous integration service that compiles source code, runs tests, and produces software packages that are ready to deploy.
 
-AWS CodeBuild uses a definition file called a buildspec yaml file. The contents of the buildspec will determine what AWS actions CodeBuild should perform. The key parts of the buildspec are Environment Variables, Phases, and Artifacts. See [Build Specification Reference for AWS CodeBuild](http://docs.aws.amazon.com/codebuild/latest/userguide/build-spec-ref.html) for more details.
+In this workshop, we created an [AWS CodePipeline](https://aws.amazon.com/codepipeline/) stage that calls [AWS CodeBuild](https://aws.amazon.com/codebuild/),  which is a fully managed continuous integration service that compiles source code, runs tests, and produces software packages that are ready to deploy.
+
+AWS CodeBuild uses a definition file called a buildspec yaml file. The contents of the buildspec will determine what AWS actions CodeBuild should perform. The key parts of the buildspec are Environment Variables, Phases, and Artifacts. See [Build Specification Reference for AWS CodeBuild](http://docs.aws.amazon.com/codebuild/latest/userguide/build-spec-ref.html).
+
 </details>
 
 You have (2) options at this point:
@@ -165,35 +167,41 @@ OR
 
 Run the `bootstrap/secondary-region/setup` script. If you're short on time or would rather focus on the traffic management bits later in the workshop, reveal and follow the Option 2 step by step below.
 
-Choose your adventure!
+**Choose your adventure!**
 
 <details>
 <summary>Option 1: Step-by-step manual instructions</summary>
-First, we will update the `core-service` app. Navigate to the core-service codecommit repo. We can do this in the side navigation pane or via CLI.
+
+First, we will update the **core-service** app. Navigate to the **core-service** CodeCommit repo. We can do this in the side navigation pane or via CLI.
 
 Console:
 ![Find file on nav pane](images/03-core-service_buildspec.png)
 
 CLI:
-<pre>
-  $ cd ~/environment/core-service-[PRESS TAB TO AUTO COMPLETE AND PRESS ENTER]
-</pre>
+```
+$ cd ~/environment/core-service-[PRESS TAB TO AUTO COMPLETE AND PRESS ENTER]
+```
 
-Find the buildspec_prod file in both mysfits-service and like-service. Update them to push your conainers and application to both regions. Within both of the buildspecs there are [TODO] lines to guide you through what you'll need to do. It's your choice if you want to understand how the build process works. Otherwise...
+Find the **buildspec_prod** file in both **core-service** and **like-service** git repos. Update them to push your built containers  to both your primary and secondary regions. Within both of the buildspec files there are [TODO] lines to guide you through what you'll need to do. It's your choice if you want to understand how the build process works.
 
 We have created some completed buildspec files if you want to skip this portion. They are in the app/hints folder.
+
 <pre>
-  $ cd ~/environment/core-service-[PRESS TAB TO AUTO COMPLETE AND PRESS ENTER]
-  $ cp ~/environment/multi-region-workshop/app/hints/mysfits-service-buildspec_prod.yml buildspec_prod.yml
-  $ cd ~/environment/like-service-[PRESS TAB TO AUTO COMPLETE AND PRESS ENTER]
+  $ cd ~/environment/<b>core-service-[PRESS TAB TO AUTO COMPLETE AND PRESS ENTER]</b>
+  $ cp ~/environment/multi-region-workshop/app/hints/core-buildspec_prod.yml buildspec_prod.yml
+  $ cd ~/environment/<b>like-service-[PRESS TAB TO AUTO COMPLETE AND PRESS ENTER]</b>
   $ cp ~/environment/multi-region-workshop/app/hints/like-buildspec_prod.yml buildspec_prod.yml
 
-Open the two files and replace these variables:
-* REPLACEME_SECONDARY_REGION with your secondary region (default **us-east-1**) in both buildspec_prod.yml files
-* REPLACEME_CORE_REPOURI_SECONDARY with the value of **SecondaryMythicalServiceEcrRepo** from the Cloudformation outputs in the Core service buildspec_prod.yml
-* REPLACEME_LIKE_REPOURI_SECONDARY with the value of **SecondaryLikeServiceEcrRepo** from the CloudFormation outputs in the Like service buildspec_prod.yml
+  Open the two files and replace these variables:
+  * REPLACEME_SECONDARY_REGION with your secondary region (default <b>us-east-1</b>) in
+    both buildspec_prod.yml files
+  * REPLACEME_CORE_REPOURI_SECONDARY with the value of <b>SecondaryMythicalServiceEcrRepo</b>
+    from the Cloudformation outputs in the Core service buildspec_prod.yml
+  * REPLACEME_LIKE_REPOURI_SECONDARY with the value of <b>SecondaryLikeServiceEcrRepo</b>
+    from the CloudFormation outputs in the Like service buildspec_prod.yml
 
-*Note that in these labs we are hard coding values, but best practice is to use environment variables instead. This just simplifies the process for illustrative purposes.*
+  <b>Note that in these labs we are hard coding values, but best practice is to use environment variables
+  instead. This just simplifies the process for illustrative purposes.</b>
 </pre>
 
 ### Trigger deployment again
@@ -322,30 +330,3 @@ Here's how:
 At this time, your application should be running in both regions. Hit the secondary **SecondaryLoadBalancerDNS** that you copied earlier. You should see the exact same site you had before.
 
 Proceed to [Lab 4](../lab-4-globalacc)!
-
-
-<!--
-# disregard
-
-In this section, you will begin preparations for moving your application to multiple regions. It's very common to forget a number of steps along the way as many people will mainly think of infrastructure and the application itself to move over, but there are a number of assets that also need to be referenced.
-
-These are the things that we will need to replicate and also automate:
-* Infrastructure
-  * Network
-  * Docker Repositories
-  * ECS
-* Container images
-* Application Deployments
-
-
-- Also need to copy over artifacts for deployment
-- ECR cross region replication?
-- object replication in S3
-- codecommit x-region app
--
-
-
-
-### Replicate The app to a second region
-
-    aws cloudformation deploy --stack-name second-region --template-file core.yml --capabilities CAPABILITY_NAMED_IAM --region us-west-2 -->
