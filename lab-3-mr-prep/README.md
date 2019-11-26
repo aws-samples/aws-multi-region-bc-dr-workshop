@@ -186,7 +186,7 @@ Find the **buildspec_prod** file in both core-service and like-service. Update t
 
 We have created some completed buildspec files if you want to skip this portion. They are in the app/hints folder.
 
-```
+```markdown
 $ cd ~/environment/<b>core-service-[PRESS TAB TO AUTO COMPLETE AND PRESS ENTER]</b>
 $ cp ~/environment/multi-region-workshop/app/hints/core-buildspec_prod.yml buildspec_prod.yml
 $ cd ~/environment/<b>like-service-[PRESS TAB TO AUTO COMPLETE AND PRESS ENTER]</b>
