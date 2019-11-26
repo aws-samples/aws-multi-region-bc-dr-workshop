@@ -152,7 +152,7 @@ In the previous section, we automated the deployments into another region. Now w
 
 <details>
 <summary>Learn more: What is a buildspec file?</summary>
-In this workshop, we created an <a href="https://aws.amazon.com/codepipeline/">AWS CodePipeline</a> stage that calls <a href="https://aws.amazon.com/codebuild/">AWS CodeBuild</a>, which is a fully managed continuous integration service that compiles source code, runs tests, and produces software packages that are ready to deploy.
+In this workshop, we created an <a href="https://aws.amazon.com/codepipeline/">AWS CodePipeline</a> stage that calls <a href="https://aws.amazon.com/codebuild/">AWS CodeBuild</a>, [AWS CodePipeline](https://aws.amazon.com/codepipeline/) which is a fully managed continuous integration service that compiles source code, runs tests, and produces software packages that are ready to deploy.
 
 AWS CodeBuild uses a definition file called a buildspec yaml file. The contents of the buildspec will determine what AWS actions CodeBuild should perform. The key parts of the buildspec are Environment Variables, Phases, and Artifacts. See <a href="http://docs.aws.amazon.com/codebuild/latest/userguide/build-spec-ref.html">Build Specification Reference for AWS CodeBuild</a>.
 </details>
@@ -176,17 +176,17 @@ Console:
 
 CLI:
 ```
-$ cd ~/environment/core-service-[PRESS TAB TO AUTO COMPLETE AND PRESS ENTER]
+  $ cd ~/environment/core-service-[PRESS TAB TO AUTO COMPLETE AND PRESS ENTER]
 ```
 
 Find the buildspec_prod file in both mysfits-service and like-service. Update them to push your conainers and application to both regions. Within both of the buildspecs there are [TODO] lines to guide you through what you'll need to do. It's your choice if you want to understand how the build process works. Otherwise...
 
 We have created some completed buildspec files if you want to skip this portion. They are in the app/hints folder.
-<pre>
-  $ cd ~/environment/core-service-[PRESS TAB TO AUTO COMPLETE AND PRESS ENTER]
-  $ cp ~/environment/multi-region-workshop/app/hints/mysfits-service-buildspec_prod.yml buildspec_prod.yml
-  $ cd ~/environment/like-service-[PRESS TAB TO AUTO COMPLETE AND PRESS ENTER]
-  $ cp ~/environment/multi-region-workshop/app/hints/like-buildspec_prod.yml buildspec_prod.yml
+```<pre>
+$ cd ~/environment/core-service-[PRESS TAB TO AUTO COMPLETE AND PRESS ENTER]
+$ cp ~/environment/multi-region-workshop/app/hints/core-buildspec_prod.yml buildspec_prod.yml
+$ cd ~/environment/like-service-[PRESS TAB TO AUTO COMPLETE AND PRESS ENTER]
+$ cp ~/environment/multi-region-workshop/app/hints/like-buildspec_prod.yml buildspec_prod.yml
 
 Open the two files and replace these variables:
 * REPLACEME_SECONDARY_REGION with your secondary region (default **us-east-1**) in both buildspec_prod.yml files
@@ -194,7 +194,7 @@ Open the two files and replace these variables:
 * REPLACEME_LIKE_REPOURI_SECONDARY with the value of **SecondaryLikeServiceEcrRepo** from the CloudFormation outputs in the Like service buildspec_prod.yml
 
 *Note that in these labs we are hard coding values, but best practice is to use environment variables instead. This just simplifies the process for illustrative purposes.*
-</pre>
+```
 
 ### Trigger deployment again
 
