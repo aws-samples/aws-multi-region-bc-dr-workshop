@@ -1,0 +1,6 @@
+#!/bin/bash
+
+bootstrap/secondary-region/fetch-outputs
+bootstrap/dashboard/build-cwdashboard
+aws cloudformation deploy --stack-name Fully-Prepared-Dashboard --template-file ~/environment/aws-multi-region-bc-dr-workshop/cwdashboard_multiregion.yml --capabilities CAPABILITY_NAMED_IAM  --region us-west-2
+
