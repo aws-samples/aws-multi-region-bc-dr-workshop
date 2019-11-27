@@ -1,6 +1,21 @@
-# Mysfits: Multi-Region-Workshop
+# Mythical Mysfits Multi-Region BC/DR Workshop
 
-**Workshop progress:**<br>
+## Workshop progress
+✅ **Lab 0: Workshop Initialization**
+
+✅ **Lab 1: Implement Observability**
+
+✅  **Lab 2: Operationalize Observability - Aggregate Metrics**
+
+**Lab 3: Prep for Multi-Region Deployments**
+- Replicate Data Tier
+- Automate Cross Region Builds and Deploys
+- Update Observability Dashboards
+
+**Lab 4: Implement Traffic Management**
+
+**Lab 5: Load Test and Failover**
+<!--
 ✅ Implement observability<p>
  - Distributed Tracing with AWS X-Ray<br>
  - Create metric dashboards<br>
@@ -13,7 +28,7 @@
  ---- Build Global Accelerator<br>
 - Load test and failover<br>
   - Artificially break app<br>
-  - Inject failure<br>
+  - Inject failure<br> -->
 
 
 ## Lab 3 - Preparing for Multi-Region Deployments
