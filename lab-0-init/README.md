@@ -1,5 +1,18 @@
 # Mythical Mysfits: Multi-Region-Workshop
 
+## Workshop progress
+**Lab 0: Workshop Initialization**
+
+**Lab 1: Implement Observability**
+
+**Lab 2: Operationalize Observability - Aggregate Metrics**
+
+**Lab 3: Prep for Multi-Region Deployments**
+
+**Lab 4: Implement Traffic Management**
+
+**Lab 5: Load Test and Failover**
+
 ## Lab 0 - Deploy Existing Mythical Stack
 
 In this lab, you'll launch the core infrastructure for the workshop and get familiar with the Cloud9 integrated development environment (IDE) where you'll edit code and run commands.
