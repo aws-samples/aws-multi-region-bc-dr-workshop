@@ -353,9 +353,9 @@ Since Mythical Mysfits moved to a microservices architecture, it was apparent th
 
     </details>
 
-The pipeline will take a few minutes to complete, so feel free to move on to the next section. If you want to watch the pipeline, navigate to the CodePipeline dashboard in the AWS console and click on the pipeline for the Like service which begins with `LikePipeline-`. When it's completed, it will look similar to the screenshot below.
+    The pipeline will take a few minutes to complete, so feel free to move on to the next section. If you want to watch the pipeline, navigate to the CodePipeline dashboard in the AWS console and click on the pipeline for the Like service which begins with `LikePipeline-`. When it's completed, it will look similar to the screenshot below.
 
-![CodePipeline for Like service](./images/01-03-likeServicePipeline.png)
+    ![CodePipeline for Like service](./images/01-03-likeServicePipeline.png)
 
 ### [4] Test your configuration
 
@@ -368,7 +368,7 @@ Now that you've instrumented the like service, you should see additional trace d
     ```
     $ cat ~/environment/aws-multi-region-bc-dr-workshop/cfn-output.json | grep LoadBalancerDNS
     ```
-Note: You can also visit the CloudFormation dashboard, click on the workshop stack and find LoadBalancerDNS in the outputs tab.
+    Note: You can also visit the CloudFormation dashboard, click on the workshop stack and find LoadBalancerDNS in the outputs tab.
 
 2. Open a new tab and enter the load balancer DNS name to load the Mythical Mysfits application.  When the page loads, you should see a grid of mysfits and notice a heart icon in the bottom right corner of each box. Click on a few hearts for a few mysfits to generate some traffic to the Like service. The service was launched with chaos mode 'on' which randomly returns 404s and 500s, so you'd see more interesting data in the X-Ray service map. Keep clicking on the hearts until it lights up orange for a few mysfits.
 
@@ -418,7 +418,6 @@ Note: Throughout this workshop, we're going to focus purely on the Like service 
 
     * [Filter expression documentation](https://docs.aws.amazon.com/xray/latest/devguide/xray-console-filters.html)
 
-
 <details>
 <summary>HINT: Detailed step by step</summary>
 
@@ -428,7 +427,9 @@ Note: Throughout this workshop, we're going to focus purely on the Like service 
 
 2. Enter a name, e.g. `like-service`
 
-3. Enter `service("Like Service") AND http.method = "POST"` into the filter expression field
+3. Enter `service("Like Service") AND http.method = "POST"` into the filter expression field.
+
+    **PLEASE READ:** if you copy/paste the expression above into the filter expression field, make sure you type a space at the end. We discovered a bug in the UI where field validation seems to expect some keyboard input; Ctrl-V alone will not work, hence adding the space. The product team has been made aware, and this will be fixed in a future release. Apologies for the inconvenience.
 
 4. Click **Create**
 
@@ -453,7 +454,9 @@ Note: Throughout this workshop, we're going to focus purely on the Like service 
 
 2. Enter a name, e.g. `like-service-errors-faults`
 
-3. Enter `service("Like Service") { error = true OR fault = true }` into the filter expression field
+3. Enter `service("Like Service") { error = true OR fault = true }` into the filter expression field.
+
+    **PLEASE READ:** if you copy/paste the expression above into the filter expression field, make sure you type a space at the end. We discovered a bug in the UI where field validation seems to expect some keyboard input; Ctrl-V alone will not work, hence adding the space. The product team has been made aware, and this will be fixed in a future release. Apologies for the inconvenience.
 
 4. Click **Create**
 
