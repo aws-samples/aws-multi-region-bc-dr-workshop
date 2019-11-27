@@ -1,5 +1,21 @@
 # Mythical Mysfits: Multi-Region-Workshop
 
+## Workshop progress
+✅ Lab 0: Workshop Initialization
+
+✅ Lab 1: Implement Observability
+
+**Lab 2: Operationalize Observability - Aggregate Metrics**
+
+Lab 3: Prep for Multi-Region Deployments
+- Replicate Data Tier
+- Automate Cross Region Builds and Deploys
+- Update Observability Dashboards
+
+Lab 4: Implement Traffic Management
+
+Lab 5: Load Test and Failover
+
 ## Lab 2 - Gather AWS Metrics
 
 In this lab, you will start the process of aggregating metrics to understand the health of your application so you can make informed decisions about when to fail over to a different region. We will use an Amazon Cloudwatch Dashboard for this.
