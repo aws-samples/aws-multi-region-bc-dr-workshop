@@ -3,16 +3,16 @@
 
 
 # Define local variables for ALB full name
-PRIMARY_ALB_FULL_NAME=$(jq < cfn-output.json -r '.ALBFullName')
-SECONDARY_ALB_FULL_NAME=$(jq < cfn-output-secondary.json -r '.ALBFullName')
+PRIMARY_ALB_FULL_NAME=$(jq < cfn-output.json -r '.LoadBalancerFullName')
+SECONDARY_ALB_FULL_NAME=$(jq < cfn-output-secondary.json -r '.LoadBalancerFullName')
 
 # Define local variables for CORE ECS service
-PRIMARY_CORE_ECS_SERVICE=$(jq < cfn-output.json -r '.CoreECSService')
-SECONDARY_CORE_ECS_SERVICE=$(jq < cfn-output-secondary.json -r '.CoreECSService')
+PRIMARY_CORE_ECS_SERVICE=$(jq < cfn-output.json -r '.CoreEcsServiceName')
+SECONDARY_CORE_ECS_SERVICE=$(jq < cfn-output-secondary.json -r '.CoreEcsServiceName')
 
 # Define local variables for LIKE ECS service
-PRIMARY_LIKE_ECS_SERVICE=$(jq < cfn-output.json -r '.LikeECSService')
-SECONDARY_LIKE_ECS_SERVICE=$(jq < cfn-output-secondary.json -r '.LikeECSService')
+PRIMARY_LIKE_ECS_SERVICE=$(jq < cfn-output.json -r '.LikeEcsServiceName')
+SECONDARY_LIKE_ECS_SERVICE=$(jq < cfn-output-secondary.json -r '.LikeEcsServiceName')
 
 # Define local variables for ECS cluster
 PRIMARY_ECS_CLUSTER=$(jq < cfn-output.json -r '.EcsClusterName')
