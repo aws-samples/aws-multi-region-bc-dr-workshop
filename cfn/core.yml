@@ -1082,9 +1082,9 @@ Outputs:
     Condition: PrimaryRegion
     Value: !GetAtt 'MythicalCiCdStack.Outputs.MythicalCoreGitRepositoryName'
   CoreEcsServiceName:
-    Value: !Sub ${AWS::StackName}_Core-Service
+    Value: !If [PrimaryRegion, !Sub '${AWS::StackName}_Core-Service', !GetAtt 'CoreEcsService.Name']
   LikeEcsServiceName:
-    Value: !Sub ${AWS::StackName}_Like-Service
+    Value: !If [PrimaryRegion, !Sub '${AWS::StackName}_Like-Service', !GetAtt 'LikeEcsService.Name']
   LoadBalancerFullName:
     Description: The Full Name for the load balancer
     Value: !GetAtt MythicalLoadBalancer.LoadBalancerFullName
