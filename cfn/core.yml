@@ -528,7 +528,7 @@ Resources:
     Properties:
       Cpu: 256
       ExecutionRoleArn: !GetAtt EcsServiceRole.Arn
-      Family: !Sub Multi-Region-Service-${AWS::StackName}
+      Family: !Sub Secondary-Core-Service-${AWS::StackName}
       Memory: 512
       NetworkMode: awsvpc
       RequiresCompatibilities:
@@ -571,7 +571,7 @@ Resources:
     Properties:
       Cpu: 256
       ExecutionRoleArn: !GetAtt EcsServiceRole.Arn
-      Family: !Sub Multi-Region-Like-Service-${AWS::StackName}
+      Family: !Sub Secondary-Like-Service-${AWS::StackName}
       Memory: 512
       NetworkMode: awsvpc
       RequiresCompatibilities:
