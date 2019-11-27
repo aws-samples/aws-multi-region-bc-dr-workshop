@@ -880,7 +880,6 @@ Resources:
       Timeout: '300'
 
   LambdaExecutionRole:
-    Condition: PrimaryRegion
     Type: AWS::IAM::Role
     Properties:
       AssumeRolePolicyDocument:
