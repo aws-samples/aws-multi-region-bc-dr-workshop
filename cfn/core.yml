@@ -350,7 +350,7 @@ Resources:
                 - 'dynamodb:Query'
                 - 'dynamodb:UpdateItem'
                 - 'dynamodb:GetItem'
-              Resource: !GetAtt MythicalDynamoTable.Arn
+              Resource: !Sub 'arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${DDBTableName}'
             #  Removing this for now to test with multi-region^
               # Resource: '*'
 
@@ -456,7 +456,7 @@ Resources:
             - Name: UPSTREAM_URL
               Value: !GetAtt MythicalLoadBalancer.DNSName
             - Name: DDB_TABLE_NAME
-              Value: !Ref MythicalDynamoTable
+              Value: !Ref DDBTableName
           LogConfiguration:
             LogDriver: awslogs
             Options:
@@ -499,7 +499,7 @@ Resources:
             - Name: CHAOSMODE
               Value: 'on'
             - Name: DDB_TABLE_NAME
-              Value: !Ref MythicalDynamoTable
+              Value: !Ref DDBTableName
             - Name: LOGLEVEL
               Value: 'ERROR'
           LogConfiguration:
@@ -544,7 +544,7 @@ Resources:
             - Name: UPSTREAM_URL
               Value: !GetAtt MythicalLoadBalancer.DNSName
             - Name: DDB_TABLE_NAME
-              Value: !Ref MythicalDynamoTable
+              Value: !Ref DDBTableName
           LogConfiguration:
             LogDriver: awslogs
             Options:
@@ -587,7 +587,7 @@ Resources:
             - Name: CHAOSMODE
               Value: 'off'
             - Name: DDB_TABLE_NAME
-              Value: !Ref MythicalDynamoTable
+              Value: !Ref DDBTableName
             - Name: LOGLEVEL
               Value: 'ERROR'
           LogConfiguration:
@@ -756,7 +756,7 @@ Resources:
         CoreServiceName: !Sub ${AWS::StackName}_Core-Service
         LikeServiceName: !Sub ${AWS::StackName}_Like-Service
         PrimaryRegionALBFullName: !GetAtt MythicalLoadBalancer.LoadBalancerFullName
-        DDBTable: !Ref MythicalDynamoTable
+        DDBTable: !Ref DDBTableName
         DashboardName: !Sub ${AWS::StackName}_Dashboard
 
   # Working on a function to delete all extra stuff - disregard for now
@@ -997,7 +997,7 @@ Outputs:
     Value: !GetAtt MythicalLoadBalancer.DNSName
   DynamoTable:
     Condition: PrimaryRegion
-    Value: !Ref MythicalDynamoTable
+    Value: !Ref DDBTableName
   ProfileName:
     Condition: PrimaryRegion
     Value: !Ref MythicalProfile
