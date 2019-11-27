@@ -3,10 +3,10 @@ AWSTemplateFormatVersion: '2010-09-09'
 Description: This stack deploys the core network infrastructure and IAM resources
              to be used for a service hosted in Amazon ECS using AWS Fargate.
 Parameters:
-  # DDBTableName:
-  #   Type: String
-  #   Default: MythicalMysfits-DDBTable
-  #   Description: Name of your DynamoDB Table.
+  DDBTableName:
+    Type: String
+    Default: mm-ddbtable
+    Description: Name of your DynamoDB Table.
 
   IsSecondary:
     Type: String
@@ -375,8 +375,7 @@ Resources:
     Condition: PrimaryRegion
     Type: AWS::DynamoDB::Table
     Properties:
-      TableName: !Sub Table-${AWS::StackName}
-      # TableName: !Ref DDBTableName
+      TableName: !Ref DDBTableName
       AttributeDefinitions:
         - AttributeName: MysfitId
           AttributeType: S
