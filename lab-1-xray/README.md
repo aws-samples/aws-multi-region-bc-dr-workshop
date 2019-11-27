@@ -72,7 +72,7 @@ Choose your adventure!
 2. Copy the instrumented Like service code from the answers directory into this working directory.
 
     ```
-    $ cp ~/environment/multi-region-workshop/lab-1-xray/answers/mysfits_like.py ./service
+    $ cp ~/environment/aws-multi-region-bc-dr-workshop/lab-1-xray/answers/mysfits_like.py ./service
     ```
 
     [*Click here to skip to Section 3 to deploy your changes*](#3-deploy-the-changes-you-made-to-the-like-service)
@@ -112,7 +112,7 @@ In this section, you will use the Cloud9 IDE, which should still be open from th
     <summary>HINT: Completed imports</summary>
 
     ```
-    # Load functions/classes from aws xray sdk to instrument this service to trace incoming 
+    # Load functions/classes from aws xray sdk to instrument this service to trace incoming
     # http requests and downstream aws sdk calls. This includes the X-Ray Flask middleware
     # [TODO] load x-ray recorder class
     # [TODO] load x-ray patch function
@@ -156,7 +156,7 @@ Further reading:
     <summary>HINT: Completed xray_recorder configuration</summary>
 
     ```
-    # Configure xray_recorder class to name your service and load the ECS plugin for 
+    # Configure xray_recorder class to name your service and load the ECS plugin for
     # additional metadata.
     # [TODO] configure the x-ray recorder with a service name and load the ecs plugin
     plugins = ('ecs_plugin',)
@@ -236,7 +236,7 @@ from flask import Flask, jsonify, json, Response, request, abort
 from flask_cors import CORS
 import mysfitsTableClient
 
-# Load functions/classes from aws xray sdk to instrument this service to trace incoming 
+# Load functions/classes from aws xray sdk to instrument this service to trace incoming
 # http requests and downstream aws sdk calls. This includes the X-Ray Flask middleware
 # [TODO] load x-ray recorder class
 # [TODO] load x-ray patch function
@@ -252,7 +252,7 @@ else:
 
 logging.basicConfig(level=loglevel)
 
-# Configure xray_recorder class to name your service and load the ECS plugin for 
+# Configure xray_recorder class to name your service and load the ECS plugin for
 # additional metadata.
 # [TODO] configure the x-ray recorder with a service name and load the ecs plugin
 plugins = ('ecs_plugin',)
@@ -293,7 +293,7 @@ def like_mysfit(mysfit_id):
             app.logger.warn('WARN: simulated 404 activated')
             abort(404)
         app.logger.warn('WARN: This thing should NOT be left on..')
-    
+
     service_response = mysfitsTableClient.likeMysfit(mysfit_id)
     flask_response = Response(service_response)
     flask_response.headers["Content-Type"] = "application/json"
@@ -364,7 +364,7 @@ Now that you've instrumented the like service, you should see additional trace d
 1. If you already have the ALB's DNS name handy, move to step 2. Otherwise, retrieve the ALB's DNS name from the CloudFormation stack outputs. The output values are written to a JSON file local to your Cloud9 environment as a part of the bootstrap script. Run the following command in your Cloud9 terminal to get the load balancer's DNS name:
 
     ```
-    $ cat ~/environment/multi-region-workshop/cfn-output.json | grep LoadBalancerDNS
+    $ cat ~/environment/aws-multi-region-bc-dr-workshop/cfn-output.json | grep LoadBalancerDNS
     ```
 Note: You can also visit the CloudFormation dashboard, click on the workshop stack and find LoadBalancerDNS in the outputs tab.
 
@@ -393,13 +393,13 @@ Note: Throughout this workshop, we're going to focus purely on the Like service 
     Note: There is a basic utility in the lab-1-xray/utils folder that will generate a constant flow of artificial traffic to the like service as you work on implementing the filters. This may be more convenient than manually clicking through the website to generate requests. Choice is up to you. To use the utility, run this command -
 
     ```
-    $ python ~/environment/multi-region-workshop/lab-1-xray/utils/ryder.py
+    $ python ~/environment/aws-multi-region-bc-dr-workshop/lab-1-xray/utils/ryder.py
     ```
 
     You will be prompted for an endpoint to target. Enter the load balancer DNS name. The command and output should look something like this -
 
     ```
-    whiterabbit:~/environment/like-service-mmm-MythicalCiCdStack-WZO1F61QZRZX/service (master) $ python ~/environment/multi-region-workshop/lab-1-xray/utils/ryder.py
+    whiterabbit:~/environment/like-service-mmm-MythicalCiCdStack-WZO1F61QZRZX/service (master) $ python ~/environment/aws-multi-region-bc-dr-workshop/lab-1-xray/utils/ryder.py
     Enter an ENDPOINT:PORT combination [port is optional]: alb-mmm-1270147538.us-west-2.elb.amazonaws.com
     Request 0 returned: <Response [500]>
     Request 1 returned: <Response [404]>
@@ -408,7 +408,7 @@ Note: Throughout this workshop, we're going to focus purely on the Like service 
     Request 4 returned: <Response [404]>
     Request 5 returned: <Response [404]>
     ```
-    
+
 
     `Ctrl-C` will kill the process.
 
