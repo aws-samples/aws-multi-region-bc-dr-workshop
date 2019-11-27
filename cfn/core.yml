@@ -445,7 +445,7 @@ Resources:
       TaskRoleArn: !GetAtt ECSTaskRole.Arn
       ContainerDefinitions:
         - Name: service
-          Image: !Sub ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${CoreServiceRepo}:latest
+          Image: docker.io/nginx:latest
           PortMappings:
             - ContainerPort: 8080
               Protocol: http
@@ -488,7 +488,7 @@ Resources:
       TaskRoleArn: !GetAtt ECSTaskRole.Arn
       ContainerDefinitions:
         - Name: like-service
-          Image: !Sub ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${LikeServiceRepo}:latest
+          Image: docker.io/nginx:latest
           PortMappings:
             - ContainerPort: 8080
               Protocol: http
