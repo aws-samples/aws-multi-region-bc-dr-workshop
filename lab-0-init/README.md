@@ -3,15 +3,15 @@
 ## Workshop progress
 **Lab 0: Workshop Initialization**
 
-**Lab 1: Implement Observability**
+Lab 1: Implement Observability
 
-**Lab 2: Operationalize Observability - Aggregate Metrics**
+Lab 2: Operationalize Observability - Aggregate Metrics
 
-**Lab 3: Prep for Multi-Region Deployments**
+Lab 3: Prep for Multi-Region Deployments
 
-**Lab 4: Implement Traffic Management**
+Lab 4: Implement Traffic Management
 
-**Lab 5: Load Test and Failover**
+Lab 5: Load Test and Failover
 
 ## Lab 0 - Deploy Existing Mythical Stack
 
