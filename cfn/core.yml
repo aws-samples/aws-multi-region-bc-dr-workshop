@@ -420,9 +420,6 @@ Resources:
   LikeServiceRepo:
     Type: AWS::ECR::Repository
 
-  Xray:
-    Type: AWS::ECR::Repository
-
   MythicalEcsCluster:
     Type: AWS::ECS::Cluster
     Properties:
@@ -759,7 +756,6 @@ Resources:
         DDBTable: !Ref DDBTableName
         DashboardName: !Sub ${AWS::StackName}_Dashboard
 
-  # Working on a function to delete all extra stuff - disregard for now
   CleanDeletionCustomResource:
     # Removing from secondary region for time being. Todo.
     Condition: PrimaryRegion
@@ -772,12 +768,25 @@ Resources:
       MythicalArtifactBucket: !GetAtt 'MythicalCiCdStack.Outputs.MythicalArtifactBucket'
       CoreServiceRepo: !Ref CoreServiceRepo
       LikeServiceRepo: !Ref LikeServiceRepo
-      XRayRepo: !Ref Xray
       EcsClusterName: !Ref MythicalEcsCluster
+      SecondaryRegion: !Ref IsSecondary
+
+  CleanDeletionCustomResource:
+    # Removing from secondary region for time being. Todo.
+    Condition: SecondaryRegion
+    Type: Custom::CleanDelete
+    DependsOn: CleanDeletionLambdaFunction
+    Properties:
+      ServiceToken: !GetAtt CleanDeletionLambdaFunction.Arn
+      Region: !Ref AWS::Region
+      CfnStackName: !Ref AWS::StackName
+      CoreServiceRepo: !Ref CoreServiceRepo
+      LikeServiceRepo: !Ref LikeServiceRepo
+      EcsClusterName: !Ref MythicalEcsCluster
+      SecondaryRegion: !Ref IsSecondary
 
   #Actual Lambda function to delete stuff
   CleanDeletionLambdaFunction:
-    Condition: PrimaryRegion
     Type: AWS::Lambda::Function
     Properties:
       Code:
@@ -794,14 +803,16 @@ Resources:
           s3 = boto3.resource('s3')
 
           def handler(event, context):
-              print('Response URL: '+event['ResponseURL'])
-              print('RequestID: '+event['RequestId'])
+              print(event)
               CoreServiceEcrRepo = event['ResourceProperties']['CoreServiceRepo']
-              XrayEcrRepo = event['ResourceProperties']['XRayRepo']
               LikeServiceEcrRepo = event['ResourceProperties']['LikeServiceRepo']
               EcsClusterName = event['ResourceProperties']['EcsClusterName']
-              MythicalArtifactBucket = event['ResourceProperties']['MythicalArtifactBucket']
+
               CfnStackName = event['ResourceProperties']['CfnStackName']
+              IsSecondary = event['ResourceProperties']['IsSecondary']
+
+              if IsSecondary == 'true':
+                  MythicalArtifactBucket = event['ResourceProperties']['MythicalArtifactBucket']
 
               logger.debug('Event: {}'.format(event))
               logger.debug('Context: {}'.format(context))
@@ -817,27 +828,24 @@ Resources:
                       likeDeleteResponse = ecrClient.delete_repository(
                           repositoryName=LikeServiceEcrRepo,
                           force=True)
-                      xRayDeleteResponse = ecrClient.delete_repository(
-                          repositoryName=XrayEcrRepo,
-                          force=True)
 
-                      bucket = s3.Bucket(MythicalArtifactBucket)
+                      if IsSecondary == 'false':
+                          bucket = s3.Bucket(MythicalArtifactBucket)
+                          # Delete S3 bucket
+                          for key in bucket.objects.all():
+                            key.delete()
+                          bucket.delete()
 
-                      # Delete S3 bucket
-                      for key in bucket.objects.all():
-                        key.delete()
-                      bucket.delete()
-
-                      # List ECS Services and delete services in a specific cluster
-                      ecsServicesToDelete = ecsClient.list_services(
-                          cluster=EcsClusterName
-                      )
-                      if ecsServicesToDelete['serviceArns'] != []:
-                          for serviceName in ecsServicesToDelete['serviceArns']:
-                              ecsDeleteResponse = ecsClient.delete_service(
-                                  cluster=EcsClusterName,
-                                  service=serviceName,
-                                  force=True)
+                          # List ECS Services and delete services in a specific cluster
+                          ecsServicesToDelete = ecsClient.list_services(
+                              cluster=EcsClusterName
+                          )
+                          if ecsServicesToDelete['serviceArns'] != []:
+                              for serviceName in ecsServicesToDelete['serviceArns']:
+                                  ecsDeleteResponse = ecsClient.delete_service(
+                                      cluster=EcsClusterName,
+                                      service=serviceName,
+                                      force=True)
 
                       responseData = {}
                       cfnresponse.send(event, context, cfnresponse.SUCCESS, responseData, 'CustomResourcePhysicalID')
@@ -1013,12 +1021,6 @@ Outputs:
   SecondaryLikeServiceEcrRepo:
     Condition: SecondaryRegion
     Value: !Sub ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${LikeServiceRepo}
-  XrayEcrRepo:
-    Condition: PrimaryRegion
-    Value: !Sub ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${Xray}
-  SecondaryXrayEcrRepo:
-    Condition: SecondaryRegion
-    Value: !Sub ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${Xray}
   MythicalServiceTargetGroupArn:
     Value: !Ref MythicalServiceTargetGroup
   LikeServiceTargetGroupArn:
