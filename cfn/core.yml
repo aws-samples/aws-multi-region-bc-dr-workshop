@@ -415,7 +415,7 @@ Resources:
       Name: !Sub Project-${AWS::StackName}
       SubnetId: !Ref PublicSubnetOne
 
-  MythicalServiceRepo:
+  CoreServiceRepo:
     Type: AWS::ECR::Repository
 
   LikeServiceRepo:
@@ -435,7 +435,7 @@ Resources:
   LikeServiceLogGroup:
     Type: AWS::Logs::LogGroup
 
-  MythicalServiceTaskDefinition:
+  CoreServiceTaskDefinition:
     Condition: PrimaryRegion
     Type: AWS::ECS::TaskDefinition
     Properties:
@@ -449,7 +449,7 @@ Resources:
       TaskRoleArn: !GetAtt ECSTaskRole.Arn
       ContainerDefinitions:
         - Name: service
-          Image: !Sub ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${MythicalServiceRepo}:latest
+          Image: !Sub ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${CoreServiceRepo}:latest
           PortMappings:
             - ContainerPort: 8080
               Protocol: http
@@ -523,7 +523,7 @@ Resources:
               awslogs-region: !Ref AWS::Region
               awslogs-stream-prefix: xray-daemon
 
-  SecondaryMythicalServiceTaskDefinition:
+  SecondaryCoreServiceTaskDefinition:
     Condition: SecondaryRegion
     Type: AWS::ECS::TaskDefinition
     Properties:
@@ -616,7 +616,7 @@ Resources:
     DependsOn: MythicalListener
     Type: AWS::ECS::Service
     Properties:
-      TaskDefinition: !Ref SecondaryMythicalServiceTaskDefinition
+      TaskDefinition: !Ref SecondaryCoreServiceTaskDefinition
       DesiredCount: 1
       LaunchType: FARGATE
       LoadBalancers:
@@ -771,7 +771,7 @@ Resources:
       Region: !Ref AWS::Region
       CfnStackName: !Ref AWS::StackName
       MythicalArtifactBucket: !GetAtt 'MythicalCiCdStack.Outputs.MythicalArtifactBucket'
-      CoreServiceRepo: !Ref MythicalServiceRepo
+      CoreServiceRepo: !Ref CoreServiceRepo
       LikeServiceRepo: !Ref LikeServiceRepo
       XRayRepo: !Ref Xray
       EcsClusterName: !Ref MythicalEcsCluster
@@ -1002,15 +1002,15 @@ Outputs:
   ProfileName:
     Condition: PrimaryRegion
     Value: !Ref MythicalProfile
-  MythicalServiceEcrRepo:
+  CoreServiceEcrRepo:
     Condition: PrimaryRegion
-    Value: !Sub ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${MythicalServiceRepo}
+    Value: !Sub ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${CoreServiceRepo}
   LikeServiceEcrRepo:
     Condition: PrimaryRegion
     Value: !Sub ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${LikeServiceRepo}
-  SecondaryMythicalServiceEcrRepo:
+  SecondaryCoreServiceEcrRepo:
     Condition: SecondaryRegion
-    Value: !Sub ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${MythicalServiceRepo}
+    Value: !Sub ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${CoreServiceRepo}
   SecondaryLikeServiceEcrRepo:
     Condition: SecondaryRegion
     Value: !Sub ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${LikeServiceRepo}
@@ -1030,13 +1030,13 @@ Outputs:
     Value: !Sub ${AWS::StackName}
   CoreServiceTaskDefinition:
     Condition: PrimaryRegion
-    Value: !Ref MythicalServiceTaskDefinition
+    Value: !Ref CoreServiceTaskDefinition
   LikeServiceTaskDefinition:
     Condition: PrimaryRegion
     Value: !Ref LikeServiceTaskDefinition
   SecondaryCoreServiceTaskDefinition:
     Condition: SecondaryRegion
-    Value: !Ref SecondaryMythicalServiceTaskDefinition
+    Value: !Ref SecondaryCoreServiceTaskDefinition
   SecondaryLikeServiceTaskDefinition:
     Condition: SecondaryRegion
     Value: !Ref SecondaryLikeServiceTaskDefinition

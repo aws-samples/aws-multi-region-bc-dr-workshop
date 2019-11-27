@@ -1,7 +1,7 @@
 #!/bin/bash
 
-SERVICE_TASK_DEF=$(jq < cfn-output.json -r '.MythicalServiceTaskDefinition')
+CORE_SERVICE_TASK_DEF=$(jq < cfn-output.json -r '.CoreServiceTaskDefinition')
 LIKE_SERVICE_TASK_DEF=$(jq < cfn-output.json -r '.LikeServiceTaskDefinition')
 
-aws ecs create-service --cli-input-json file://service.json --task-definition $SERVICE_TASK_DEF
+aws ecs create-service --cli-input-json file://service.json --task-definition $CORE_SERVICE_TASK_DEF
 aws ecs create-service --cli-input-json file://like-service.json --task-definition $LIKE_SERVICE_TASK_DEF
