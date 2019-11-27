@@ -16,10 +16,7 @@ If you are attending an AWS event, you will be provided an AWS account to use fo
 
     Region | Launch Template
     ------------ | -------------  
-    **Oregon** (us-west-2) | [![Launch Mythical Mysfits Stack into Oregon with CloudFormation](/images/deploy-to-aws.png)](https://console.aws.amazon.com/cloudformation/home?region=us-west-2#/stacks/new?stackName=mm-multi-region&templateURL=https://mythical-mysfits-website.s3.amazonaws.com/multi-region-bcdr/core.yml)  
-    **Ohio** (us-east-2) | [![Launch Mythical Mysfits Stack into Ohio with CloudFormation](/images/deploy-to-aws.png)](https://console.aws.amazon.com/cloudformation/home?region=us-east-2#/stacks/new?stackName=mm-multi-region&templateURL=https://mythical-mysfits-website.s3.amazonaws.com/multi-region-bcdr/core.yml)  
-    **Ireland** (eu-west-1) | [![Launch Mythical Mysfits Stack into Ireland with CloudFormation](/images/deploy-to-aws.png)](https://console.aws.amazon.com/cloudformation/home?region=eu-west-1#/stacks/new?stackName=mm-multi-region&templateURL=https://mythical-mysfits-website.s3.amazonaws.com/multi-region-bcdr/core.yml)  
-    **Singapore** (ap-southeast-1) | [![Launch Mythical Mysfits Stack into Singapore with CloudFormation](/images/deploy-to-aws.png)](https://console.aws.amazon.com/cloudformation/home?region=ap-southeast-1#/stacks/new?stackName=mm-multi-region&templateURL=https://mythical-mysfits-website.s3.amazonaws.com/multi-region-bcdr/core.yml)
+    **Oregon** (us-west-2) | [![Launch Mythical Mysfits Stack into Oregon with CloudFormation](/images/deploy-to-aws.png)](https://console.aws.amazon.com/cloudformation/home?region=us-west-2#/stacks/new?stackName=mm-multi-region&templateURL=https://mythical-mysfits-website.s3.amazonaws.com/multi-region-bcdr/core.yml)
 
     The link will load the AWS CloudFormation console in the selected region and populate the Amazon S3 URL with the location of the core workshop CloudFormation template. If you want to review the core and nested templates, you can find them in the cfn folder of the GitHub repo.
 
