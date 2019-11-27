@@ -273,7 +273,7 @@ Finally, add all the files to both repos and trigger deployments:
 Navigate back to the [AWS Cloud9 console](http://console.aws.amazon.com/cloud9) and access your working environment if you're not already there. Run these commands:
 
 <pre>
-  $ cd ~environment/aws-multi-region-bc-dr-workshop
+  $ cd ~/environment/aws-multi-region-bc-dr-workshop
   $ bootstrap/secondary-region/setup
 </pre>
 
