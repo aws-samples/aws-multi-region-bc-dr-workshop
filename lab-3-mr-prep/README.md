@@ -211,7 +211,14 @@ Run the `bootstrap/secondary-region/setup` script. If you're short on time or wo
 <details>
 <summary>Option 1: Step-by-step manual instructions</summary>
 
-First, we will update the **core-service** app. Navigate to the **core-service** CodeCommit repo. We can do this in the side navigation pane or via CLI.
+First, we will update the **core-service** app.
+
+Navigate to the [CloudFormation console](https://console.aws.amazon.com/cloudformation/) of the secondary region. Click on your stack and go to the **Outputs** tab. Jot down in your notepad the values of:
+- SecondaryRegion
+- SecondaryLikeServiceEcrRepo
+- SecondaryCoreServiceEcrRepo
+
+Within Cloud9, find the **core-service** CodeCommit repo. We can do this in the side navigation pane or via CLI.
 
 Console:
 ![Find file on nav pane](images/03-core-service_buildspec.png)
@@ -221,6 +228,8 @@ CLI:
 $ cd ~/environment/core-service-[PRESS TAB TO AUTO COMPLETE AND PRESS ENTER]
 ```
 
+Don't do this right now. 
+<!--
 Find the **buildspec_prod** file in both **core-service** and **like-service** git repos. Update them to push your built containers  to both your primary and secondary regions. Within both of the buildspec files there are [TODO] lines to guide you through what you'll need to do. It's your choice if you want to understand how the build process works.
 
 We have created some completed buildspec files if you want to skip this portion. They are in the app/hints folder.
@@ -231,17 +240,17 @@ We have created some completed buildspec files if you want to skip this portion.
   $ cd ~/environment/<b>like-service-[PRESS TAB TO AUTO COMPLETE AND PRESS ENTER]</b>
   $ cp ~/environment/multi-region-workshop/app/hints/like-buildspec_prod.yml buildspec_prod.yml
 
-  Open the two files and replace these variables:
-  * REPLACEME_SECONDARY_REGION with your secondary region (default <b>us-east-1</b>) in
-    both buildspec_prod.yml files
-  * REPLACEME_CORE_REPOURI_SECONDARY with the value of <b>SecondaryMythicalServiceEcrRepo</b>
-    from the Cloudformation outputs in the Core service buildspec_prod.yml
-  * REPLACEME_LIKE_REPOURI_SECONDARY with the value of <b>SecondaryLikeServiceEcrRepo</b>
-    from the CloudFormation outputs in the Like service buildspec_prod.yml
+  Open the <b>buildspec_prod.yml</b> file in the <b>core service</b> repository. Replace these variables:
+  * REPLACEME_SECONDARY_REGION with your secondary region (default <b>us-east-1</b>)
+
+  * REPLACEME_SECONDARY_REPO_URI with the value of <b>SecondaryCoreServiceEcrRepo</b>
+    from the Cloudformation outputs in the <b>Core service</b> buildspec_prod.yml
+  * REPLACEME_SECONDARY_REPO_URI with the value of <b>SecondaryLikeServiceEcrRepo</b>
+    from the CloudFormation outputs in the <b>Like service</b> buildspec_prod.yml
 
   <b>Note that in these labs we are hard coding values, but best practice is to use environment variables
   instead. This just simplifies the process for illustrative purposes.</b>
-</pre>
+</pre> -->
 
 ### Trigger deployment again
 

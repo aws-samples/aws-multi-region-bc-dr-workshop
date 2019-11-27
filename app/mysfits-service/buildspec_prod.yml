@@ -6,6 +6,10 @@ phases:
       - echo Assigning variables for repositories and regions
       - PRIMARY_CORE_REPO_URI=REPLACEME_PRIMARY_REPO_URI
       - PRIMARY_REGION=$AWS_DEFAULT_REGION
+      # Here we'll assign a variable for the Secondary Region ECR repo.
+      # - [TODO]: SECONDARY_CORE_REPO_URI=
+      # Do the same thing for the secondary region. We can't pull the default region from anywhere since the second region is compeltely separate.
+      # - [TODO]: SECONDARY_REGION=
   build:
     commands:
       - echo Build started on `date`
@@ -13,6 +17,8 @@ phases:
       - docker build -t core-service:$CODEBUILD_RESOLVED_SOURCE_VERSION . # Here, we are using the environment variable passed in via CodeBuild IMAGE_REPO_NAME
       - echo Tagging Image for primary region
       - docker tag core-service:$CODEBUILD_RESOLVED_SOURCE_VERSION $PRIMARY_CORE_REPO_URI:$CODEBUILD_RESOLVED_SOURCE_VERSION
+      # In the previous 3 2 commands, we issued a build and then a tag. How would you tag this for a second region?
+      # [TODO]: Implement tagging the same docker container to a different ECR repo
   post_build:
     commands:
       - echo Build completed on `date`
