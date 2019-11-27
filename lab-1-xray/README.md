@@ -1,5 +1,18 @@
 # Mythical Mysfits: Multi-Region-Workshop
 
+## Workshop progress
+✅ Lab 0: Workshop Initialization
+
+**Lab 1: Implement Observability**
+
+Lab 2: Operationalize Observability - Aggregate Metrics
+
+Lab 3: Prep for Multi-Region Deployments
+
+Lab 4: Implement Traffic Management
+
+Lab 5: Load Test and Failover
+
 ## LAB 1 - Distributed Tracing with AWS X-Ray
 
 Observability helps quantify how we are able to meet our availability requirements. An important aspect of observability especially in a microservices architecture is distributed tracing. This enables the ability to profile a request as it passes through our application architecture which may involve one or more services and potentially interactions with backend data stores. Data captured from traces helps teams understand how the application behaves under various conditions and can be incredibly helpful when issues arise. For example, developers can use the data to identify inefficiencies in code and prioritize their sprints. Operations or SRE teams can use the data to diagnose or triage unusual latencies or failures. Infrastructure engineers can use the data to make adjustments to resident scaling policies or resources supporting particular services.
