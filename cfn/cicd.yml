@@ -24,11 +24,11 @@ Resources:
     Properties:
       RepositoryDescription: Repository for the Mythical Mysfits core service
       RepositoryName: !Sub core-service-${AWS::StackName}
-  MythicalInfraGitRepository:
-    Type: AWS::CodeCommit::Repository
-    Properties:
-      RepositoryDescription: Repository for the Mythical Mysfits infrastructure
-      RepositoryName: !Sub Infra-${AWS::StackName}
+  # MythicalInfraGitRepository:
+  #   Type: AWS::CodeCommit::Repository
+  #   Properties:
+  #     RepositoryDescription: Repository for the Mythical Mysfits infrastructure
+  #     RepositoryName: !Sub Infra-${AWS::StackName}
 
 
   # An IAM role that allows the AWS CodePipeline service to perform its
@@ -487,10 +487,10 @@ Outputs:
     Value: !GetAtt MythicalCoreGitRepository.CloneUrlHttp
   MythicalCoreGitRepositoryName:
     Value: !GetAtt MythicalCoreGitRepository.Name
-  MythicalInfraGitRepositoryCloneUrl:
-    Value: !GetAtt MythicalInfraGitRepository.CloneUrlHttp
-  MythicalInfraGitRepositoryName:
-    Value: !GetAtt MythicalInfraGitRepository.Name
+  # MythicalInfraGitRepositoryCloneUrl:
+  #   Value: !GetAtt MythicalInfraGitRepository.CloneUrlHttp
+  # MythicalInfraGitRepositoryName:
+  #   Value: !GetAtt MythicalInfraGitRepository.Name
   MythicalMysfitsServiceCodeBuildServiceRoleArn:
     Value: !GetAtt MythicalMysfitsServiceCodeBuildServiceRole.Arn
   MythicalMysfitsServiceCodePipelineServiceRoleArn:
