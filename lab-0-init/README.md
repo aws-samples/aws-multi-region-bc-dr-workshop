@@ -3,7 +3,7 @@
 ## Workshop progress
 **Lab 0: Workshop Initialization**
 
-Lab 1: Implement Observability
+Lab 1: Instrument Observability
 
 Lab 2: Operationalize Observability - Aggregate Metrics
 
