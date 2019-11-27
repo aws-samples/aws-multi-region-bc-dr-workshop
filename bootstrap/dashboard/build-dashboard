@@ -38,3 +38,15 @@ sed -i -e 's;REPLACEME_PRIMARY_REGION;'"$PRIMARY_REGION"';' ~/environment/aws-mu
 sed -i -e 's;REPLACEME_SECONDARY_REGION;'"$SECONDARY_REGION"';' ~/environment/aws-multi-region-bc-dr-workshop/cwdashboard_multiregion.yml
 sed -i -e 's;REPLACEME_DDBTABLE;'"$DDBTABLE"';' ~/environment/aws-multi-region-bc-dr-workshop/cwdashboard_multiregion.yml
 
+# We have to do a second pass of the file...
+sed -i -e 's;REPLACEME_PRIMARY_ALB_FULL_NAME;'"$PRIMARY_ALB_FULL_NAME"';' ~/environment/aws-multi-region-bc-dr-workshop/cwdashboard_multiregion.yml
+sed -i -e 's;REPLACEME_SECONDARY_ALB_FULL_NAME;'"$SECONDARY_ALB_FULL_NAME"';' ~/environment/aws-multi-region-bc-dr-workshop/cwdashboard_multiregion.yml
+sed -i -e 's;REPLACEME_PRIMARY_CORE_ECS_SERVICE;'"$PRIMARY_CORE_ECS_SERVICE"';' ~/environment/aws-multi-region-bc-dr-workshop/cwdashboard_multiregion.yml
+sed -i -e 's;REPLACEME_SECONDARY_CORE_ECS_SERVICE;'"$SECONDARY_CORE_ECS_SERVICE"';' ~/environment/aws-multi-region-bc-dr-workshop/cwdashboard_multiregion.yml
+sed -i -e 's;REPLACEME_PRIMARY_LIKE_ECS_SERVICE;'"$PRIMARY_LIKE_ECS_SERVICE"';' ~/environment/aws-multi-region-bc-dr-workshop/cwdashboard_multiregion.yml
+sed -i -e 's;REPLACEME_SECONDARY_LIKE_ECS_SERVICE;'"$SECONDARY_LIKE_ECS_SERVICE"';' ~/environment/aws-multi-region-bc-dr-workshop/cwdashboard_multiregion.yml
+sed -i -e 's;REPLACEME_PRIMARY_ECS_CLUSTER;'"$PRIMARY_ECS_CLUSTER"';' ~/environment/aws-multi-region-bc-dr-workshop/cwdashboard_multiregion.yml
+sed -i -e 's;REPLACEME_SECONDARY_ECS_CLUSTER;'"$SECONDARY_ECS_CLUSTER"';' ~/environment/aws-multi-region-bc-dr-workshop/cwdashboard_multiregion.yml
+sed -i -e 's;REPLACEME_PRIMARY_REGION;'"$PRIMARY_REGION"';' ~/environment/aws-multi-region-bc-dr-workshop/cwdashboard_multiregion.yml
+sed -i -e 's;REPLACEME_SECONDARY_REGION;'"$SECONDARY_REGION"';' ~/environment/aws-multi-region-bc-dr-workshop/cwdashboard_multiregion.yml
+sed -i -e 's;REPLACEME_DDBTABLE;'"$DDBTABLE"';' ~/environment/aws-multi-region-bc-dr-workshop/cwdashboard_multiregion.yml

@@ -19,7 +19,7 @@ Resources:
                             "properties": {
                                 "metrics": [
                                     [ "AWS/ApplicationELB", "RequestCount", "LoadBalancer", "REPLACEME_PRIMARY_ALB_FULL_NAME", { "label": "REPLACEME_PRIMARY_REGION ALB" } ],
-                                    [ "...", "REPLACEME_SECONDARY_ALB_FULL_NAME", { "region": "REPLACEME_SECONDARY_REGION" } ]
+                                    [ "...", "REPLACEME_SECONDARY_ALB_FULL_NAME", { "region": "REPLACEME_SECONDARY_REGION" }, "label": "REPLACEME_SECONDARY_REGION ALB" } ]
                                 ],
                                 "view": "timeSeries",
                                 "stacked": true,
@@ -74,7 +74,7 @@ Resources:
                             "type": "text",
                             "x": 3,
                             "y": 0,
-                            "width": 6,
+                            "width": 9,
                             "height": 1,
                             "properties": {
                                 "markdown": "\n# Multi-Region BCDR Workshop\n"
