@@ -1,0 +1,176 @@
+AWSTemplateFormatVersion: '2010-09-09'
+
+
+Resources:
+
+    MultiRegionWorkShopDashboard:
+      Type: AWS::CloudWatch::Dashboard
+      Properties:
+        DashboardName: Multi-Region-Fully-Prepared-Dashboard
+        DashboardBody: 
+              '{
+                    "widgets": [
+                        {
+                            "type": "metric",
+                            "x": 0,
+                            "y": 1,
+                            "width": 6,
+                            "height": 6,
+                            "properties": {
+                                "metrics": [
+                                    [ "AWS/ApplicationELB", "RequestCount", "LoadBalancer", "REPLACEME_PRIMARY_ALB_FULL_NAME", { "label": "REPLACEME_PRIMARY_REGION ALB" } ],
+                                    [ "...", "REPLACEME_SECONDARY_ALB_FULL_NAME", { "region": "REPLACEME_SECONDARY_REGION" } ]
+                                ],
+                                "view": "timeSeries",
+                                "stacked": true,
+                                "region": "REPLACEME_PRIMARY_REGION",
+                                "stat": "Sum",
+                                "period": 60,
+                                "title": "ALB Requests Per Minute"
+                            }
+                        },
+                        {
+                            "type": "metric",
+                            "x": 6,
+                            "y": 7,
+                            "width": 9,
+                            "height": 3,
+                            "properties": {
+                                "metrics": [
+                                    [ "AWS/ECS", "CPUUtilization", "ServiceName", "REPLACEME_SECONDARY_CORE_ECS_SERVICE", "ClusterName", "REPLACEME_SECONDARY_ECS_CLUSTER", { "region": "REPLACEME_SECONDARY_REGION", "label": "REPLACEME_SECONDARY_REGION CoreEcsService CPUUtilization" } ],
+                                    [ ".", "MemoryUtilization", ".", ".", ".", ".", { "region": "REPLACEME_SECONDARY_REGION" } ]
+                                ],
+                                "view": "singleValue",
+                                "region": "REPLACEME_PRIMARY_REGION",
+                                "title": "REPLACEME_SECONDARY_REGION Core Service Metrics",
+                                "stat": "Average",
+                                "period": 60
+                            }
+                        },
+                        {
+                            "type": "metric",
+                            "x": 0,
+                            "y": 7,
+                            "width": 6,
+                            "height": 6,
+                            "properties": {
+                                "metrics": [
+                                    [ "AWS/ApplicationELB", "HTTPCode_Target_4XX_Count", "LoadBalancer", "REPLACEME_PRIMARY_ALB_FULL_NAME", { "label": "REPLACEME_PRIMARY_REGION ALB 4XX" } ],
+                                    [ ".", "HTTPCode_Target_5XX_Count", ".", ".", { "label": "REPLACEME_PRIMARY_REGION ALB 5XX" } ],
+                                    [ ".", "HTTPCode_Target_2XX_Count", ".", ".", { "label": "REPLACEME_PRIMARY_REGION ALB 2XX" } ],
+                                    [ "...", "REPLACEME_SECONDARY_ALB_FULL_NAME", { "region": "REPLACEME_SECONDARY_REGION", "label": "REPLACEME_SECONDARY_REGION ALB 2XX" } ],
+                                    [ ".", "HTTPCode_Target_4XX_Count", ".", ".", { "region": "REPLACEME_SECONDARY_REGION", "label": "REPLACEME_SECONDARY_REGION ALB 4XX" } ],
+                                    [ "...", { "region": "REPLACEME_SECONDARY_REGION", "label": "REPLACEME_SECONDARY_REGION ALB 5XX" } ]
+                                ],
+                                "view": "timeSeries",
+                                "stacked": true,
+                                "title": "ALB HTTP Responses",
+                                "region": "REPLACEME_PRIMARY_REGION",
+                                "stat": "Sum",
+                                "period": 60
+                            }
+                        },
+                        {
+                            "type": "text",
+                            "x": 3,
+                            "y": 0,
+                            "width": 6,
+                            "height": 1,
+                            "properties": {
+                                "markdown": "\n# Multi-Region BCDR Workshop\n"
+                            }
+                        },
+                        {
+                            "type": "metric",
+                            "x": 6,
+                            "y": 4,
+                            "width": 9,
+                            "height": 3,
+                            "properties": {
+                                "metrics": [
+                                    [ "AWS/ECS", "CPUUtilization", "ServiceName", "REPLACEME_PRIMARY_LIKE_ECS_SERVICE", "ClusterName", "REPLACEME_PRIMARY_ECS_CLUSTER" ],
+                                    [ ".", "MemoryUtilization", ".", ".", ".", "." ]
+                                ],
+                                "view": "singleValue",
+                                "region": "REPLACEME_PRIMARY_REGION",
+                                "title": "REPLACEME_PRIMARY_REGION Like Service Metrics",
+                                "stat": "Average",
+                                "period": 60
+                            }
+                        },
+                        {
+                            "type": "metric",
+                            "x": 0,
+                            "y": 13,
+                            "width": 6,
+                            "height": 6,
+                            "properties": {
+                                "metrics": [
+                                    [ "AWS/DynamoDB", "ConsumedReadCapacityUnits", "TableName", "REPLACEME_DDBTABLE" ],
+                                    [ ".", "ConsumedWriteCapacityUnits", ".", "." ]
+                                ],
+                                "view": "timeSeries",
+                                "stacked": true,
+                                "region": "REPLACEME_PRIMARY_REGION",
+                                "title": "DynamoDB Metrics",
+                                "stat": "Sum",
+                                "period": 300
+                            }
+                        },
+                        {
+                            "type": "metric",
+                            "x": 6,
+                            "y": 13,
+                            "width": 6,
+                            "height": 6,
+                            "properties": {
+                                "metrics": [
+                                    [ "AWS/X-Ray", "ApproximateTraceCount", "GroupName", "like-service-errors-faults" ]
+                                ],
+                                "view": "timeSeries",
+                                "stacked": true,
+                                "region": "REPLACEME_PRIMARY_REGION",
+                                "title": "X-Ray Errors and Faults",
+                                "stat": "Sum",
+                                "period": 300
+                            }
+                        },
+                        {
+                            "type": "metric",
+                            "x": 6,
+                            "y": 1,
+                            "width": 9,
+                            "height": 3,
+                            "properties": {
+                                "metrics": [
+                                    [ "AWS/ECS", "CPUUtilization", "ServiceName", "REPLACEME_PRIMARY_CORE_ECS_SERVICE", "ClusterName", "REPLACEME_PRIMARY_ECS_CLUSTER" ],
+                                    [ ".", "MemoryUtilization", ".", ".", ".", "." ]
+                                ],
+                                "view": "singleValue",
+                                "region": "REPLACEME_PRIMARY_REGION",
+                                "title": "REPLACEME_PRIMARY_REGION Core Service Metrics",
+                                "stat": "Average",
+                                "period": 60
+                            }
+                        },
+                        {
+                            "type": "metric",
+                            "x": 6,
+                            "y": 10,
+                            "width": 9,
+                            "height": 3,
+                            "properties": {
+                                "metrics": [
+                                    [ "AWS/ECS", "CPUUtilization", "ServiceName", "REPLACEME_SECONDARY_LIKE_ECS_SERVICE", "ClusterName", "REPLACEME_SECONDARY_ECS_CLUSTER", { "region": "REPLACEME_SECONDARY_REGION" } ],
+                                    [ ".", "MemoryUtilization", ".", ".", ".", ".", { "region": "REPLACEME_SECONDARY_REGION" } ]
+                                ],
+                                "view": "singleValue",
+                                "region": "REPLACEME_PRIMARY_REGION",
+                                "title": "REPLACEME_SECONDARY_REGION Like Service Metrics",
+                                "stat": "Average",
+                                "period": 60
+                            }
+                        }
+                    ]
+              }'
+              
