@@ -52,7 +52,7 @@ Further reading:
 
 </details>
 
-You have (2) options at this point:
+**PLEASE READ: You have (2) options at this point:**
 
 1. Follow the steps below, using the provided documentation (and hints if you get stuck), to add lines of instrumentation code to the Like service. If you go this route, try not spend more than 5 min on each step if you're at an AWS event with a time limit. We want you to be able to get through as many of the labs as possible.
 
@@ -60,7 +60,7 @@ You have (2) options at this point:
 
 2. Copy the instrumented code from the lab-1-xray/answers folder and move on to Section 3 where you push the instrumented code to the CI/CD pipeline for build and deployment. If you're short on time or would rather focus on the traffic management bits later in the workshop, reveal and follow the `Option 2 step by step` below.
 
-Choose your adventure!
+**Choose your adventure!**
 
 <details>
 <summary>Option 2 step by step</summary>
