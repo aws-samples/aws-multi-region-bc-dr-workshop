@@ -209,7 +209,7 @@ Run the `bootstrap/secondary-region/setup` script. If you're short on time or wo
 **Choose your adventure!**
 
 <details>
-<summary>Option 1: Step-by-step manual instructions</summary>
+<summary>Option 1: Step-by-step manual instructions (Don't do this right now)</summary>
 
 First, we will update the **core-service** app.
 
@@ -228,8 +228,6 @@ CLI:
 $ cd ~/environment/core-service-[PRESS TAB TO AUTO COMPLETE AND PRESS ENTER]
 ```
 
-Don't do this right now. 
-<!--
 Find the **buildspec_prod** file in both **core-service** and **like-service** git repos. Update them to push your built containers  to both your primary and secondary regions. Within both of the buildspec files there are [TODO] lines to guide you through what you'll need to do. It's your choice if you want to understand how the build process works.
 
 We have created some completed buildspec files if you want to skip this portion. They are in the app/hints folder.
@@ -250,7 +248,7 @@ We have created some completed buildspec files if you want to skip this portion.
 
   <b>Note that in these labs we are hard coding values, but best practice is to use environment variables
   instead. This just simplifies the process for illustrative purposes.</b>
-</pre> -->
+</pre>
 
 ### Trigger deployment again
 
