@@ -635,7 +635,7 @@ Resources:
 
   LikeEcsService:
     Condition: SecondaryRegion
-    DependsOn: MythicalListener
+    DependsOn: MythicalLikeListenerRule
     Type: AWS::ECS::Service
     Properties:
       TaskDefinition: !Ref SecondaryLikeServiceTaskDefinition
