@@ -246,7 +246,7 @@ Finally, add all the files to both repos and trigger deployments:
 </details>
 
 <details>
-<summary>Option 2: Skip this step</summary>
+<summary>Option 2: Run the automated secondary region bootstrap script</summary>
 
 Navigate back to the [AWS Cloud9 console](http://console.aws.amazon.com/cloud9) and access your working environment if you're not already there. Run these commands:
 
@@ -259,7 +259,7 @@ Navigate back to the [AWS Cloud9 console](http://console.aws.amazon.com/cloud9) 
 
 The last step of both of the options above will commit and push your new application code. Take a look at your pipelines in the AWS CodePipeline Console and you should see the deployments start. Wait until all deployments are complete.
 
-![Todo: screenshot of finished cp deploy multi-region](images/03-cp-stuff.png)
+![Todo: screenshot of finished cp deploy multi-region](images/03-codepipeline-complete.png)
 
 ### Enabling Cloudwatch Dashboard to show multi-region metrics
 
