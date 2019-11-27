@@ -1,9 +1,0 @@
-#! /bin/bash
-
-set -eu
-
-echo "Bootstrapping for WS2"
-script/ws2/bootstrap_ws2
-#echo "Bootstrapping for WS3"
-#script/ws3/bootstrap_ws3
-echo "Success!"
