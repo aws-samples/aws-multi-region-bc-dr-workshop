@@ -16,7 +16,7 @@ To recap our progress to date, we've modernized our stack to be containerized mi
 * AWS account - if you're doing this workshop as a part of an AWS event, you will be provided an account through a platform called Event Engine. The workshop administrator will provide instructions. If the event specifies you'll need your own account or if you're doing this workshop on your own, it's easy and free to [create an account](https://aws.amazon.com/) if you do not have one already.
 * If using your own AWS account, create and use an IAM account with elevated privileges. Easiest option is to create an IAM user with admin privileges.
 
-NOTE: Familiarity with AWS, Python, [Docker](https://www.docker.com/), networking, CI/CD, and git is a plus but not required.
+Familiarity with AWS, Python, [Docker](https://www.docker.com/), networking, CI/CD, and git is a plus but not required.
 
 ### What you'll do
 
@@ -29,7 +29,7 @@ The labs in the workshop are designed to be completed in sequence, and the full 
 * **[Lab 4](lab-4-globalacc):** Implement AWS Global Accelerator and test traffic management
 * **[Lab 5](lab-5-loadtest):** Load test the system to test manual failover based on operational metrics
 * **[Bonus Lab](/):** [DOES NOT EXIST YET] Implement automated failover and active-active
-* **Workshop Cleanup** [Cleanup working environment](#workshop-cleanup)
+* **Workshop Cleanup** [Cleanup working environment](#important-workshop-cleanup)
 
 ### Conventions
 
@@ -67,9 +67,9 @@ Hints are also provided along the way and will look like this:
 
 ### IMPORTANT: Workshop Cleanup
 
-If you're attending an AWS event and are provided an account to use, you can ignore this section because we'll destroy the account. Feel free to skip to [Lab-0 to get started](lab-0-init)
+If you're attending an AWS event and are provided an account to use, you can ignore this section because we'll destroy the account once the workshop concludes. Feel free to proceed to [Lab-0 to get started](lab-0-init).
 
-**If you are using your own account**, it is **VERY** important you clean up resources created during the workshop. Follow these steps to delete the main workshop CloudFormation stack:
+**If you are using your own account**, it is **VERY** important you clean up resources created during the workshop. Follow these steps to delete the main workshop CloudFormation stack once you're done going through the workshop:
 
 1. Navigate to the [CloudFormation dashboard](https://console.aws.amazon.com/cloudformation/home#/stacks) and click on your workshop stack name to load stack details
 2. Click **Delete** to delete the stack
