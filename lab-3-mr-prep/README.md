@@ -1,4 +1,4 @@
-# Mythical Mysfits: Multi-Region-Workshop
+# Mysfits: Multi-Region-Workshop
 
 **Workshop progress:**<br>
 ✅ Implement observability<p>
@@ -248,20 +248,49 @@ The last step of both of the options above will commit and push your new applica
 
 ### Enabling Cloudwatch Dashboard to show multi-region metrics
 
-Now that you have deployed the stack in the secondary region, lets adjust the Cloudwatch dashboard that you created in the previous lab to include these new resources. This will provide visibility to the Mythical and Like services running across both regions on the same dashboard.
+Now that you have deployed the stack in the secondary region, lets adjust the Cloudwatch dashboard that you created in the previous lab to include these new resources. This will provide visibility to the Core and Like services running across both regions on the same dashboard.
 
-If you are unfamiliar with Amazon Cloudwatch, you may consider creating a duplicate of the current Cloudwatch dashboard for safe keeping. That way you can always revert back to the original if you need to.
+You have (2) options at this point:
+
+Follow the steps below, using the provided documentation (and hints if you get stuck), to add the additional metrics to the Cloudwatch dashboard manually. If you go this route, try not spend more than 5 min on each step if you're at an AWS event with a time limit. We want you to be able to get through as many of the labs as possible.
+
+OR
+
+Run the `bootstrap/dashboard/setup` script. This will deploy a fully prepared Cloudwatch dashboard for you showing metrics from both stacks in both regions. If you're short on time or would rather focus on the traffic management bits later in the workshop, reveal and follow the Option 1 step by step below.
+
+**Choose your adventure!**
 
 <details>
-    <summary>Instructions: How do I do this?</summary>
+ <summary>Option 1: Use the script to build the dashboard</summary>
+ 
+1. In the Cloud9 IDE terminal window, navigate to the root of the working directory that was cloned from Github.
 
-* Select the Cloudwatch dashboard you wish to duplicate
-* Click **Actions** followed by **Save dashboard as...**
-* Enter a name for the new dashboard - **BackupOfMyDashboard**
-* Click **Save dashboard**
+    ```
+    $ cd ~/environment/aws-multi-region-[PRESS TAB TO AUTO COMPLETE AND PRESS ENTER]
+    ```    
 
-</details>
+2. Run the dashboard setup script to launch a Cloudformation template that will build the dashboard for you.
 
+    ```
+    $ ~/environment/aws-multi-region-bc-dr-workshop
+    ```
+
+
+![image](https://user-images.githubusercontent.com/23423809/69701838-bbd0ef80-10a2-11ea-8173-3e720b0efc69.png)
+
+3. Wait until you see **Successfully created/updated stack - Fully-Prepared-Dashboard**. This should take less than 30 seconds. Once complete, you can navigate to the [Cloudwatch Dashboards](https://console.aws.amazon.com/cloudwatch/home?#dashboards:) page where you will see a new dashboard with **Fully-Prepared-Dashboard** in the name. You can use this going forward and modify it as you wish to.
+
+![image](https://user-images.githubusercontent.com/23423809/69702002-15d1b500-10a3-11ea-9e4f-86ba53e69054.png)
+
+**Needs updated screenshot**
+![image](https://user-images.githubusercontent.com/23423809/69702075-431e6300-10a3-11ea-9862-e513bb24dbbe.png)
+
+
+</details> 
+
+
+<details>
+<summary>Option 2: Step-by-step manual instructions</summary>
 
 ### X. Edit the widgets to show metrics from the other region
 
@@ -309,7 +338,7 @@ Modify the ALB HTTP Responses widget to show the metrics from the ALB in the sec
 </details>
 
 
-### X.b Add widgets for the Like and Mythical Services from Secondary region
+### X.b Add widgets for the Like and Core Services from Secondary region
 
 Following the same process from Lab 2, add a new widget for each of the Like and Mytical services. Modify the titles to be able to easily identify which region they are populating from. You should end up with something like this:
 
@@ -333,6 +362,8 @@ Here's how:
 * Click **Create Widget**
 
 ## Important - Save your Cloudwatch Dashboard! ##
+
+</details>
 
 # Checkpoint
 
