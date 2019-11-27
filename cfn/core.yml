@@ -5,10 +5,10 @@ Description: This stack deploys the core network infrastructure and IAM resource
 Parameters:
   DDBTableName:
     Type: String
-    Default: MythicalMysfits-DDBTable
+    Default: mm-ddbtable
     Description: Name of your DynamoDB Table.
 
-  IsDrRegion:
+  IsSecondary:
     Type: String
     Default: false
     AllowedValues:
@@ -43,8 +43,8 @@ Mappings:
       CIDR: '10.0.3.0/24'
 
 Conditions:
-  NotDrRegion: !Equals [ !Ref IsDrRegion, false ]
-  IsInDrRegionTest: !Equals [ !Ref IsDrRegion, true ]
+  PrimaryRegion: !Equals [ !Ref IsSecondary, false ]
+  SecondaryRegion: !Equals [ !Ref IsSecondary, true ]
 
 Resources:
   # VPC in which containers will be networked.
@@ -365,14 +365,14 @@ Resources:
               Resource: '*'
 
   MythicalProfile:
-    Condition: NotDrRegion
+    Condition: PrimaryRegion
     Type: AWS::IAM::InstanceProfile
     Properties:
       Roles:
         - !Ref ECSTaskRole
 
   MythicalDynamoTable:
-    Condition: NotDrRegion
+    Condition: PrimaryRegion
     Type: AWS::DynamoDB::Table
     Properties:
       TableName: !Ref DDBTableName
@@ -407,20 +407,17 @@ Resources:
 
   MythicalEnvironment:
     Type: AWS::Cloud9::EnvironmentEC2
-    Condition: NotDrRegion
+    Condition: PrimaryRegion
     Properties:
       AutomaticStopTimeMinutes: 30
       InstanceType: t2.small
       Name: !Sub Project-${AWS::StackName}
       SubnetId: !Ref PublicSubnetOne
 
-  MythicalServiceRepo:
+  CoreServiceRepo:
     Type: AWS::ECR::Repository
 
   LikeServiceRepo:
-    Type: AWS::ECR::Repository
-
-  Xray:
     Type: AWS::ECR::Repository
 
   MythicalEcsCluster:
@@ -434,8 +431,8 @@ Resources:
   LikeServiceLogGroup:
     Type: AWS::Logs::LogGroup
 
-  MythicalServiceTaskDefinition:
-    Condition: NotDrRegion
+  CoreServiceTaskDefinition:
+    Condition: PrimaryRegion
     Type: AWS::ECS::TaskDefinition
     Properties:
       Cpu: 256
@@ -448,7 +445,7 @@ Resources:
       TaskRoleArn: !GetAtt ECSTaskRole.Arn
       ContainerDefinitions:
         - Name: service
-          Image: !Sub ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${MythicalServiceRepo}:latest
+          Image: !Sub ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${CoreServiceRepo}:latest
           PortMappings:
             - ContainerPort: 8080
               Protocol: http
@@ -478,7 +475,7 @@ Resources:
               awslogs-stream-prefix: xray-daemon
 
   LikeServiceTaskDefinition:
-    Condition: NotDrRegion
+    Condition: PrimaryRegion
     Type: AWS::ECS::TaskDefinition
     Properties:
       Cpu: 256
@@ -522,13 +519,13 @@ Resources:
               awslogs-region: !Ref AWS::Region
               awslogs-stream-prefix: xray-daemon
 
-  SecondaryMythicalServiceTaskDefinition:
-    Condition: IsInDrRegionTest
+  SecondaryCoreServiceTaskDefinition:
+    Condition: SecondaryRegion
     Type: AWS::ECS::TaskDefinition
     Properties:
       Cpu: 256
       ExecutionRoleArn: !GetAtt EcsServiceRole.Arn
-      Family: !Sub Multi-Region-Service-${AWS::StackName}
+      Family: !Sub Secondary-Core-Service-${AWS::StackName}
       Memory: 512
       NetworkMode: awsvpc
       RequiresCompatibilities:
@@ -566,12 +563,12 @@ Resources:
               awslogs-stream-prefix: xray-daemon
 
   SecondaryLikeServiceTaskDefinition:
-    Condition: IsInDrRegionTest
+    Condition: SecondaryRegion
     Type: AWS::ECS::TaskDefinition
     Properties:
       Cpu: 256
       ExecutionRoleArn: !GetAtt EcsServiceRole.Arn
-      Family: !Sub Multi-Region-Like-Service-${AWS::StackName}
+      Family: !Sub Secondary-Like-Service-${AWS::StackName}
       Memory: 512
       NetworkMode: awsvpc
       RequiresCompatibilities:
@@ -611,11 +608,11 @@ Resources:
               awslogs-stream-prefix: xray-daemon
 
   CoreEcsService:
-    Condition: IsInDrRegionTest
+    Condition: SecondaryRegion
     DependsOn: MythicalListener
     Type: AWS::ECS::Service
     Properties:
-      TaskDefinition: !Ref SecondaryMythicalServiceTaskDefinition
+      TaskDefinition: !Ref SecondaryCoreServiceTaskDefinition
       DesiredCount: 1
       LaunchType: FARGATE
       LoadBalancers:
@@ -633,8 +630,8 @@ Resources:
             - !Ref PrivateSubnetTwo
 
   LikeEcsService:
-    Condition: IsInDrRegionTest
-    DependsOn: MythicalListener
+    Condition: SecondaryRegion
+    DependsOn: MythicalLikeListenerRule
     Type: AWS::ECS::Service
     Properties:
       TaskDefinition: !Ref SecondaryLikeServiceTaskDefinition
@@ -736,34 +733,32 @@ Resources:
 
   MythicalCiCdStack:
     Type: AWS::CloudFormation::Stack
-    Condition: NotDrRegion
+    Condition: PrimaryRegion
     Properties:
       TemplateURL: "https://mythical-mysfits-website.s3.amazonaws.com/multi-region-bcdr/cicd.yml"
       Parameters:
         MythicalEcsCluster: !Ref MythicalEcsCluster
-        CoreServiceName: !Sub ${AWS::StackName}_Mythical-Service
+        CoreServiceName: !Sub ${AWS::StackName}_Core-Service
         LikeServiceName: !Sub ${AWS::StackName}_Like-Service
         CfnStackName: !Sub ${AWS::StackName}
 
   MultiRegionCwDashboard:
     Type: AWS::CloudFormation::Stack
     DependsOn: MythicalCiCdStack
-    Condition: NotDrRegion
+    Condition: PrimaryRegion
     Properties:
       TemplateURL: "https://mythical-mysfits-website.s3.amazonaws.com/multi-region-bcdr/cwdashboard.yml"
       Parameters:
         MythicalEcsCluster: !Ref MythicalEcsCluster
-        CoreServiceName: !Sub ${AWS::StackName}_Mythical-Service
-        CoreServiceName: !Sub ${AWS::StackName}_Mythical-Service
+        CoreServiceName: !Sub ${AWS::StackName}_Core-Service
         LikeServiceName: !Sub ${AWS::StackName}_Like-Service
         PrimaryRegionALBFullName: !GetAtt MythicalLoadBalancer.LoadBalancerFullName
         DDBTable: !Ref DDBTableName
         DashboardName: !Sub ${AWS::StackName}_Dashboard
 
-  # Working on a function to delete all extra stuff - disregard for now
   CleanDeletionCustomResource:
-    # Removing from dr region for time being. Todo.
-    Condition: NotDrRegion
+    # Removing from secondary region for time being. Todo.
+    Condition: PrimaryRegion
     Type: Custom::CleanDelete
     DependsOn: CleanDeletionLambdaFunction
     Properties:
@@ -771,14 +766,27 @@ Resources:
       Region: !Ref AWS::Region
       CfnStackName: !Ref AWS::StackName
       MythicalArtifactBucket: !GetAtt 'MythicalCiCdStack.Outputs.MythicalArtifactBucket'
-      CoreServiceRepo: !Ref MythicalServiceRepo
+      CoreServiceRepo: !Ref CoreServiceRepo
       LikeServiceRepo: !Ref LikeServiceRepo
-      XRayRepo: !Ref Xray
       EcsClusterName: !Ref MythicalEcsCluster
+      SecondaryRegion: !Ref IsSecondary
+
+  CleanDeletionCustomResource:
+    # Removing from secondary region for time being. Todo.
+    Condition: SecondaryRegion
+    Type: Custom::CleanDelete
+    DependsOn: CleanDeletionLambdaFunction
+    Properties:
+      ServiceToken: !GetAtt CleanDeletionLambdaFunction.Arn
+      Region: !Ref AWS::Region
+      CfnStackName: !Ref AWS::StackName
+      CoreServiceRepo: !Ref CoreServiceRepo
+      LikeServiceRepo: !Ref LikeServiceRepo
+      EcsClusterName: !Ref MythicalEcsCluster
+      SecondaryRegion: !Ref IsSecondary
 
   #Actual Lambda function to delete stuff
   CleanDeletionLambdaFunction:
-    Condition: NotDrRegion
     Type: AWS::Lambda::Function
     Properties:
       Code:
@@ -795,14 +803,16 @@ Resources:
           s3 = boto3.resource('s3')
 
           def handler(event, context):
-              print('Response URL: '+event['ResponseURL'])
-              print('RequestID: '+event['RequestId'])
+              print(event)
               CoreServiceEcrRepo = event['ResourceProperties']['CoreServiceRepo']
-              XrayEcrRepo = event['ResourceProperties']['XRayRepo']
               LikeServiceEcrRepo = event['ResourceProperties']['LikeServiceRepo']
               EcsClusterName = event['ResourceProperties']['EcsClusterName']
-              MythicalArtifactBucket = event['ResourceProperties']['MythicalArtifactBucket']
+
               CfnStackName = event['ResourceProperties']['CfnStackName']
+              IsSecondary = event['ResourceProperties']['SecondaryRegion']
+
+              if IsSecondary == True:
+                  MythicalArtifactBucket = event['ResourceProperties']['MythicalArtifactBucket']
 
               logger.debug('Event: {}'.format(event))
               logger.debug('Context: {}'.format(context))
@@ -818,27 +828,24 @@ Resources:
                       likeDeleteResponse = ecrClient.delete_repository(
                           repositoryName=LikeServiceEcrRepo,
                           force=True)
-                      xRayDeleteResponse = ecrClient.delete_repository(
-                          repositoryName=XrayEcrRepo,
-                          force=True)
 
-                      bucket = s3.Bucket(MythicalArtifactBucket)
+                      if IsSecondary == False:
+                          bucket = s3.Bucket(MythicalArtifactBucket)
+                          # Delete S3 bucket
+                          for key in bucket.objects.all():
+                            key.delete()
+                          bucket.delete()
 
-                      # Delete S3 bucket
-                      for key in bucket.objects.all():
-                        key.delete()
-                      bucket.delete()
-
-                      # List ECS Services and delete services in a specific cluster
-                      ecsServicesToDelete = ecsClient.list_services(
-                          cluster=EcsClusterName
-                      )
-                      if ecsServicesToDelete['serviceArns'] != []:
-                          for serviceName in ecsServicesToDelete['serviceArns']:
-                              ecsDeleteResponse = ecsClient.delete_service(
-                                  cluster=EcsClusterName,
-                                  service=serviceName,
-                                  force=True)
+                          # List ECS Services and delete services in a specific cluster
+                          ecsServicesToDelete = ecsClient.list_services(
+                              cluster=EcsClusterName
+                          )
+                          if ecsServicesToDelete['serviceArns'] != []:
+                              for serviceName in ecsServicesToDelete['serviceArns']:
+                                  ecsDeleteResponse = ecsClient.delete_service(
+                                      cluster=EcsClusterName,
+                                      service=serviceName,
+                                      force=True)
 
                       responseData = {}
                       cfnresponse.send(event, context, cfnresponse.SUCCESS, responseData, 'CustomResourcePhysicalID')
@@ -866,14 +873,12 @@ Resources:
                       cfnresponse.send(event, context, cfnresponse.FAILED, responseData, 'CustomResourcePhysicalID')
       Handler: index.handler
       Role:
-        Fn::GetAtt:
-        - LambdaExecutionRole
-        - Arn
+        !If [PrimaryRegion, !GetAtt 'LambdaExecutionRole.Arn', !GetAtt 'SecondaryLambdaExecutionRole.Arn']
       Runtime: python3.7
       Timeout: '300'
 
   LambdaExecutionRole:
-    Condition: NotDrRegion
+    Condition: PrimaryRegion
     Type: AWS::IAM::Role
     Properties:
       AssumeRolePolicyDocument:
@@ -916,6 +921,36 @@ Resources:
             - ecs:DeleteService
             Resource: !Sub arn:aws:ecs:${AWS::Region}:${AWS::AccountId}:service/${MythicalEcsCluster}/*
 
+  SecondaryLambdaExecutionRole:
+    Condition: SecondaryRegion
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+            - lambda.amazonaws.com
+          Action:
+          - sts:AssumeRole
+      Path: "/"
+      Policies:
+      - PolicyName: root
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+          - Effect: Allow
+            Action:
+            - logs:CreateLogGroup
+            - logs:CreateLogStream
+            - logs:PutLogEvents
+            Resource: arn:aws:logs:*:*:*
+          - Effect: Allow
+            Action:
+            - ecr:*
+            - ecs:ListServices
+            Resource: '*'
 
 # These are the values output by the CloudFormation template. Be careful
 # about changing any of them, because of them are exported with specific
@@ -927,7 +962,7 @@ Outputs:
     Export:
       Name: !Join [ ':', [ !Ref 'AWS::StackName', 'CurrentRegion' ] ]
   SecondaryRegion:
-    Condition: IsInDrRegionTest
+    Condition: SecondaryRegion
     Description: REPLACEME_SECONDARY_REGION
     Value: !Ref AWS::Region
     Export:
@@ -978,13 +1013,13 @@ Outputs:
     Export:
       Name: !Join [ ':', [ !Ref 'AWS::StackName', 'FargateContainerSecurityGroup' ] ]
   CodeBuildRole:
-    Condition: NotDrRegion
+    Condition: PrimaryRegion
     Description: REPLACE_ME_CODEBUILD_ROLE_ARN
     Value: !GetAtt 'MythicalCiCdStack.Outputs.MythicalMysfitsServiceCodeBuildServiceRoleArn'
     Export:
       Name: !Join [ ':', [ !Ref 'AWS::StackName', 'MythicalMysfitsServiceCodeBuildServiceRole' ] ]
   CodePipelineRole:
-    Condition: NotDrRegion
+    Condition: PrimaryRegion
     Description: REPLACE_ME_CODEPIPELINE_ROLE_ARN
     Value: !GetAtt 'MythicalCiCdStack.Outputs.MythicalMysfitsServiceCodePipelineServiceRoleArn'
     Export:
@@ -993,33 +1028,27 @@ Outputs:
     Description: The DNS for the load balancer
     Value: !GetAtt MythicalLoadBalancer.DNSName
   SecondaryLoadBalancerDNS:
-    Condition: IsInDrRegionTest
+    Condition: SecondaryRegion
     Description: The DNS for the load balancer
     Value: !GetAtt MythicalLoadBalancer.DNSName
   DynamoTable:
-    Condition: NotDrRegion
+    Condition: PrimaryRegion
     Value: !Ref DDBTableName
   ProfileName:
-    Condition: NotDrRegion
+    Condition: PrimaryRegion
     Value: !Ref MythicalProfile
-  MythicalServiceEcrRepo:
-    Condition: NotDrRegion
-    Value: !Sub ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${MythicalServiceRepo}
+  CoreServiceEcrRepo:
+    Condition: PrimaryRegion
+    Value: !Sub ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${CoreServiceRepo}
   LikeServiceEcrRepo:
-    Condition: NotDrRegion
+    Condition: PrimaryRegion
     Value: !Sub ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${LikeServiceRepo}
-  SecondaryMythicalServiceEcrRepo:
-    Condition: IsInDrRegionTest
-    Value: !Sub ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${MythicalServiceRepo}
+  SecondaryCoreServiceEcrRepo:
+    Condition: SecondaryRegion
+    Value: !Sub ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${CoreServiceRepo}
   SecondaryLikeServiceEcrRepo:
-    Condition: IsInDrRegionTest
+    Condition: SecondaryRegion
     Value: !Sub ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${LikeServiceRepo}
-  XrayEcrRepo:
-    Condition: NotDrRegion
-    Value: !Sub ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${Xray}
-  SecondaryXrayEcrRepo:
-    Condition: IsInDrRegionTest
-    Value: !Sub ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${Xray}
   MythicalServiceTargetGroupArn:
     Value: !Ref MythicalServiceTargetGroup
   LikeServiceTargetGroupArn:
@@ -1028,33 +1057,34 @@ Outputs:
     Value: !Ref MythicalEcsCluster
   StackName:
     Value: !Sub ${AWS::StackName}
-  MythicalServiceTaskDefinition:
-    Condition: NotDrRegion
-    Value: !Ref MythicalServiceTaskDefinition
+  CoreServiceTaskDefinition:
+    Condition: PrimaryRegion
+    Value: !Ref CoreServiceTaskDefinition
   LikeServiceTaskDefinition:
-    Condition: NotDrRegion
+    Condition: PrimaryRegion
     Value: !Ref LikeServiceTaskDefinition
-  SecondaryMythicalServiceTaskDefinition:
-    Condition: IsInDrRegionTest
-    Value: !Ref SecondaryMythicalServiceTaskDefinition
+  SecondaryCoreServiceTaskDefinition:
+    Condition: SecondaryRegion
+    Value: !Ref SecondaryCoreServiceTaskDefinition
   SecondaryLikeServiceTaskDefinition:
-    Condition: IsInDrRegionTest
+    Condition: SecondaryRegion
     Value: !Ref SecondaryLikeServiceTaskDefinition
   MythicalLikeGitRepositoryCloneUrl:
-    Condition: NotDrRegion
+    Condition: PrimaryRegion
     Value: !GetAtt 'MythicalCiCdStack.Outputs.MythicalLikeGitRepositoryCloneUrl'
   MythicalLikeGitRepositoryName:
-    Condition: NotDrRegion
+    Condition: PrimaryRegion
     Value: !GetAtt 'MythicalCiCdStack.Outputs.MythicalLikeGitRepositoryName'
   MythicalCoreGitRepositoryCloneUrl:
-    Condition: NotDrRegion
+    Condition: PrimaryRegion
     Value: !GetAtt 'MythicalCiCdStack.Outputs.MythicalCoreGitRepositoryCloneUrl'
   MythicalCoreGitRepositoryName:
-    Condition: NotDrRegion
+    Condition: PrimaryRegion
     Value: !GetAtt 'MythicalCiCdStack.Outputs.MythicalCoreGitRepositoryName'
-  MythicalInfraGitRepositoryCloneUrl:
-    Condition: NotDrRegion
-    Value: !GetAtt 'MythicalCiCdStack.Outputs.MythicalInfraGitRepositoryCloneUrl'
-  MythicalInfraGitRepositoryName:
-    Condition: NotDrRegion
-    Value: !GetAtt 'MythicalCiCdStack.Outputs.MythicalInfraGitRepositoryName'
+  CoreEcsServiceName:
+    Value: !Sub ${AWS::StackName}_Core-Service
+  LikeEcsServiceName:
+    Value: !Sub ${AWS::StackName}_Like-Service
+  LoadBalancerFullName:
+    Description: The Full Name for the load balancer
+    Value: !GetAtt MythicalLoadBalancer.LoadBalancerFullName

@@ -1,28 +1,28 @@
 {
-    "cluster": "CLUSTER_NAME", 
-    "serviceName": "STACK_NAME_Mythical-Service", 
+    "cluster": "CLUSTER_NAME",
+    "serviceName": "SERVICE_NAME", 
     "loadBalancers": [
         {
-            "targetGroupArn": "TARGET_GROUP_ARN", 
-            "containerName": "CONTAINER_NAME", 
+            "targetGroupArn": "TARGET_GROUP_ARN",
+            "containerName": "CONTAINER_NAME",
             "containerPort": 8080
         }
-    ], 
-    "desiredCount": 1, 
-    "launchType": "FARGATE", 
+    ],
+    "desiredCount": 1,
+    "launchType": "FARGATE",
     "deploymentConfiguration": {
-        "maximumPercent": 200, 
+        "maximumPercent": 200,
         "minimumHealthyPercent": 0
-    }, 
+    },
     "networkConfiguration": {
         "awsvpcConfiguration": {
             "subnets": [
                 "PRIVATE_SUBNET_ONE",
                 "PRIVATE_SUBNET_TWO"
-            ], 
+            ],
             "securityGroups": [
                 "FARGATE_CONTAINER_SECURITY_GROUP"
-            ], 
+            ],
             "assignPublicIp": "DISABLED"
         }
     }

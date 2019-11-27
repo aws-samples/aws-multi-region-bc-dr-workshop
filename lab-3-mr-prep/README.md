@@ -60,7 +60,7 @@ Navigate back to the [AWS Cloud9 console](http://console.aws.amazon.com/cloud9) 
 
 <pre>
 $ cd ~/environment/aws-multi-region-bc-dr-workshop
-$ aws cloudformation deploy --stack-name mm-secondary-region --template-file cfn/core.yml --capabilities CAPABILITY_NAMED_IAM CAPABILITY_AUTO_EXPAND --parameter-overrides IsDrRegion=true --region us-east-1
+$ aws cloudformation deploy --stack-name mm-secondary-region --template-file cfn/core.yml --capabilities CAPABILITY_NAMED_IAM CAPABILITY_AUTO_EXPAND --parameter-overrides IsSecondary=true --region us-east-1
 </pre>
 
 <details>
@@ -135,9 +135,19 @@ Next we will configure the stage so that it deploys to ECS in the secondary regi
 
 ![Create Action](images/03-cp-createactiongroup.png)
 
+<<<<<<< HEAD
+Click **Done** and then **Save** at the top of the screen. Click through prompts until you're back at the pipeline. AWS CodePipeline will tell you that some resources will be updated. This is expected. Click **Save**.
+
+![CodePipeline Update Source](images/03-codepipeline-update-cwe.png)
+
+At this point, you should see your pipeline again and the final stage will be grey because it has not run yet.
+
+![CodePipeline Not Deployed](images/03-codepipeline-not-deployed.png)
+=======
 Click **Done** and then **Save** at the top of the screen. Click through prompts until you're back at the pipeline. At this point, you should see your pipeline again and the final stage will be grey because it has not run yet. It will look like this:
 
 ![CodePipeline New Stage](images/03-codepipeline-newstage.png)
+>>>>>>> master
 
 **Do this again for the Like Service**
 

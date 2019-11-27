@@ -5,8 +5,8 @@ CORE_GIT_REPO_NAME=$(jq < cfn-output.json -r '.MythicalCoreGitRepositoryName')
 # INFRA_REPO_NAME=$(jq < cfn-output.json -r '.MythicalInfraGitRepositoryName')
 
 LIKE_ECR_REPO_URI=$(jq < cfn-output.json -r '.LikeServiceEcrRepo')
-CORE_ECR_REPO_URI=$(jq < cfn-output.json -r '.MythicalServiceEcrRepo')
-XRAY_ECR_REPO=$(jq < cfn-output.json -r '.XrayEcrRepo')
+CORE_ECR_REPO_URI=$(jq < cfn-output.json -r '.CoreServiceEcrRepo')
+# XRAY_ECR_REPO=$(jq < cfn-output.json -r '.XrayEcrRepo')
 
 # DDB_TABLE_NAME=$(jq < cfn-output.json -r '.DynamoTable')
 
