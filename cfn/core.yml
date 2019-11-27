@@ -809,9 +809,9 @@ Resources:
               EcsClusterName = event['ResourceProperties']['EcsClusterName']
 
               CfnStackName = event['ResourceProperties']['CfnStackName']
-              IsSecondary = event['ResourceProperties']['IsSecondary']
+              IsSecondary = event['ResourceProperties']['SecondaryRegion']
 
-              if IsSecondary == 'true':
+              if IsSecondary == True:
                   MythicalArtifactBucket = event['ResourceProperties']['MythicalArtifactBucket']
 
               logger.debug('Event: {}'.format(event))
@@ -829,7 +829,7 @@ Resources:
                           repositoryName=LikeServiceEcrRepo,
                           force=True)
 
-                      if IsSecondary == 'false':
+                      if IsSecondary == False:
                           bucket = s3.Bucket(MythicalArtifactBucket)
                           # Delete S3 bucket
                           for key in bucket.objects.all():
@@ -873,9 +873,7 @@ Resources:
                       cfnresponse.send(event, context, cfnresponse.FAILED, responseData, 'CustomResourcePhysicalID')
       Handler: index.handler
       Role:
-        Fn::GetAtt:
-        - LambdaExecutionRole
-        - Arn
+        !If [PrimaryRegion, !GetAtt 'LambdaExecutionRole.Arn', !GetAtt 'SecondaryLambdaExecutionRole.Arn']
       Runtime: python3.7
       Timeout: '300'
 

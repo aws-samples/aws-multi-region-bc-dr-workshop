@@ -109,7 +109,13 @@ Next we will configure the stage so that it deploys to ECS in the secondary regi
 
 ![Create Action](images/03-cp-createactiongroup.png)
 
-Click **Done** and then **Save** at the top of the screen. Click through prompts until you're back at the pipeline. At this point, you should see your pipeline again and the final stage will be grey because it has not run yet.
+Click **Done** and then **Save** at the top of the screen. Click through prompts until you're back at the pipeline. AWS CodePipeline will tell you that some resources will be updated. This is expected. Click **Save**.
+
+![CodePipeline Update Source](images/03-codepipeline-update-cwe.png)
+
+At this point, you should see your pipeline again and the final stage will be grey because it has not run yet.
+
+![CodePipeline Not Deployed](images/03-codepipeline-not-deployed.png)
 
 **Do this again for the Like Service**
 
