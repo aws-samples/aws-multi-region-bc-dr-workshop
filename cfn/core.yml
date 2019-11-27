@@ -771,7 +771,7 @@ Resources:
       EcsClusterName: !Ref MythicalEcsCluster
       SecondaryRegion: !Ref IsSecondary
 
-  CleanDeletionCustomResource:
+  SecondaryCleanDeletionCustomResource:
     # Removing from secondary region for time being. Todo.
     Condition: SecondaryRegion
     Type: Custom::CleanDelete
