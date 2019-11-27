@@ -84,9 +84,18 @@ There's an easy way to do this - DynamoDB Global Tables. This feature will ensur
 [TODO - Add screenshots]
 
 1. Open up the [DynamoDB console](https://console.aws.amazon.com/dynamodb/) and ensure the region selected is your Primary region
-2. Select **Tables** from the menu on the left and select the table **MythicalMysfits-DDBTable**
-3. Select the tab marked **Global Tables** and then press **Enable Streams**. Wait for this to complete (about 2 mins).
+2. Select **Tables** from the menu on the left and select the table **mm-ddbtable**
+
+![image](https://user-images.githubusercontent.com/23423809/69709325-0a39ba80-10b2-11ea-82a7-b07e69840e28.png)
+
+3. Select the tab marked **Global Tables** and then press **Enable Streams**. Press **Enable** at the next prompt. Wait for this to complete (about 2 mins).
+
+![image](https://user-images.githubusercontent.com/23423809/69709422-33f2e180-10b2-11ea-851c-a46b5b6075be.png)
+
 4. Add the Secondary region by selecting **Add region**, select the Secondary region from the list and click **Create replica**. *If you receive an error during this phase, try the Add replica step again - this error may occue if step 3 has not completed fully*.
+
+![image](https://user-images.githubusercontent.com/23423809/69709749-df039b00-10b2-11ea-8cc8-c636c9346514.png)
+
 5. The replica will take a few minutes to create and populate in the Secondary region. While this is happening, you can proceed to the next step.
 
 <details>
@@ -282,7 +291,7 @@ Run the `bootstrap/dashboard/setup` script. This will deploy a fully prepared Cl
 2. Run the dashboard setup script to launch a Cloudformation template that will build the dashboard for you.
 
     ```
-    $ ~/environment/aws-multi-region-bc-dr-workshop
+    $ bootstrap/dashboard/setup
     ```
 
 
@@ -324,8 +333,9 @@ Modify the ALB Requests Per Minute widget to show the metrics from the ALB in th
     <summary>Hint with screenshots:</summary>
 
 * Hover over the widget and select Edit in the top right hand corner
-![image](https://user-images.githubusercontent.com/23423809/69213104-03420380-0b18-11ea-8cff-e25b09c70fb5.png)
-* Change the graph type from a Line to Stacked Area. Then select the All Metrics tab and add in the **requestcount** metric from the ALB
+<--![image](https://user-images.githubusercontent.com/23423809/69213104-03420380-0b18-11ea-8cff-e25b09c70fb5.png)-->
+![image](https://user-images.githubusercontent.com/23423809/69710628-951bb480-10b4-11ea-9a0c-ca8e8b603030.png)
+* Select the All Metrics tab and add in the **requestcount** metric from the ALB
 ![image](https://user-images.githubusercontent.com/23423809/69213968-83696880-0b1a-11ea-9d71-18a2c1dbfd62.png)
 * Select Graphed Metrics and change the label to match the region
 ![image](https://user-images.githubusercontent.com/23423809/69214232-2d48f500-0b1b-11ea-83a4-2ae1e7dfeade.png)
@@ -354,7 +364,7 @@ Following the same process from Lab 2, add a new widget for each of the Like and
 
 ![image](https://user-images.githubusercontent.com/23423809/69214987-46eb3c00-0b1d-11ea-8317-94c55dad4af2.png)
 
-Feel free to move the widgets around the dashboard to suit your style following the instructions in the [https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/move_resize_graph_dashboard.html](Cloudwatch documentation).
+Feel free to move the widgets around the dashboard to suit your style following the instructions in the [Cloudwatch documentation](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/move_resize_graph_dashboard.html).
 Youc can drag widgets around and move them into position wherever you like. You can also add a text widget to show a title, include links to a knowledgebase wiki or internal tooling. Get creative!
 
 [TODO - Add Andy's KPIs / other metrics from X-Ray]
