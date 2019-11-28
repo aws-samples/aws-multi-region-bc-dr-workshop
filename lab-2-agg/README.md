@@ -59,7 +59,7 @@ Reminder: [What is an AWS X-Ray trace?](https://docs.aws.amazon.com/xray/latest/
 
 2. Select **Stacked area** and press **configure**
 
-3. Select **X-Ray** followed by **Group Metrics** and select the Group created in the X-Ray lab previously
+3. Give the widget a name, then select **X-Ray** followed by **Group Metrics** and select the Group created in the X-Ray lab previously (like-service-errors-faults).
 ![image](https://user-images.githubusercontent.com/23423809/69609559-a8f4e700-0fde-11ea-89aa-9375ce0db044.png)
 
 4. Select the tab maked **Graphed metrics** and change the Statistic to **Sum**. Press **Create widget**
