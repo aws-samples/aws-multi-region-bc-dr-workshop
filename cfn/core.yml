@@ -811,7 +811,7 @@ Resources:
               CfnStackName = event['ResourceProperties']['CfnStackName']
               IsSecondary = event['ResourceProperties']['SecondaryRegion']
 
-              if IsSecondary == True:
+              if IsSecondary == 'false':
                   MythicalArtifactBucket = event['ResourceProperties']['MythicalArtifactBucket']
 
               logger.debug('Event: {}'.format(event))
@@ -829,7 +829,7 @@ Resources:
                           repositoryName=LikeServiceEcrRepo,
                           force=True)
 
-                      if IsSecondary == False:
+                      if IsSecondary == 'false':
                           bucket = s3.Bucket(MythicalArtifactBucket)
                           # Delete S3 bucket
                           for key in bucket.objects.all():
@@ -850,8 +850,8 @@ Resources:
                       responseData = {}
                       cfnresponse.send(event, context, cfnresponse.SUCCESS, responseData, 'CustomResourcePhysicalID')
                   except Exception as e:
-                      logger.error(e, exc_info=True)
-                      responseData = {'Error': traceback.format_exc(e)}
+                      # logger.error(e, exc_info=True)
+                      # responseData = {'Error': traceback.format_exc(e)}
                       cfnresponse.send(event, context, cfnresponse.FAILED, responseData, 'CustomResourcePhysicalID')
 
               if event['RequestType'] == 'Create':
@@ -859,8 +859,8 @@ Resources:
                       responseData = {}
                       cfnresponse.send(event, context, cfnresponse.SUCCESS, responseData, 'CustomResourcePhysicalID')
                   except Exception as e:
-                      logger.error(e, exc_info=True)
-                      responseData = {'Error': traceback.format_exc(e)}
+                      # logger.error(e, exc_info=True)
+                      # responseData = {'Error': traceback.format_exc(e)}
                       cfnresponse.send(event, context, cfnresponse.FAILED, responseData, 'CustomResourcePhysicalID')
 
               if event['RequestType'] == 'Update':
@@ -868,8 +868,8 @@ Resources:
                       responseData = {}
                       cfnresponse.send(event, context, cfnresponse.SUCCESS, responseData, 'CustomResourcePhysicalID')
                   except Exception as e:
-                      logger.error(e, exc_info=True)
-                      responseData = {'Error': traceback.format_exc(e)}
+                      # logger.error(e, exc_info=True)
+                      # responseData = {'Error': traceback.format_exc(e)}
                       cfnresponse.send(event, context, cfnresponse.FAILED, responseData, 'CustomResourcePhysicalID')
       Handler: index.handler
       Role:
