@@ -17,9 +17,36 @@ Lab 5: Load Test and Failover
 
 In this lab, you'll launch the core infrastructure for the workshop and get familiar with the Cloud9 integrated development environment (IDE) where you'll edit code and run commands.
 
-## STOP! Pay attention here because it matters! Are you at an AWS Event?
+## STOP! Pay attention here because it matters!
 
-If you are attending an AWS event, you will be provided an AWS account to use for the workshop (unless event details specify otherwise). Follow the instructions and use the team hash code to login to the AWS management console. If you arrived late, raise your hand and someone will help you.
+<details>
+<summary><b>Expand this section</b> if you are attending an AWS event where you are provided an AWS account to use.</summary>
+
+You will be provided an AWS account through an platform called Event Engine. Workshop administrators will do a walk through, but here is a quick start if you prefer step by step instructions or arrived late.
+
+**Quick Start:**
+
+1. You should have a notecard that looks like the image below. If you do not have one, raise your hand and session support will get you one. -
+
+    ![EE handout](images/ee.png)
+
+2. Open a new browser tab and navigate to [https://dashboard.eventengine.run](https://dashboard.eventengine.run).
+
+3. Enter the 12-digit team hash code found on the card and click **Accept Terms & Login**
+
+4. Once logged in, you should see your event listed on the page. Click on **AWS Console**.
+
+    ![EE handout](images/ee-logged-in.png)
+
+5. On the next page, click **Open AWS console** to launch the AWS management console. You will not need API key/secret for this workshop, but it's good to note down in case you want to use the CLI to do things like describe calls.
+
+    ![EE handout](images/ee-console-login.png)
+
+If you get stuck, raise your hand and session support will come help you. Otherwise, proceed to the next section to deploy the workshop environment.
+
+</details>
+
+If you're not attending an AWS event, you will need to use your own account. Make sure you have an IAM account with elevated permissions as noted earlier. Move on to the next section to deploy the workshop environment.
 
 ### [1] Deploy Mythical CloudFormation Stack
 
@@ -136,7 +163,7 @@ $ git clone https://github.com/aws-samples/aws-multi-region-bc-dr-workshop.git
 
 ### IMPORTANT: Make sure the CloudFormation template has finished launching. The status of the workshop stack should show CREATE_COMPLETE before running this script; otherwise, the script will fail
 
-The setup script will perform actions like install dependencies, build docker images, perform an initial commit to the CI/CD pipeline, and more. If you'd like to review what's happening, have a look at the scripts in the bootstrap folder in the GitHub repo.
+The setup script will perform actions like install dependencies, perform an initial commit to the CI/CD pipeline, among other things. If you'd like to review what's happening, have a look at the scripts in the bootstrap folder in the GitHub repo.
 
 Run the following commands to run the setup script.
 
@@ -145,7 +172,7 @@ $ cd ~/environment/aws-multi-region-bc-dr-workshop
 $ bootstrap/setup
 </pre>
 
-The setup script will take a few minutes to complete. When you see **"Profile associated successfully. Script completed. Please continue on with Lab-1!"**, that means bootstrap has completed.
+The script takes less than a minute to run. When you see **"Profile associated successfully. Script completed. Please continue on with Lab-1!"**, that means bootstrap has completed.
 
 ![Cloud9 Editing](images/setup-complete.png)
 
