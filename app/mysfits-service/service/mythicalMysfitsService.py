@@ -72,23 +72,6 @@ def mainSite():
             <div style="text-align: center">
               <img src="https://www.mythicalmysfits.com/images/mysfits_banner.gif" width="800px" align="center">
             </div>
-            <div class="container" ng-controller="mysfitsFilterController">
-              <div id="filterMenu">
-                <ul class="nav nav-pills">
-                  &nbsp;
-                  <li class="nav-item dropdown" ng-repeat="filterCategory in filterOptionsList.categories">
-                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#!" role="button" aria-haspopup="true" aria-expanded="false">{{filterCategory.title}}</a>
-                    <div class="dropdown-menu" >
-                      <button class="dropdown-item" ng-repeat="filterCategorySelection in filterCategory.selections" ng-click="queryMysfits(filterCategory.title, filterCategorySelection)">{{filterCategorySelection}}</button>
-                    </div>
-                  </li>
-                  &nbsp;
-                  <li class="nav-item " >
-                    <button type="button" class="btn btn-success" ng-click="removeFilter()">View All</button>
-                  </li>
-                </ul>
-              </div>
-            </div>
             <br>
             <div class="container">
               <div id="mysfitsGrid" class="row" ng-controller="mysfitsListController">
@@ -124,7 +107,7 @@ def mainSite():
           </body>
           <script>
                     
-            var mysfitsApiEndpoint = 'REPLACE_ME_API_ENDPOINT';
+            //var mysfitsApiEndpoint = 'REPLACE_ME_API_ENDPOINT';
             //var mysfitsApiEndpoint = 'http://localhost:8080'
 
             var app = angular.module('mysfitsApp', []);
@@ -175,8 +158,8 @@ def mainSite():
                    } else {
                      filterCategoryQS = "LawChaos"
                    }
-                   var mysfitsApi = mysfitsApiEndpoint + '/mysfits?' + 'filter=' + filterCategoryQS + "&value=" + filterValue;
-        
+                   var mysfitsApi = '/mysfits?' + 'filter=' + filterCategoryQS + "&value=" + filterValue;
+
                    $.ajax({
                      url : mysfitsApi,
                      type : 'GET',
@@ -213,7 +196,7 @@ def mainSite():
         
             function getAllMysfits(callback) {
         
-              var mysfitsApi = mysfitsApiEndpoint + '/mysfits';
+              var mysfitsApi = '/mysfits';
         
               $.ajax({
                 url : mysfitsApi,
@@ -236,7 +219,7 @@ def mainSite():
         
             function likeMysfit(mysfitId, callback) {
               try {
-                var mysfitsApi = mysfitsApiEndpoint + '/mysfits/' + mysfitId + "/like";
+                var mysfitsApi = '/mysfits/' + mysfitId + "/like";
                 //var mysfitsApi = 'http://localhost:8000/mysfits/' + mysfitId + "/like";
                 var reqData = {
                   url : mysfitsApi,

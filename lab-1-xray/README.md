@@ -15,7 +15,7 @@ Lab 5: Load Test and Failover
 
 ## LAB 1 - Distributed Tracing with AWS X-Ray
 
-Observability helps quantify how we are able to meet our availability requirements. An important aspect of observability especially in a microservices architecture is distributed tracing. This enables the ability to profile a request as it passes through our application architecture which may involve one or more services and potentially interactions with backend data stores. Data captured from traces helps teams understand how the application behaves under various conditions and can be incredibly helpful when issues arise. For example, developers can use the data to identify inefficiencies in code and prioritize their sprints. Operations or SRE teams can use the data to diagnose or triage unusual latencies or failures. Infrastructure engineers can use the data to make adjustments to resident scaling policies or resources supporting particular services.
+Observability helps quantify how we are able to meet our availability requirements. An important aspect of observability especially in a microservices architecture is distributed tracing. This enables the ability to profile a request as it passes through our application architecture which may involve one or more services and potentially interactions with backend data stores. Data captured from traces helps teams understand how the application behaves under various conditions and can be incredibly helpful when issues arise. For example, developers can use the data to identify inefficiencies in code and prioritize their sprints. Operations or SRE (site reliability engineering) teams can use the data to diagnose or triage unusual latencies or failures. Infrastructure engineers can use the data to make adjustments to resident scaling policies or resources supporting particular services.
 
 AWS X-Ray is a distributed tracing service that provides a SDK to instrument your applications, a daemon to aggregate and deliver trace data to the X-Ray service, and a dashboard to view a service map which is a visualization of the trace data. If you would like to read more in depth about X-Ray, check out these links to documentation - [What is X-Ray?](https://docs.aws.amazon.com/xray/latest/devguide/aws-xray.html) and [X-Ray Concepts](https://docs.aws.amazon.com/xray/latest/devguide/xray-concepts.html)
 
@@ -25,7 +25,7 @@ In this lab, you'll continue where our lead developer left off before she was pu
 
 The Mythical Mysfits application is made up of (2) microservices:
 
-1. The Mysfits service serves the Angular front-end application and hosts an API that returns Mysfit profiles from DynamoDB.
+1. The Mysfits service (also referred to as the Core service) serves the Angular front-end application and hosts an API that returns Mysfit profiles from DynamoDB.
 2. The Like service tracks the number of likes for a particular mysfit. When a visitor clicks on the heart icon next to a mysfit in the app, a counter for that mysfit's profile is incremented in DynamoDB.
 
 Our lead developer successfully instrumented the Mysfits service, capturing data for inbound http requests and downstream calls to DynamoDB. We need your help to do the same for the Like service, so we have a more complete picture. Don't worry if you're not a developer, we'll guide you with the lab instructions and provide hints along the way. If you really get stuck, skip to the final hint where we provide the fully instrumented app code. Good luck!
@@ -37,7 +37,7 @@ Our lead developer successfully instrumented the Mysfits service, capturing data
 When you instrument an application with the X-Ray SDK to enable tracing, trace data is sent to the X-Ray service via an X-Ray daemon process. To save time in the workshop and focus on the more interesting bits, the CloudFormation template you ran already included the X-Ray daemon as a sidecar container in the Mysfits and Like service ECS task definitions. Just know that this is how trace data is being relayed to the X-Ray service. Also, this process can run as a local process for non-containerized applications or as a standalone service, expand the Learn more section below for documentation links to read more on the topic if you're interested.
 
 <details>
-<summary>Learn more: What is the X-Ray daemon?</summary>
+<summary>Learn more: What is the X-Ray daemon? And what is a sidecar container</summary>
 The AWS X-Ray daemon is an open source software application that listens for traffic on UDP port 2000. It gathers raw segment data and relays it to the AWS X-Ray API. When deployed as a sidecar container with Fargate, the Task IAM role is what authorizes it to communicate with the X-Ray API. The workshop CloudFormation template you ran earlier already created a role that has the necessary permissions. Also, AWS X-Ray provides a managed Docker container image of the X-Ray daemon that you can run as a sidecar. If you'd like to customize the software or container image, you can find the source code on GitHub and a sample Dockerfile in our documentation to build from.
 
 Further reading:
@@ -47,6 +47,9 @@ Further reading:
 * [X-Ray daemon permissions](https://docs.aws.amazon.com/xray/latest/devguide/xray-daemon.html#xray-daemon-permissions)
 * [X-Ray sample dockerfile](https://docs.aws.amazon.com/xray/latest/devguide/xray-daemon-ecs.html#xray-daemon-ecs-build)
 * [Application Tracing on Fargate with AWS X-Ray](https://github.com/aws-samples/aws-xray-fargate)
+
+Similar to how an actual sidecar is attached to a motorocycle, a sidecar container sits alongside the main container in your unit of deployment and adds functionality to the main container. In Kubernetes, a unit of deployment is a pod, or in ECS terms, a unit of deployment is a task. Both pods and tasks can include multiple containers which is how sidecar patterns are deployed. A common example of a sidecar pattern in practice is a logger. Let's say you have an nginx container deployed and want to capture access and error logs. The logger could be deployed as a sidecar container used to capture and forward access/error logs from the nginx container to your logging destination of choice. In the example of X-Ray, the sidecar runs the daemon process that listens for events and proxies it to the X-Ray service.
+
 </details>
 
 ### [2] Instrument the Like service code using the AWS X-Ray SDK and Cloud9
@@ -183,6 +186,7 @@ Further reading:
     ```
 
     Note: In case you're wondering why there's a trailing comma after `'ecs_plugin'`, it's because plugins is a tuple, and in Python a single value tuple or singleton requires a comma.
+    
     </details>
 
 #### c. Patch AWS SDK clients to enable tracing of downstream calls to DynamoDB
@@ -227,8 +231,6 @@ Further reading:
     # [TODO] configure middleware with the flask app and x-ray recorder
     XRayMiddleware(app, xray_recorder)
     ```
-
-    Note: In case you're wondering why there's a trailing comma after `'boto3'`, it's because libraries is a tuple, and in Python a single value tuple or singleton requires a comma.
 
     </details>
 
