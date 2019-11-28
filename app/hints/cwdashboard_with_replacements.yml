@@ -14,7 +14,7 @@ Resources:
                             "type": "metric",
                             "x": 0,
                             "y": 1,
-                            "width": 6,
+                            "width": 9,
                             "height": 6,
                             "properties": {
                                 "metrics": [
@@ -31,13 +31,13 @@ Resources:
                         },
                         {
                             "type": "metric",
-                            "x": 6,
+                            "x": 9,
                             "y": 7,
-                            "width": 9,
+                            "width": 12,
                             "height": 3,
                             "properties": {
                                 "metrics": [
-                                    [ "AWS/ECS", "CPUUtilization", "ServiceName", "REPLACEME_SECONDARY_CORE_ECS_SERVICE", "ClusterName", "REPLACEME_SECONDARY_ECS_CLUSTER", { "region": "REPLACEME_SECONDARY_REGION", "label": "REPLACEME_SECONDARY_REGION CoreEcsService CPUUtilization" } ],
+                                    [ "AWS/ECS", "CPUUtilization", "ServiceName", "REPLACEME_SECONDARY_CORE_ECS_SERVICE", "ClusterName", "REPLACEME_SECONDARY_ECS_CLUSTER", { "region": "REPLACEME_SECONDARY_REGION" } ],
                                     [ ".", "MemoryUtilization", ".", ".", ".", ".", { "region": "REPLACEME_SECONDARY_REGION" } ]
                                 ],
                                 "view": "singleValue",
@@ -51,7 +51,7 @@ Resources:
                             "type": "metric",
                             "x": 0,
                             "y": 7,
-                            "width": 6,
+                            "width": 9,
                             "height": 6,
                             "properties": {
                                 "metrics": [
@@ -74,7 +74,7 @@ Resources:
                             "type": "text",
                             "x": 3,
                             "y": 0,
-                            "width": 9,
+                            "width": 12,
                             "height": 1,
                             "properties": {
                                 "markdown": "\n# Multi-Region BCDR Workshop\n"
@@ -82,9 +82,9 @@ Resources:
                         },
                         {
                             "type": "metric",
-                            "x": 6,
+                            "x": 9,
                             "y": 4,
-                            "width": 9,
+                            "width": 12,
                             "height": 3,
                             "properties": {
                                 "metrics": [
@@ -102,7 +102,7 @@ Resources:
                             "type": "metric",
                             "x": 0,
                             "y": 13,
-                            "width": 6,
+                            "width": 9,
                             "height": 6,
                             "properties": {
                                 "metrics": [
@@ -119,9 +119,9 @@ Resources:
                         },
                         {
                             "type": "metric",
-                            "x": 6,
+                            "x": 9,
                             "y": 13,
-                            "width": 6,
+                            "width": 9,
                             "height": 6,
                             "properties": {
                                 "metrics": [
@@ -137,9 +137,9 @@ Resources:
                         },
                         {
                             "type": "metric",
-                            "x": 6,
+                            "x": 9,
                             "y": 1,
-                            "width": 9,
+                            "width": 12,
                             "height": 3,
                             "properties": {
                                 "metrics": [
@@ -155,9 +155,9 @@ Resources:
                         },
                         {
                             "type": "metric",
-                            "x": 6,
+                            "x": 9,
                             "y": 10,
-                            "width": 9,
+                            "width":12,
                             "height": 3,
                             "properties": {
                                 "metrics": [
