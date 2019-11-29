@@ -2,7 +2,9 @@
 
 ## Workshop progress
 **Lab 0: Workshop Initialization**
-
+- [Deploy Mythical CloudFormation Stack](#1-deploy-mythical-cloudformation-stack)
+- [Familiarize yourself with the workshop environment and tips](#2-familiarize-yourself-with-the-workshop-environment-and-tips)
+- [Bootstrap the workshop environment](#3-bootstrap-the-workshop-environment)
 Lab 1: Instrument Observability
 
 Lab 2: Operationalize Observability - Aggregate Metrics
@@ -13,7 +15,7 @@ Lab 4: Implement Traffic Management
 
 Lab 5: Load Test and Failover
 
-## Lab 0 - Deploy Existing Mythical Stack
+## Lab 0 - Workshop Initialization
 
 In this lab, you'll launch the core infrastructure for the workshop and get familiar with the Cloud9 integrated development environment (IDE) where you'll edit code and run commands.
 
