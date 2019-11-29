@@ -15,21 +15,6 @@
 Lab 4: Implement Traffic Management
 
 Lab 5: Load Test and Failover
-<!--
-✅ Implement observability<p>
- - Distributed Tracing with AWS X-Ray<br>
- - Create metric dashboards<br>
-
----- Prepare for multi-region deployments<p>
- - Replicate Data Tier <br>
- - Cross-Region Builds<br>
- - Update Dashboard<br>
----- Implement Traffic Management<br>
- ---- Build Global Accelerator<br>
-- Load test and failover<br>
-  - Artificially break app<br>
-  - Inject failure<br> -->
-
 
 ## Lab 3 - Preparing for Multi-Region Deployments
 

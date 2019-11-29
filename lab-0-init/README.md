@@ -5,15 +5,16 @@
 - [Deploy Mythical CloudFormation Stack](#1-deploy-mythical-cloudformation-stack)
 - [Familiarize yourself with the workshop environment and tips](#2-familiarize-yourself-with-the-workshop-environment-and-tips)
 - [Bootstrap the workshop environment](#3-bootstrap-the-workshop-environment)
-Lab 1: Instrument Observability
 
-Lab 2: Operationalize Observability - Aggregate Metrics
+[Lab 1: Instrument Observability](../lab-1-xray)
 
-Lab 3: Prep for Multi-Region Deployments
+[Lab 2: Operationalize Observability - Aggregate Metrics](../lab-2-agg)
 
-Lab 4: Implement Traffic Management
+[Lab 3: Prep for Multi-Region Deployments](../lab-3-mr-prep)
 
-Lab 5: Load Test and Failover
+[Lab 4: Implement Traffic Management](../lab-4-globalacc)
+
+[Lab 5: Load Test and Failover](../lab-5-loadtest)
 
 ## Lab 0 - Workshop Initialization
 
