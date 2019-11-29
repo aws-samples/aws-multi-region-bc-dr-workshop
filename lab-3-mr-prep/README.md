@@ -98,8 +98,6 @@ The most difficult part of a multi-region application is typically data synchron
 
 There's an easy way to do this - DynamoDB Global Tables. This feature will ensure we always have a copy of our data in both our primary and failover region by continuously replicating changes using DynamoDB Streams. We'll set this up now.
 
-[TODO - Add screenshots]
-
 1. Open up the [DynamoDB console](https://console.aws.amazon.com/dynamodb/) and ensure the region selected is your Primary region
 2. Select **Tables** from the menu on the left and select the table **mm-ddbtable**
 
@@ -273,7 +271,7 @@ Finally, add all the files to both repos and trigger deployments:
 Navigate back to the [AWS Cloud9 console](http://console.aws.amazon.com/cloud9) and access your working environment if you're not already there. Run these commands:
 
 <pre>
-  $ cd ~environment/aws-multi-region-bc-dr-workshop
+  $ cd ~/environment/aws-multi-region-bc-dr-workshop
   $ bootstrap/secondary-region/setup
 </pre>
 
@@ -303,7 +301,7 @@ Run the `bootstrap/dashboard/setup` script. This will deploy a fully prepared Cl
 1. In the Cloud9 IDE terminal window, navigate to the root of the working directory that was cloned from Github.
 
     ```
-    $ cd ~/environment/aws-multi-region-[PRESS TAB TO AUTO COMPLETE AND PRESS ENTER]
+    $ cd ~/environment/aws-multi-region-bc-dr-workshop
     ```    
 
 2. Run the dashboard setup script to launch a Cloudformation template that will build the dashboard for you.
@@ -320,7 +318,7 @@ Run the `bootstrap/dashboard/setup` script. This will deploy a fully prepared Cl
 ![image](https://user-images.githubusercontent.com/23423809/69702002-15d1b500-10a3-11ea-9e4f-86ba53e69054.png)
 
 **Needs updated screenshot**
-![image](https://user-images.githubusercontent.com/23423809/69702075-431e6300-10a3-11ea-9862-e513bb24dbbe.png)
+![image](https://user-images.githubusercontent.com/23423809/69792175-fa39dd80-117a-11ea-9465-ff7b459449aa.png)
 
 
 </details>
@@ -351,7 +349,7 @@ Modify the ALB Requests Per Minute widget to show the metrics from the ALB in th
     <summary>Hint with screenshots:</summary>
 
 * Hover over the widget and select Edit in the top right hand corner
-<--![image](https://user-images.githubusercontent.com/23423809/69213104-03420380-0b18-11ea-8cff-e25b09c70fb5.png)-->
+
 ![image](https://user-images.githubusercontent.com/23423809/69710628-951bb480-10b4-11ea-9a0c-ca8e8b603030.png)
 * Select the All Metrics tab and add in the **requestcount** metric from the ALB
 ![image](https://user-images.githubusercontent.com/23423809/69213968-83696880-0b1a-11ea-9d71-18a2c1dbfd62.png)
@@ -385,19 +383,6 @@ Following the same process from Lab 2, add a new widget for each of the Like and
 Feel free to move the widgets around the dashboard to suit your style following the instructions in the [Cloudwatch documentation](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/move_resize_graph_dashboard.html).
 Youc can drag widgets around and move them into position wherever you like. You can also add a text widget to show a title, include links to a knowledgebase wiki or internal tooling. Get creative!
 
-[TODO - Add Andy's KPIs / other metrics from X-Ray]
-
-### X.c Add a widget to show statistics from the DynamoDB Global Table
-
-While we're at it, lets create a new widget showing the the Read Capacity Units and Write Capacity Units for our newly created Global Table. Monitoring the table ensures that we have full visibility of the amount of read and write activity which can be useful in troubleshooting efforts.
-
-Here's how:
-
-* Create a new stacked area graph on the Cloudwatch Dashboard
-* Select **DynamoDB**, **Table Metrics**, **[insert table name]**, **ConsumedReadCapacityUnits** and **ConsumedWriteCapacityUnits**
-**ConsumedWriteCapacityUnits** for our DynamoDB Global Table.
-* Change the statistic type to **Sum**
-* Click **Create Widget**
 
 ## Important - Save your Cloudwatch Dashboard! ##
 
