@@ -810,15 +810,13 @@ Resources:
 
               CfnStackName = event['ResourceProperties']['CfnStackName']
               IsSecondary = event['ResourceProperties']['SecondaryRegion']
-
               if IsSecondary == 'false':
                   MythicalArtifactBucket = event['ResourceProperties']['MythicalArtifactBucket']
-
               logger.debug('Event: {}'.format(event))
               logger.debug('Context: {}'.format(context))
+              tempResponse = []
               responseData = {}
-
-
+              failure = False
               # Immediately respond on Delete
               if event['RequestType'] == 'Delete':
                   try:
@@ -826,16 +824,21 @@ Resources:
                           repositoryName=CoreServiceEcrRepo,
                           force=True)
                   except Exception as e:
-                      failure = True
-                      responseData.append({CoreServiceEcrRepo:str(e)})
-
+                      if "RepositoryNotFoundException" in str(e):
+                          failure = False
+                      else:
+                          failure = True
+                      tempResponse.append({CoreServiceEcrRepo:str(e)})
                   try:
                       likeDeleteResponse = ecrClient.delete_repository(
                           repositoryName=LikeServiceEcrRepo,
                           force=True)
                   except Exception as e:
-                      failure = True
-                      responseData.append({LikeServiceEcrRepo:str(e)})
+                      if "RepositoryNotFoundException" in str(e):
+                          failure = False
+                      else:
+                          failure = True
+                      tempResponse.append({LikeServiceEcrRepo:str(e)})
 
                   if IsSecondary == 'false':
                       try:
@@ -845,8 +848,11 @@ Resources:
                             key.delete()
                           bucket.delete()
                       except Exception as e:
-                          failure = True
-                          responseData.append({MythicalArtifactBucket:str(e)})
+                          if "The specified bucket does not exist" in str(e):
+                              failure = False
+                          else:
+                              failure = True
+                          tempResponse.append({MythicalArtifactBucket:str(e)})
                       try:
                           # List ECS Services and delete services in a specific cluster
                           ecsServicesToDelete = ecsClient.list_services(
@@ -860,28 +866,18 @@ Resources:
                                       force=True)
                       except Exception as e:
                           failure = True
-                          responseData.append({EcsClusterName:str(e)})
+                          tempResponse.append({EcsClusterName:str(e)})
+                  responseData['Data'] = str(tempResponse)
                   if failure == False:
                       cfnresponse.send(event, context, cfnresponse.SUCCESS, responseData, 'CustomResourcePhysicalID')
                   else:
                       cfnresponse.send(event, context, cfnresponse.FAILED, responseData, 'CustomResourcePhysicalID')
 
-              if event['RequestType'] == 'Create':
+              if event['RequestType'] == 'Update' or event['RequestType'] == 'Create':
                   try:
                       responseData = {}
                       cfnresponse.send(event, context, cfnresponse.SUCCESS, responseData, 'CustomResourcePhysicalID')
                   except Exception as e:
-                      # logger.error(e, exc_info=True)
-                      # responseData = {'Error': traceback.format_exc(e)}
-                      cfnresponse.send(event, context, cfnresponse.FAILED, responseData, 'CustomResourcePhysicalID')
-
-              if event['RequestType'] == 'Update':
-                  try:
-                      responseData = {}
-                      cfnresponse.send(event, context, cfnresponse.SUCCESS, responseData, 'CustomResourcePhysicalID')
-                  except Exception as e:
-                      # logger.error(e, exc_info=True)
-                      # responseData = {'Error': traceback.format_exc(e)}
                       cfnresponse.send(event, context, cfnresponse.FAILED, responseData, 'CustomResourcePhysicalID')
       Handler: index.handler
       Role:
