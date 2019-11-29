@@ -281,7 +281,7 @@ The last step of both of the options above will commit and push your new applica
 
 ![Todo: screenshot of finished cp deploy multi-region](images/03-codepipeline-complete.png)
 
-### Enabling Cloudwatch Dashboard to show multi-region metrics
+### [3] Enabling Cloudwatch Dashboard to show multi-region metrics
 
 Now that you have deployed the stack in the secondary region, lets adjust the Cloudwatch dashboard that you created in the previous lab to include these new resources. This will provide visibility to the Core and Like services running across both regions on the same dashboard.
 
@@ -317,7 +317,7 @@ Run the `bootstrap/dashboard/setup` script. This will deploy a fully prepared Cl
 
 ![image](https://user-images.githubusercontent.com/23423809/69702002-15d1b500-10a3-11ea-9e4f-86ba53e69054.png)
 
-**Needs updated screenshot**
+
 ![image](https://user-images.githubusercontent.com/23423809/69792175-fa39dd80-117a-11ea-9465-ff7b459449aa.png)
 
 
@@ -327,13 +327,13 @@ Run the `bootstrap/dashboard/setup` script. This will deploy a fully prepared Cl
 <details>
 <summary>Option 2: Step-by-step manual instructions</summary>
 
-### X. Edit the widgets to show metrics from the other region
+### 3. Edit the widgets to show metrics from the other region
 
 With Amazon Cloudwatch, we have the ability to stack metrics on top of each other in a widget that contains a graph. This will be useful in our case where we are viewing the same metric type, over two resources. We'll do this in the steps below in addition to adding the metrics from the other region.
 
 Hint - see documentation for [Editing a Graph on a Cloudwatch Dashboard](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/edit_graph_dashboard.html)
 
-### X.a Edit the ALB widgets
+## a. Edit the ALB widgets
 
 As we are now adding in metrics from two different regions, we must navigate to the secondary region and load the dashboard from there. This is because when referring to metrics within a dashboard, Cloudwatch can only see resources local to that region.
 
@@ -373,7 +373,7 @@ Modify the ALB HTTP Responses widget to show the metrics from the ALB in the sec
 </details>
 
 
-### X.b Add widgets for the Like and Core Services from Secondary region
+## b. Add widgets for the Like and Core Services from Secondary region
 
 Following the same process from Lab 2, add a new widget for each of the Like and Core services. Modify the titles to be able to easily identify which region they are populating from. You should end up with something like this:
 
