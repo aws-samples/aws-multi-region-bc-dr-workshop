@@ -6,7 +6,7 @@
 - [Familiarize yourself with the workshop environment and tips](#2-familiarize-yourself-with-the-workshop-environment-and-tips)
 - [Bootstrap the workshop environment](#3-bootstrap-the-workshop-environment)
 
-[Lab 1: Instrument Observability](../lab-1-xray)
+[Lab 1: Instrument Observability - Distributed Tracing with AWS X-Ray](../lab-1-xray)
 
 [Lab 2: Operationalize Observability - Aggregate Metrics](../lab-2-agg)
 
