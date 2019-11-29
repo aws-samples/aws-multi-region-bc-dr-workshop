@@ -389,6 +389,6 @@ Youc can drag widgets around and move them into position wherever you like. You 
 
 # Checkpoint
 
-At this time, your application should be running in both regions. Hit the secondary **SecondaryLoadBalancerDNS** that you copied earlier. You should see the exact same site you had before.
+At this time, your application should be running in both regions and you have some visibility into the underlying infrastructure in both regions. Hit the secondary **SecondaryLoadBalancerDNS** that you copied earlier. You should see the exact same site you had before.
 
 Proceed to [Lab 4](../lab-4-globalacc)!
