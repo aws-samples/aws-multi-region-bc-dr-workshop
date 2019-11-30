@@ -27,7 +27,10 @@ else:
     x = raw_input("Enter an ENDPOINT:PORT combination [port is optional]: ")
 
 if (x.startswith('http')):
-    URL = x
+    if (x.endswith('/')):
+        URL = x[:-1]
+    else:
+        URL = x
 else:
     URL = "http://"+x
 
