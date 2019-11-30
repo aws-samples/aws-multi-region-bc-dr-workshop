@@ -38,7 +38,7 @@ At the beginning of the workshop, you used [AWS CloudFormation](https://aws.amaz
 <details>
 <summary>Learn more: AWS CloudFormation deployment options</summary>
 
-What you are about to do is quite likely the simplest way of deploying another CloudFormation stack. You will run a CLI (Command Line Interface) command to deploy the same CloudFormation template into a different region. Specfically, we will be telling CloudFormation to deploy into the us-east-1 region.
+What you are about to do is quite likely the simplest way of deploying another CloudFormation stack. You will run a CLI (Command Line Interface) command to deploy the same CloudFormation template into a different region. Specifically, we will be instructing CloudFormation to deploy into the us-east-1 region.
 
 There are a number of different ways to achieve this, like using [AWS CloudFormation Stacksets](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/what-is-cfnstacksets.html) or using [AWS CodePipeline to trigger CloudFormation in a CI/CD pipeline](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/continuous-delivery-codepipeline.html). Both of these are a much more automated way of deploying into multiple regions, but for simplicity's sake, in this lab you will use the simplest method of using the CLI.
 </details>
@@ -53,13 +53,13 @@ There are a number of different ways to achieve this, like using [AWS CloudForma
     ```
 
 <details>
-<summary>Learn more: What did you just do</summary>
-  In Lab-0, we deployed a CloudFormation stack that had all the core components of the infrastructure, such as:
-  * VPC (subnets, route tables, routes, etc)
-  * ECS (task definitions, services, etc)
-  * CICD Stack (AWS CodePipeline, AWS CodeBuild)
+    <summary>Learn more: What did you just do</summary>
+    In Lab-0, we deployed a CloudFormation stack that had all the core components of the infrastructure, such as:
+    * VPC (subnets, route tables, routes, etc)
+    * ECS (task definitions, services, etc)
+    * CICD Stack (AWS CodePipeline, AWS CodeBuild)
 
-What you just did was replicate a portion of that based on the `IsDrRegion=true` flag. We set the flag to true this time to spin up some additional resources and not spin up others.
+    What you just did was replicate a portion of that based on the `IsDrRegion=true` flag. We set the flag to true this time to spin up some additional resources and not spin up others.
 </details>
 
 Once you see **Waiting for changeset to be created..Waiting for stack create/update to complete**, you can continue on. This doesn't mean the stack is done, but you can do the Database Replication portion in parallel. Check back later and make sure you see **Successfully created/updated stack - mm-secondary-region**.
@@ -73,25 +73,25 @@ There's an easy way to do this - DynamoDB Global Tables. This feature will ensur
 1. Open up the [DynamoDB console](https://console.aws.amazon.com/dynamodb/) and ensure the region selected is your Primary region
 2. Select **Tables** from the menu on the left and select the table **mm-ddbtable**
 
-![image](https://user-images.githubusercontent.com/23423809/69709325-0a39ba80-10b2-11ea-82a7-b07e69840e28.png)
+    ![image](https://user-images.githubusercontent.com/23423809/69709325-0a39ba80-10b2-11ea-82a7-b07e69840e28.png)
 
 3. Select the tab marked **Global Tables** and then press **Enable Streams**. Press **Enable** at the next prompt. Wait for this to complete (about 2 mins).
 
-![image](https://user-images.githubusercontent.com/23423809/69709422-33f2e180-10b2-11ea-851c-a46b5b6075be.png)
+    ![image](https://user-images.githubusercontent.com/23423809/69709422-33f2e180-10b2-11ea-851c-a46b5b6075be.png)
 
 4. Add the Secondary region by selecting **Add region**, select the Secondary region from the list and click **Create replica**. *If you receive an error during this phase, try the Add replica step again - this error may occue if step 3 has not completed fully*.
 
-![image](https://user-images.githubusercontent.com/23423809/69709749-df039b00-10b2-11ea-8cc8-c636c9346514.png)
+    ![image](https://user-images.githubusercontent.com/23423809/69709749-df039b00-10b2-11ea-8cc8-c636c9346514.png)
 
 5. The replica will take a few minutes to create and populate in the Secondary region. While this is happening, you can proceed to the next step.
 
 <details>
- <summary>Learn more: What did I just do?</summary>
- You have just converted a regional DynamoDB table to a Global DynamoDB table. Doing this will automatically replicate the items in the table to any region that has a replica table configured using the above process. This ensures that our database tier (our DynamoDB table in this case) will remain in sync between the regions and is both writable and readable from any region that has a replica configured.
+    <summary>Learn more: What did I just do?</summary>
+    You have just converted a regional DynamoDB table to a Global DynamoDB table. Doing this will automatically replicate the items in the table to any region that has a replica table configured using the above process. This ensures that our database tier (our DynamoDB table in this case) will remain in sync between the regions and is both writable and readable from any region that has a replica configured.
 
- * [Blog - converting a Single-Regional DynamoDB table to a Global Table](https://aws.amazon.com/blogs/aws/new-convert-your-single-region-amazon-dynamodb-tables-to-global-tables/)
- * [DynamoDB Core Components](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.CoreComponents.html)
- * [DynamoDB Global Tables](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/GlobalTables.html)
+    * [Blog - converting a Single-Regional DynamoDB table to a Global Table](https://aws.amazon.com/blogs/aws/new-convert-your-single-region-amazon-dynamodb-tables-to-global-tables/)
+    * [DynamoDB Core Components](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.CoreComponents.html)
+    * [DynamoDB Global Tables](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/GlobalTables.html)
 </details>
 
 ### [3] Replicate deployment infrastructure
@@ -129,31 +129,31 @@ Now that you have all your artifacts replicated into the secondary region, you c
     * Service name: **Select the service that includes "Core"**
     * Image definitions file: **imagedefinitions_secondary.json** - The value of this will depend on what you output in your buildspec. Our default is imagedefinitions_secondary.json.
 
-![Create Action](images/03-cp-createactiongroup.png)
+    ![Create Action](images/03-cp-createactiongroup.png)
 
 5. Click **Done** and then **Save** at the top of the screen. Click through prompts until you're back at the pipeline. AWS CodePipeline will tell you that some resources will be updated. This is expected. Click **Save**.
 
-![CodePipeline Update Source](images/03-codepipeline-update-cwe.png)
+    ![CodePipeline Update Source](images/03-codepipeline-update-cwe.png)
 
-At this point, you should see your pipeline again and the final stage will be grey because it has not run yet.
+    At this point, you should see your pipeline again and the final stage will be grey because it has not run yet.
 
-![CodePipeline Not Deployed](images/03-codepipeline-not-deployed.png)
+    ![CodePipeline Not Deployed](images/03-codepipeline-not-deployed.png)
 
 6. **Do this again for the Like Service**
 
-![Do it again](images/03-codepipeline-like.png)
+    ![Do it again](images/03-codepipeline-like.png)
 
-**Edit Action**:
-* Click on **Add Action Group** and enter the following details:
-* Action name: **CrossRegionDeploy**
-* Action provider: **Amazon ECS**
-* Region: **Choose the secondary region you deployed into** - By default, this should be US East - (N. Virginia)
-* Input artifacts: **BuildArtifact**
-* Cluster name: **Choose the cluster that was created for you. It will start with Cluster-**
-* Service name: **Select the service that includes "Like"**
-* Image definitions file: **imagedefinitions_secondary.json** - The value of this will depend on what you output in your buildspec. Our default is imagedefinitions_secondary.json.
+    **Edit Action**:
+    * Click on **Add Action Group** and enter the following details:
+    * Action name: **CrossRegionDeploy**
+    * Action provider: **Amazon ECS**
+    * Region: **Choose the secondary region you deployed into** - By default, this should be US East - (N. Virginia)
+    * Input artifacts: **BuildArtifact**
+    * Cluster name: **Choose the cluster that was created for you. It will start with Cluster-**
+    * Service name: **Select the service that includes "Like"**
+    * Image definitions file: **imagedefinitions_secondary.json** - The value of this will depend on what you output in your buildspec. Our default is imagedefinitions_secondary.json.
 
-![Do it again with the like](images/03-cp-createactiongroup-like.png)
+    ![Do it again with the like](images/03-cp-createactiongroup-like.png)
 
 ### [4] Replicate build artifacts
 
@@ -184,55 +184,54 @@ OR
 First, we will update the **core-service** app.
 
 1. Navigate to the [CloudFormation console](https://console.aws.amazon.com/cloudformation/) of the secondary region. Click on your stack and go to the **Outputs** tab. Jot down in your notepad the values of:
-- SecondaryRegion
-- SecondaryLikeServiceEcrRepo
-- SecondaryCoreServiceEcrRepo
+    - SecondaryRegion
+    - SecondaryLikeServiceEcrRepo
+    - SecondaryCoreServiceEcrRepo
 
 2. Within Cloud9, find the **core-service** CodeCommit repo. We can do this in the side navigation pane or via CLI.
 
-  Console:
-  ![Find file on nav pane](images/03-core-service_buildspec.png)
+    Console:
+    ![Find file on nav pane](images/03-core-service_buildspec.png)
 
-  CLI:
-  ```
-  $ cd ~/environment/core-service-[PRESS TAB TO AUTO COMPLETE AND PRESS ENTER]
-  ```
+    CLI:
+    ```
+    $ cd ~/environment/core-service-[PRESS TAB TO AUTO COMPLETE AND PRESS ENTER]
+    ```
 
 3. Find the **buildspec_prod** file in both **core-service** and **like-service** git repos. Update them to push your built containers to both your primary and secondary regions. Within both of the buildspec files there are [TODO] lines to guide you through what you'll need to do. It's your choice if you want to understand how the build process works.
 
-We have created some completed buildspec files if you want to skip this portion. They are in the app/hints folder.
+    We have created some completed buildspec files if you want to skip this portion. They are in the app/hints folder.
 
-```
-  $ cd ~/environment/<b>core-service-[PRESS TAB TO AUTO COMPLETE AND PRESS ENTER]</b>
-  $ cp ~/environment/multi-region-workshop/app/hints/core-buildspec_prod.yml buildspec_prod.yml
-  $ cd ~/environment/<b>like-service-[PRESS TAB TO AUTO COMPLETE AND PRESS ENTER]</b>
-  $ cp ~/environment/multi-region-workshop/app/hints/like-buildspec_prod.yml buildspec_prod.yml
+    ```
+    $ cd ~/environment/<b>core-service-[PRESS TAB TO AUTO COMPLETE AND PRESS ENTER]</b>
+    $ cp ~/environment/multi-region-workshop/app/hints/core-buildspec_prod.yml buildspec_prod.yml
+    $ cd ~/environment/<b>like-service-[PRESS TAB TO AUTO COMPLETE AND PRESS ENTER]</b>
+    $ cp ~/environment/multi-region-workshop/app/hints/like-buildspec_prod.yml buildspec_prod.yml
 
-  Open the <b>buildspec_prod.yml</b> file in the <b>core service</b> repository. Replace these variables:
-  * REPLACEME_SECONDARY_REGION with your secondary region (default <b>us-east-1</b>)
+    Open the <b>buildspec_prod.yml</b> file in the <b>core service</b> repository. Replace these variables:
+    * REPLACEME_SECONDARY_REGION with your secondary region (default <b>us-east-1</b>)
 
-  * REPLACEME_SECONDARY_REPO_URI with the value of <b>SecondaryCoreServiceEcrRepo</b>
+    * REPLACEME_SECONDARY_REPO_URI with the value of <b>SecondaryCoreServiceEcrRepo</b>
     from the Cloudformation outputs in the <b>Core service</b> buildspec_prod.yml
-  * REPLACEME_SECONDARY_REPO_URI with the value of <b>SecondaryLikeServiceEcrRepo</b>
+    * REPLACEME_SECONDARY_REPO_URI with the value of <b>SecondaryLikeServiceEcrRepo</b>
     from the CloudFormation outputs in the <b>Like service</b> buildspec_prod.yml
-```
+    ```
 **Note that in these labs we are hard coding values, but best practice is to use environment variables instead. This just simplifies the process for illustrative purposes.**
 
 
-### Trigger deployment again
+4. Finally, add all the files to both repos and trigger new deployments:
 
-Finally, add all the files to both repos and trigger deployments:
+    ```  
+    $ cd ~/environment/<b>core-service-[PRESS TAB TO AUTO COMPLETE AND PRESS ENTER]</b>
+    $ git add -A
+    $ git commit -m "Updating core buildspec for multi-region deploy"
+    $ git push origin master
+    $ cd ~/environment/<b>like-service-[PRESS TAB TO AUTO COMPLETE AND PRESS ENTER]</b>
+    $ git add -A
+    $ git commit -m "Updating like buildspec for multi-region deploy"
+    $ git push origin master
+    ```
 
-<pre>
-  $ cd ~/environment/<b>core-service-[PRESS TAB TO AUTO COMPLETE AND PRESS ENTER]</b>
-  $ git add -A
-  $ git commit -m "Updating core buildspec for multi-region deploy"
-  $ git push origin master
-  $ cd ~/environment/<b>like-service-[PRESS TAB TO AUTO COMPLETE AND PRESS ENTER]</b>
-  $ git add -A
-  $ git commit -m "Updating like buildspec for multi-region deploy"
-  $ git push origin master
-</pre>
 
 </details>
 
@@ -241,28 +240,28 @@ Finally, add all the files to both repos and trigger deployments:
 
 1. Navigate back to the [AWS Cloud9 console](http://console.aws.amazon.com/cloud9) and access your working environment if you're not already there. Run these commands:
 
-<pre>
-  $ cd ~/environment/aws-multi-region-bc-dr-workshop
-  $ bootstrap/secondary-region/setup
-</pre>
+    ```
+    $ cd ~/environment/aws-multi-region-bc-dr-workshop
+    $ bootstrap/secondary-region/setup
+    ```
 
 </details>
 
 The last step of both of the options above will commit and push your new application code. Take a look at your pipelines in the AWS CodePipeline Console and you should see the deployments start. Wait until all deployments are complete.
 
-![Todo: screenshot of finished cp deploy multi-region](images/03-codepipeline-complete.png)
+    ![Todo: screenshot of finished cp deploy multi-region](images/03-codepipeline-complete.png)
 
-### [5] Enabling Cloudwatch Dashboard to show multi-region metrics
+### [5] Enable Cloudwatch Dashboard to show multi-region metrics
 
 Now that you have deployed the stack in the secondary region, lets adjust the Cloudwatch dashboard that you created in the previous lab to include these new resources. This will provide visibility to the Core and Like services running across both regions on the same dashboard.
 
 You have (2) options at this point:
 
-Follow the steps below, using the provided documentation (and hints if you get stuck), to add the additional metrics to the Cloudwatch dashboard manually. If you go this route, try not spend more than 5 min on each step if you're at an AWS event with a time limit. We want you to be able to get through as many of the labs as possible.
+1. Run the `bootstrap/dashboard/setup` script. This will deploy a fully prepared Cloudwatch dashboard for you showing metrics from both stacks in both regions. If you're short on time or would rather focus on the traffic management bits later in the workshop, reveal and follow the Option 1 step by step below.
 
 OR
 
-Run the `bootstrap/dashboard/setup` script. This will deploy a fully prepared Cloudwatch dashboard for you showing metrics from both stacks in both regions. If you're short on time or would rather focus on the traffic management bits later in the workshop, reveal and follow the Option 1 step by step below.
+2. Follow the steps below, using the provided documentation (and hints if you get stuck), to add the additional metrics to the Cloudwatch dashboard manually. If you go this route, try not spend more than 5 min on each step if you're at an AWS event with a time limit. We want you to be able to get through as many of the labs as possible.
 
 **Choose your adventure!**
 
@@ -286,10 +285,10 @@ Run the `bootstrap/dashboard/setup` script. This will deploy a fully prepared Cl
 
 3. Wait until you see **Successfully created/updated stack - Fully-Prepared-Dashboard**. This should take less than 30 seconds. Once complete, you can navigate to the [Cloudwatch Dashboards](https://console.aws.amazon.com/cloudwatch/home?#dashboards:) page where you will see a new dashboard with **Fully-Prepared-Dashboard** in the name. You can use this going forward and modify it as you wish to.
 
-![image](https://user-images.githubusercontent.com/23423809/69702002-15d1b500-10a3-11ea-9e4f-86ba53e69054.png)
+    ![image](https://user-images.githubusercontent.com/23423809/69702002-15d1b500-10a3-11ea-9e4f-86ba53e69054.png)
 
 
-![image](https://user-images.githubusercontent.com/23423809/69792175-fa39dd80-117a-11ea-9465-ff7b459449aa.png)
+    ![image](https://user-images.githubusercontent.com/23423809/69792175-fa39dd80-117a-11ea-9465-ff7b459449aa.png)
 
 
 </details>
@@ -360,6 +359,6 @@ Youc can drag widgets around and move them into position wherever you like. You 
 
 # Checkpoint
 
-At this time, your application should be running in both regions and you have some visibility into the underlying infrastructure in both regions. Hit the secondary **SecondaryLoadBalancerDNS** that you copied earlier. You should see the exact same site you had before.
+At this time, your application should be running in both regions and you have some visibility into the underlying infrastructure in both regions. Hit the secondary **SecondaryLoadBalancerDNS** that you copied earlier. You should see the exact same site you had before, but the **region** at the top right should show your Secondary region.
 
 Proceed to [Lab 4](../lab-4-globalacc)!
