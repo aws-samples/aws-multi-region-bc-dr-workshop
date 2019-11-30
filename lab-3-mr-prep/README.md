@@ -8,7 +8,6 @@
 ✅ [Lab 2: Operationalize Observability - Aggregate Metrics](../lab-2-agg)
 
 **Lab 3: Preparing for Multi-Region Deployments**
--
 
 [Lab 4: Implement Traffic Management - Global Accelerator](../lab-4-globalacc)
 
@@ -33,7 +32,7 @@ These are the things that we will need to replicate and/or also automate:
 
 ### Instructions
 
-### [1] Infrastructure Replication
+### [1] Replicate infrastructure
 At the beginning of the workshop, you used [AWS CloudFormation](https://aws.amazon.com/cloudformation/) to launch a stack and create the Lab-0 base infrastructure. We'll do the same thing now to replicate it, but we'll enter in a different parameter.
 
 <details>
@@ -65,7 +64,7 @@ What you just did was replicate a portion of that based on the `IsDrRegion=true`
 
 Once you see **Waiting for changeset to be created..Waiting for stack create/update to complete**, you can continue on. This doesn't mean the stack is done, but you can do the Database Replication portion in parallel. Check back later and make sure you see **Successfully created/updated stack - mm-secondary-region**.
 
-### Database Replication
+### [2] Replicate data tier
 
 The most difficult part of a multi-region application is typically data synchronization. Now that you have a separate stack in the Secondary region, we need to set up DynamoDB so that it automatically replicates any data created using the app in the primary region.
 
@@ -93,46 +92,46 @@ There's an easy way to do this - DynamoDB Global Tables. This feature will ensur
  * [Blog - converting a Single-Regional DynamoDB table to a Global Table](https://aws.amazon.com/blogs/aws/new-convert-your-single-region-amazon-dynamodb-tables-to-global-tables/)
  * [DynamoDB Core Components](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.CoreComponents.html)
  * [DynamoDB Global Tables](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/GlobalTables.html)
- </details>
+</details>
 
-### Deployment Replication
+### [3] Replication deployment infrastructure
 
 Now that you have all your artifacts replicated into the secondary region, you can automate the deployments too. The CICD infrastructure is already provisioned for you. To automate the deployments into the secondary region, we'll use [AWS CodePipeline's Cross-Region Actions](https://aws.amazon.com/about-aws/whats-new/2018/11/aws-codepipeline-now-supports-cross-region-actions/). This lets you see all your deployments across both regions in one place.
 
 <details>
-<summary>Learn more: Deployment pipeline options</summary>
-You may be thinking. Why didn't we create a deployment pipeline in the secondary region? This is one way of doing things. Having a single pipeline in one region lets you ensure your application is consistent in both regions. With this method, you can still roll back to previous deployments manually in the event that there's an issue in the primary and you want to do that.
+  <summary>Learn more: Deployment pipeline options</summary>
+  You may be thinking. Why didn't we create a deployment pipeline in the secondary region? This is one way of doing things. Having a single pipeline in one region lets you ensure your application is consistent in both regions. With this method, you can still roll back to previous deployments manually in the event that there's an issue in the primary and you want to do that.
 
-Isolation could also be another reason to have a second pipeline in a second region, but what you should think about is risk. How will you also deploy to the primary region? What if there's an outage? Do you want to be triggering deployments at that time? Inconsistent states are what you want to avoid, and this is one of the challenges with multi-region applications.
+  Isolation could also be another reason to have a second pipeline in a second region, but what you should think about is risk. How will you also deploy to the primary region? What if there's an outage? Do you want to be triggering deployments at that time? Inconsistent states are what you want to avoid, and this is one of the challenges with multi-region applications.
 </details>
 
-Navigate to the [CodePipeline console](http://console.aws.amazon.com/codepipeline) of the **PRIMARY** region. Click on the pipeline that starts with *Core*. Note that if your pipelines are not in a **Succeeded** state, there was a problem. Try to get your deployments into a **Succeeded** state before proceeding. You may have to re-run some setup scripts.
+1. Navigate to the [CodePipeline console](http://console.aws.amazon.com/codepipeline) of the **PRIMARY** region. Click on the pipeline that starts with *Core*. Note that if your pipelines are not in a **Succeeded** state, there was a problem. Try to get your deployments into a **Succeeded** state before proceeding. You may have to re-run some setup scripts.
 
 ![Select Core Pipeline](images/03-codepipeline-core.png)
 
-Click on **Edit** and **Add stage** after the Deploy stage.
+2. Click on **Edit** and **Add stage** after the Deploy stage.
 
 ![Edit Core {Pipeline}](images/03-codepipeline-edit.png)
 
-Type in **CrossRegionDeploy** for the stage name.
+3. Type in **CrossRegionDeploy** for the stage name.
 
 ![Edit Core {Pipeline}](images/03-codepipeline-cross-region-deploy.png)
 
-Next we will configure the stage so that it deploys to ECS in the secondary region. In the new CrossRegionDeploy stage, click **Add Action Group**. Enter in the following details in the **Edit Action** popup:
+4. Next we will configure the stage so that it deploys to ECS in the secondary region. In the new CrossRegionDeploy stage, click **Add Action Group**. Enter in the following details in the **Edit Action** popup:
 
-**Edit Action**:
-* Click on **Add Action Group** and enter the following details:
-* Action name: **CrossRegionDeploy**
-* Action provider: **Amazon ECS**
-* Region: **Choose the secondary region you deployed into** - By default, this should be US East - (N. Virginia)
-* Input artifacts: **BuildArtifact**
-* Cluster name: **Choose the cluster that was created for you. It will start with Cluster-**
-* Service name: **Select the service that includes "Core"**
-* Image definitions file: **imagedefinitions_secondary.json** - The value of this will depend on what you output in your buildspec. Our default is imagedefinitions_secondary.json.
+  **Edit Action**:
+  * Click on **Add Action Group** and enter the following details:
+  * Action name: **CrossRegionDeploy**
+  * Action provider: **Amazon ECS**
+  * Region: **Choose the secondary region you deployed into** - By default, this should be US East - (N. Virginia)
+  * Input artifacts: **BuildArtifact**
+  * Cluster name: **Choose the cluster that was created for you. It will start with Cluster-**
+  * Service name: **Select the service that includes "Core"**
+  * Image definitions file: **imagedefinitions_secondary.json** - The value of this will depend on what you output in your buildspec. Our default is imagedefinitions_secondary.json.
 
 ![Create Action](images/03-cp-createactiongroup.png)
 
-Click **Done** and then **Save** at the top of the screen. Click through prompts until you're back at the pipeline. AWS CodePipeline will tell you that some resources will be updated. This is expected. Click **Save**.
+5. Click **Done** and then **Save** at the top of the screen. Click through prompts until you're back at the pipeline. AWS CodePipeline will tell you that some resources will be updated. This is expected. Click **Save**.
 
 ![CodePipeline Update Source](images/03-codepipeline-update-cwe.png)
 
@@ -140,7 +139,7 @@ At this point, you should see your pipeline again and the final stage will be gr
 
 ![CodePipeline Not Deployed](images/03-codepipeline-not-deployed.png)
 
-**Do this again for the Like Service**
+6. **Do this again for the Like Service**
 
 ![Do it again](images/03-codepipeline-like.png)
 
@@ -156,26 +155,26 @@ At this point, you should see your pipeline again and the final stage will be gr
 
 ![Do it again with the like](images/03-cp-createactiongroup-like.png)
 
-### Update build scripts to upload docker images to both regions
+### [4] Replicate build artifacts
 
-In the previous section, we automated the deployments into another region. Now we have to update the rest of the build steps to upload artifacts into the secondary region. As part of the infrastructure automation, we gave you the application for both **core** and **like** services. We will now have to update the buildspec_prod.yml file of both services to upload the container images to the secondary region.
+There are a number of ways to replicate your artifacts to another region. For S3, we could use [S3 Cross Region Replication](), for ECR, there are solutions like [some solution](). In this case, we will update our build scripts to push the same Docker container to another region. In the previous section, we automated the deployments into another region and as part of the workshop initialization, we gave you the application for both **core** and **like** services. We will now have to update the buildspec_prod.yml file of both services to upload the container images to the secondary region.
 
 <details>
 <summary>Learn more: What is a buildspec file?</summary>
 
-In this workshop, we created an [AWS CodePipeline](https://aws.amazon.com/codepipeline/) stage that calls [AWS CodeBuild](https://aws.amazon.com/codebuild/),  which is a fully managed continuous integration service that compiles source code, runs tests, and produces software packages that are ready to deploy.
+  In this workshop, we created an [AWS CodePipeline](https://aws.amazon.com/codepipeline/) stage that calls [AWS CodeBuild](https://aws.amazon.com/codebuild/),  which is a fully managed continuous integration service that compiles source code, runs tests, and produces software packages that are ready to deploy.
 
-AWS CodeBuild uses a definition file called a buildspec yaml file. The contents of the buildspec will determine what AWS actions CodeBuild should perform. The key parts of the buildspec are Environment Variables, Phases, and Artifacts. See [Build Specification Reference for AWS CodeBuild](http://docs.aws.amazon.com/codebuild/latest/userguide/build-spec-ref.html).
+  AWS CodeBuild uses a definition file called a buildspec yaml file. The contents of the buildspec will determine what AWS actions CodeBuild should perform. The key parts of the buildspec are Environment Variables, Phases, and Artifacts. See [Build Specification Reference for AWS CodeBuild](http://docs.aws.amazon.com/codebuild/latest/userguide/build-spec-ref.html).
 
 </details>
 
 You have (2) options at this point:
 
-Follow the steps below, using the provided documentation (and hints if you get stuck), to add lines of instrumentation code to the Like service. If you go this route, try not spend more than 5 min on each step if you're at an AWS event with a time limit. We want you to be able to get through as many of the labs as possible.
+1. Follow the steps below, using the provided documentation (and hints if you get stuck), to add lines of instrumentation code to the Like service. If you go this route, try not spend more than 5 min on each step if you're at an AWS event with a time limit. We want you to be able to get through as many of the labs as possible.
 
 OR
 
-Run the `bootstrap/secondary-region/setup` script. If you're short on time or would rather focus on the traffic management bits later in the workshop, reveal and follow the Option 2 step by step below.
+2. Run the `bootstrap/secondary-region/setup` script. If you're short on time or would rather focus on the traffic management bits later in the workshop, reveal and follow the Option 2 step by step below.
 
 **Choose your adventure!**
 
@@ -184,26 +183,26 @@ Run the `bootstrap/secondary-region/setup` script. If you're short on time or wo
 
 First, we will update the **core-service** app.
 
-Navigate to the [CloudFormation console](https://console.aws.amazon.com/cloudformation/) of the secondary region. Click on your stack and go to the **Outputs** tab. Jot down in your notepad the values of:
+1. Navigate to the [CloudFormation console](https://console.aws.amazon.com/cloudformation/) of the secondary region. Click on your stack and go to the **Outputs** tab. Jot down in your notepad the values of:
 - SecondaryRegion
 - SecondaryLikeServiceEcrRepo
 - SecondaryCoreServiceEcrRepo
 
-Within Cloud9, find the **core-service** CodeCommit repo. We can do this in the side navigation pane or via CLI.
+2. Within Cloud9, find the **core-service** CodeCommit repo. We can do this in the side navigation pane or via CLI.
 
-Console:
-![Find file on nav pane](images/03-core-service_buildspec.png)
+  Console:
+  ![Find file on nav pane](images/03-core-service_buildspec.png)
 
-CLI:
-```
-$ cd ~/environment/core-service-[PRESS TAB TO AUTO COMPLETE AND PRESS ENTER]
-```
+  CLI:
+  ```
+  $ cd ~/environment/core-service-[PRESS TAB TO AUTO COMPLETE AND PRESS ENTER]
+  ```
 
-Find the **buildspec_prod** file in both **core-service** and **like-service** git repos. Update them to push your built containers  to both your primary and secondary regions. Within both of the buildspec files there are [TODO] lines to guide you through what you'll need to do. It's your choice if you want to understand how the build process works.
+3. Find the **buildspec_prod** file in both **core-service** and **like-service** git repos. Update them to push your built containers to both your primary and secondary regions. Within both of the buildspec files there are [TODO] lines to guide you through what you'll need to do. It's your choice if you want to understand how the build process works.
 
 We have created some completed buildspec files if you want to skip this portion. They are in the app/hints folder.
 
-<pre>
+```
   $ cd ~/environment/<b>core-service-[PRESS TAB TO AUTO COMPLETE AND PRESS ENTER]</b>
   $ cp ~/environment/multi-region-workshop/app/hints/core-buildspec_prod.yml buildspec_prod.yml
   $ cd ~/environment/<b>like-service-[PRESS TAB TO AUTO COMPLETE AND PRESS ENTER]</b>
@@ -216,10 +215,9 @@ We have created some completed buildspec files if you want to skip this portion.
     from the Cloudformation outputs in the <b>Core service</b> buildspec_prod.yml
   * REPLACEME_SECONDARY_REPO_URI with the value of <b>SecondaryLikeServiceEcrRepo</b>
     from the CloudFormation outputs in the <b>Like service</b> buildspec_prod.yml
+```
+**Note that in these labs we are hard coding values, but best practice is to use environment variables instead. This just simplifies the process for illustrative purposes.**
 
-  <b>Note that in these labs we are hard coding values, but best practice is to use environment variables
-  instead. This just simplifies the process for illustrative purposes.</b>
-</pre>
 
 ### Trigger deployment again
 
@@ -241,7 +239,7 @@ Finally, add all the files to both repos and trigger deployments:
 <details>
 <summary>Option 2: Run the automated secondary region bootstrap script</summary>
 
-Navigate back to the [AWS Cloud9 console](http://console.aws.amazon.com/cloud9) and access your working environment if you're not already there. Run these commands:
+1. Navigate back to the [AWS Cloud9 console](http://console.aws.amazon.com/cloud9) and access your working environment if you're not already there. Run these commands:
 
 <pre>
   $ cd ~/environment/aws-multi-region-bc-dr-workshop
@@ -254,7 +252,7 @@ The last step of both of the options above will commit and push your new applica
 
 ![Todo: screenshot of finished cp deploy multi-region](images/03-codepipeline-complete.png)
 
-### [3] Enabling Cloudwatch Dashboard to show multi-region metrics
+### [5] Enabling Cloudwatch Dashboard to show multi-region metrics
 
 Now that you have deployed the stack in the secondary region, lets adjust the Cloudwatch dashboard that you created in the previous lab to include these new resources. This will provide visibility to the Core and Like services running across both regions on the same dashboard.
 
