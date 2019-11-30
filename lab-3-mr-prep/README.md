@@ -99,23 +99,23 @@ There's an easy way to do this - DynamoDB Global Tables. This feature will ensur
 Now that you have all your artifacts replicated into the secondary region, you can automate the deployments too. The CICD infrastructure is already provisioned for you. To automate the deployments into the secondary region, we'll use [AWS CodePipeline's Cross-Region Actions](https://aws.amazon.com/about-aws/whats-new/2018/11/aws-codepipeline-now-supports-cross-region-actions/). This lets you see all your deployments across both regions in one place.
 
 <details>
-  <summary>Learn more: Deployment pipeline options</summary>
-  You may be thinking. Why didn't we create a deployment pipeline in the secondary region? This is one way of doing things. Having a single pipeline in one region lets you ensure your application is consistent in both regions. With this method, you can still roll back to previous deployments manually in the event that there's an issue in the primary and you want to do that.
+    <summary>Learn more: Deployment pipeline options</summary>
+    You may be thinking. Why didn't we create a deployment pipeline in the secondary region? This is one way of doing things. Having a single pipeline in one region lets you ensure your application is consistent in both regions. With this method, you can still roll back to previous deployments manually in the event that there's an issue in the primary and you want to do that.
 
-  Isolation could also be another reason to have a second pipeline in a second region, but what you should think about is risk. How will you also deploy to the primary region? What if there's an outage? Do you want to be triggering deployments at that time? Inconsistent states are what you want to avoid, and this is one of the challenges with multi-region applications.
+    Isolation could also be another reason to have a second pipeline in a second region, but what you should think about is risk. How will you also deploy to the primary region? What if there's an outage? Do you want to be triggering deployments at that time? Inconsistent states are what you want to avoid, and this is one of the challenges with multi-region applications.
 </details>
 
 1. Navigate to the [CodePipeline console](http://console.aws.amazon.com/codepipeline) of the **PRIMARY** region. Click on the pipeline that starts with *Core*. Note that if your pipelines are not in a **Succeeded** state, there was a problem. Try to get your deployments into a **Succeeded** state before proceeding. You may have to re-run some setup scripts.
 
-![Select Core Pipeline](images/03-codepipeline-core.png)
+    ![Select Core Pipeline](images/03-codepipeline-core.png)
 
 2. Click on **Edit** and **Add stage** after the Deploy stage.
 
-![Edit Core {Pipeline}](images/03-codepipeline-edit.png)
+    ![Edit Core {Pipeline}](images/03-codepipeline-edit.png)
 
 3. Type in **CrossRegionDeploy** for the stage name.
 
-![Edit Core {Pipeline}](images/03-codepipeline-cross-region-deploy.png)
+    ![Edit Core {Pipeline}](images/03-codepipeline-cross-region-deploy.png)
 
 4. Next we will configure the stage so that it deploys to ECS in the secondary region. In the new CrossRegionDeploy stage, click **Add Action Group**. Enter in the following details in the **Edit Action** popup:
 
@@ -160,11 +160,11 @@ Now that you have all your artifacts replicated into the secondary region, you c
 There are a number of ways to replicate your artifacts to another region. For S3, we could use [S3 Cross Region Replication](), for ECR, there are solutions like [some solution](). In this case, we will update our build scripts to push the same Docker container to another region. In the previous section, we automated the deployments into another region and as part of the workshop initialization, we gave you the application for both **core** and **like** services. We will now have to update the buildspec_prod.yml file of both services to upload the container images to the secondary region.
 
 <details>
-<summary>Learn more: What is a buildspec file?</summary>
+    <summary>Learn more: What is a buildspec file?</summary>
 
-  In this workshop, we created an [AWS CodePipeline](https://aws.amazon.com/codepipeline/) stage that calls [AWS CodeBuild](https://aws.amazon.com/codebuild/),  which is a fully managed continuous integration service that compiles source code, runs tests, and produces software packages that are ready to deploy.
+    In this workshop, we created an [AWS CodePipeline](https://aws.amazon.com/codepipeline/) stage that calls [AWS CodeBuild](https://aws.amazon.com/codebuild/),  which is a fully managed continuous integration service that compiles source code, runs tests, and produces software packages that are ready to deploy.
 
-  AWS CodeBuild uses a definition file called a buildspec yaml file. The contents of the buildspec will determine what AWS actions CodeBuild should perform. The key parts of the buildspec are Environment Variables, Phases, and Artifacts. See [Build Specification Reference for AWS CodeBuild](http://docs.aws.amazon.com/codebuild/latest/userguide/build-spec-ref.html).
+    AWS CodeBuild uses a definition file called a buildspec yaml file. The contents of the buildspec will determine what AWS actions CodeBuild should perform. The key parts of the buildspec are Environment Variables, Phases, and Artifacts. See [Build Specification Reference for AWS CodeBuild](http://docs.aws.amazon.com/codebuild/latest/userguide/build-spec-ref.html).
 
 </details>
 
@@ -172,7 +172,7 @@ You have (2) options at this point:
 
 1. Follow the steps below, using the provided documentation (and hints if you get stuck), to add lines of instrumentation code to the Like service. If you go this route, try not spend more than 5 min on each step if you're at an AWS event with a time limit. We want you to be able to get through as many of the labs as possible.
 
-OR
+    OR
 
 2. Run the `bootstrap/secondary-region/setup` script. If you're short on time or would rather focus on the traffic management bits later in the workshop, reveal and follow the Option 2 step by step below.
 
@@ -259,14 +259,14 @@ You have (2) options at this point:
 
 1. Run the `bootstrap/dashboard/setup` script. This will deploy a fully prepared Cloudwatch dashboard for you showing metrics from both stacks in both regions. If you're short on time or would rather focus on the traffic management bits later in the workshop, reveal and follow the Option 1 step by step below.
 
-OR
+    OR
 
 2. Follow the steps below, using the provided documentation (and hints if you get stuck), to add the additional metrics to the Cloudwatch dashboard manually. If you go this route, try not spend more than 5 min on each step if you're at an AWS event with a time limit. We want you to be able to get through as many of the labs as possible.
 
 **Choose your adventure!**
 
 <details>
- <summary>Option 1: Use the script to build the dashboard</summary>
+    <summary>Option 1: Use the script to build the dashboard</summary>
 
 1. In the Cloud9 IDE terminal window, navigate to the root of the working directory that was cloned from Github.
 
@@ -281,7 +281,7 @@ OR
     ```
 
 
-![image](https://user-images.githubusercontent.com/23423809/69701838-bbd0ef80-10a2-11ea-8173-3e720b0efc69.png)
+    ![image](https://user-images.githubusercontent.com/23423809/69701838-bbd0ef80-10a2-11ea-8173-3e720b0efc69.png)
 
 3. Wait until you see **Successfully created/updated stack - Fully-Prepared-Dashboard**. This should take less than 30 seconds. Once complete, you can navigate to the [Cloudwatch Dashboards](https://console.aws.amazon.com/cloudwatch/home?#dashboards:) page where you will see a new dashboard with **Fully-Prepared-Dashboard** in the name. You can use this going forward and modify it as you wish to.
 
@@ -297,63 +297,62 @@ OR
 <details>
 <summary>Option 2: Step-by-step manual instructions</summary>
 
-### 3. Edit the widgets to show metrics from the other region
+### Edit the widgets to show metrics from the other region (Step-by-step)
 
 With Amazon Cloudwatch, we have the ability to stack metrics on top of each other in a widget that contains a graph. This will be useful in our case where we are viewing the same metric type, over two resources. We'll do this in the steps below in addition to adding the metrics from the other region.
 
 Hint - see documentation for [Editing a Graph on a Cloudwatch Dashboard](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/edit_graph_dashboard.html)
 
-## a. Edit the ALB widgets
+#### a. Edit the ALB widgets
 
 As we are now adding in metrics from two different regions, we must navigate to the secondary region and load the dashboard from there. This is because when referring to metrics within a dashboard, Cloudwatch can only see resources local to that region.
 
-Modify the ALB Requests Per Minute widget to show the metrics from the ALB in the secondary region:
+1. Modify the ALB Requests Per Minute widget to show the metrics from the ALB in the secondary region:
 
-* Open up the [Cloudwatch Dashboards](https://console.aws.amazon.com/cloudwatch/) page and select the dashboard from the previous lab
-* Change the region (top right of screen) to your Secondary region
-* Add in the **RequestCount** metric to this widget from the ALB
-* Add in the **ALB 2XX, 4XX and 5XX** metrics to this widget from the ALB
-* Change the metric labels to identify the correct region for specified metric
+    * Open up the [Cloudwatch Dashboards](https://console.aws.amazon.com/cloudwatch/) page and select the dashboard from the previous lab
+    * Change the region (top right of screen) to your Secondary region
+    * Add in the **RequestCount** metric to this widget from the ALB
+    * Add in the **ALB 2XX, 4XX and 5XX** metrics to this widget from the ALB
+    * Change the metric labels to identify the correct region for specified metric
 
 <details>
     <summary>Hint with screenshots:</summary>
 
-* Hover over the widget and select Edit in the top right hand corner
+    * Hover over the widget and select Edit in the top right hand corner
 
-![image](https://user-images.githubusercontent.com/23423809/69710628-951bb480-10b4-11ea-9a0c-ca8e8b603030.png)
-* Select the All Metrics tab and add in the **requestcount** metric from the ALB
-![image](https://user-images.githubusercontent.com/23423809/69883408-f09e9b80-1288-11ea-9605-79c0969666d8.png)
-* Select Graphed Metrics and change the label to match the region
-![image](https://user-images.githubusercontent.com/23423809/69883467-3196b000-1289-11ea-884d-5cce782fe962.png)
-* Click **Update widget**
-    </details>
+    ![image](https://user-images.githubusercontent.com/23423809/69710628-951bb480-10b4-11ea-9a0c-ca8e8b603030.png)
+    * Select the All Metrics tab and add in the **requestcount** metric from the ALB
+    ![image](https://user-images.githubusercontent.com/23423809/69883408-f09e9b80-1288-11ea-9605-79c0969666d8.png)
+    * Select Graphed Metrics and change the label to match the region
+    ![image](https://user-images.githubusercontent.com/23423809/69883467-3196b000-1289-11ea-884d-5cce782fe962.png)
+    * Click **Update widget**
+</details>
 
-Modify the ALB HTTP Responses widget to show the metrics from the ALB in the secondary region:
+#### b. Modify the ALB HTTP Responses widget to show the metrics from the ALB in the secondary region:
 
-* Add in the **HTTP 2XX / 4XX / 5XX Count** metrics from the ALB. *Note: you may not see all the metrics above available to select, this is as the metric only becomes available after the Laod Balancer has seen these types of errors. If this is the case then move on as you can always come back and add the missing metric later.*
-* Change the metric labels to identify the correct region for that metric
-* Ensure the region you put in the label matches the region in the details
-* Click **Update widget**
+1. Add in the **HTTP 2XX / 4XX / 5XX Count** metrics from the ALB. *Note: you may not see all the metrics above available to select, this is as the metric only becomes available after the Laod Balancer has seen these types of errors. If this is the case then move on as you can always come back and add the missing metric later.*
+2. Change the metric labels to identify the correct region for that metric
+3. Ensure the region you put in the label matches the region in the details
+4. Click **Update widget**
 
 <details>
-<summary>Show screenshot:</summary>
+    <summary>Show screenshot:</summary>
 
-![image](https://user-images.githubusercontent.com/23423809/69883777-7bcc6100-128a-11ea-9e2b-0505f55a5b37.png)
+    ![image](https://user-images.githubusercontent.com/23423809/69883777-7bcc6100-128a-11ea-9e2b-0505f55a5b37.png)
 
 </details>
 
 
-## b. Add widgets for the Like and Core Services from Secondary region
+#### c. Add widgets for the Like and Core Services from Secondary region
 
 Following the same process from Lab 2, add a new widget for each of the Like and Core services. Modify the titles to be able to easily identify which region they are populating from. You should end up with something like this:
 
 ![image](https://user-images.githubusercontent.com/23423809/69884310-9c95b600-128c-11ea-9516-97727607869e.png)
 
 Feel free to move the widgets around the dashboard to suit your style following the instructions in the [Cloudwatch documentation](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/move_resize_graph_dashboard.html).
-Youc can drag widgets around and move them into position wherever you like. You can also add a text widget to show a title, include links to a knowledgebase wiki or internal tooling. Get creative!
+You can drag widgets around and move them into position wherever you like. You can also add a text widget to show a title, include links to a knowledgebase wiki or internal tooling. Get creative!
 
-
-## Important - Save your Cloudwatch Dashboard! ##
+## Important - Save your Cloudwatch Dashboard!
 
 </details>
 
