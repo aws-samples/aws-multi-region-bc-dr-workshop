@@ -247,7 +247,7 @@ First, we will update the **core-service** app.
 
 The last step of both of the options above will commit and push your new application code. Take a look at your pipelines in the AWS CodePipeline Console and you should see the deployments start. Wait until all deployments are complete.
 
-    ![Todo: screenshot of finished cp deploy multi-region](images/03-codepipeline-complete.png)
+![Todo: screenshot of finished cp deploy multi-region](images/03-codepipeline-complete.png)
 
 ### [5] Enable Cloudwatch Dashboard to show multi-region metrics
 
@@ -312,15 +312,12 @@ As we are now adding in metrics from two different regions, we must navigate to 
 
 <details>
     <summary>Hint with screenshots:</summary>
-
     * Hover over the widget and select Edit in the top right hand corner
-
     ![image](https://user-images.githubusercontent.com/23423809/69710628-951bb480-10b4-11ea-9a0c-ca8e8b603030.png)
     * Select the All Metrics tab and add in the **requestcount** metric from the ALB
     ![image](https://user-images.githubusercontent.com/23423809/69883408-f09e9b80-1288-11ea-9605-79c0969666d8.png)
     * Select Graphed Metrics and change the label to match the region
     ![image](https://user-images.githubusercontent.com/23423809/69883467-3196b000-1289-11ea-884d-5cce782fe962.png)
-
 </details>
 
 2. Click **Update widget**
