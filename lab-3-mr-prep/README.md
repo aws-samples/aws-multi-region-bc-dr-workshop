@@ -53,13 +53,13 @@ There are a number of different ways to achieve this, like using [AWS CloudForma
     ```
 
 <details>
-    <summary>Learn more: What did you just do</summary>
-    In Lab-0, we deployed a CloudFormation stack that had all the core components of the infrastructure, such as:
-    * VPC (subnets, route tables, routes, etc)
-    * ECS (task definitions, services, etc)
-    * CICD Stack (AWS CodePipeline, AWS CodeBuild)
+   <summary>Learn more: What did you just do</summary>
+   In Lab-0, we deployed a CloudFormation stack that had all the core components of the infrastructure, such as:
+   * VPC (subnets, route tables, routes, etc)
+   * ECS (task definitions, services, etc)
+   * CICD Stack (AWS CodePipeline, AWS CodeBuild)
 
-    What you just did was replicate a portion of that based on the `IsDrRegion=true` flag. We set the flag to true this time to spin up some additional resources and not spin up others.
+   What you just did was replicate a portion of that based on the `IsDrRegion=true` flag. We set the flag to true this time to spin up some additional resources and not spin up others.
 </details>
 
 Once you see **Waiting for changeset to be created..Waiting for stack create/update to complete**, you can continue on. This doesn't mean the stack is done, but you can do the Database Replication portion in parallel. Check back later and make sure you see **Successfully created/updated stack - mm-secondary-region**.
@@ -154,6 +154,7 @@ Now that you have all your artifacts replicated into the secondary region, you c
     * Cluster name: **Choose the cluster that was created for you. It will start with Cluster-**
     * Service name: **Select the service that includes "Like"**
     * Image definitions file: **imagedefinitions_secondary.json** - The value of this will depend on what you output in your buildspec. Our default is imagedefinitions_secondary.json.
+
 
     ![Do it again with the like](images/03-cp-createactiongroup-like.png)
     </details>
