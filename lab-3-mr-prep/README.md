@@ -337,8 +337,7 @@ As we are now adding in metrics from two different regions, we must navigate to 
 
     <details>
       <summary>Show screenshot:</summary>
-
-        ![image](images/03-updated-alb-widgets.png)
+      ![image](images/03-updated-alb-widgets.png)
 
     </details>
 
