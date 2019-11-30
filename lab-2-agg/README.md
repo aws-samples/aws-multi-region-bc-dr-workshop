@@ -1,20 +1,17 @@
 # Mythical Mysfits: Multi-Region-Workshop
 
 ## Workshop progress
-✅ Lab 0: Workshop Initialization
+✅ [Lab 0: Workshop Initialization](../lab-0-init)
 
-✅ Lab 1: Implement Observability
+✅ [Lab 1: Instrument Observability - Distributed Tracing with AWS X-Ray](../lab-1-xray)
 
 **Lab 2: Operationalize Observability - Aggregate Metrics**
 
-Lab 3: Prep for Multi-Region Deployments
-- Replicate Data Tier
-- Automate Cross Region Builds and Deploys
-- Update Observability Dashboards
+[Lab 3: Preparing for Multi-Region Deployments](../lab-3-mr-prep)
 
-Lab 4: Implement Traffic Management
+[Lab 4: Implement Traffic Management - Global Accelerator](../lab-4-globalacc)
 
-Lab 5: Load Test and Failover
+[Lab 5: Load Test and Failover your multi-region application](../lab-5-loadtest)
 
 ## Lab 2 - Gather AWS Metrics
 
@@ -53,7 +50,7 @@ Reminder: [What is an AWS X-Ray trace?](https://docs.aws.amazon.com/xray/latest/
 
 <details>
 <summary>Step by step instructions:</summary>
-  
+
 1. Click on the **Add Widget** button in the Cloudwatch dashboard
   ![image](https://user-images.githubusercontent.com/23423809/69609253-e9a03080-0fdd-11ea-9090-40568a536874.png)
 

@@ -10,11 +10,11 @@
 
 [Lab 2: Operationalize Observability - Aggregate Metrics](../lab-2-agg)
 
-[Lab 3: Prep for Multi-Region Deployments](../lab-3-mr-prep)
+[Lab 3: Preparing for Multi-Region Deployments](../lab-3-mr-prep)
 
-[Lab 4: Implement Traffic Management](../lab-4-globalacc)
+[Lab 4: Implement Traffic Management - Global Accelerator](../lab-4-globalacc)
 
-[Lab 5: Load Test and Failover](../lab-5-loadtest)
+[Lab 5: Load Test and Failover your multi-region application](../lab-5-loadtest)
 
 ## Lab 0 - Workshop Initialization
 
@@ -88,7 +88,7 @@ If you're not attending an AWS event, you will need to use your own account. Mak
 
     </details>
 
-7. Click **Create** to launch the CloudFormation stack.
+7. Click **Create Stack** to launch the CloudFormation stack.
 
     The CloudFormation stack will take a few minutes to launch. You can check on the stack creation process in the CloudFormation Dashboard. Your stack should show status **CREATE\_COMPLETE** in roughly 5-10 minutes. If you select box next to your stack and click on the **Events** tab, you can see what steps it's on.
 

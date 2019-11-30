@@ -1,22 +1,20 @@
 # Mythical Mysfits Multi-Region BC/DR Workshop
 
 ## Workshop progress
-✅ Lab 0: Workshop Initialization
+✅ [Lab 0: Workshop Initialization](../lab-0-init)
 
-✅ Lab 1: Implement Observability
+✅ [Lab 1: Instrument Observability - Distributed Tracing with AWS X-Ray](../lab-1-xray)
 
-✅ Lab 2: Operationalize Observability - Aggregate Metrics
+✅ [Lab 2: Operationalize Observability - Aggregate Metrics](../lab-2-agg)
 
-**Lab 3: Prep for Multi-Region Deployments**
-- Replicate Data Tier
-- Automate Cross Region Builds and Deploys
-- Update Observability Dashboards
+**Lab 3: Preparing for Multi-Region Deployments**
+-
 
-Lab 4: Implement Traffic Management
+[Lab 4: Implement Traffic Management - Global Accelerator](../lab-4-globalacc)
 
-Lab 5: Load Test and Failover
+[Lab 5: Load Test and Failover your multi-region application](../lab-5-loadtest)
 
-## Lab 3 - Preparing for Multi-Region Deployments
+## LAB 3 - Preparing for Multi-Region Deployments
 
 Moving to a multi-region application is no easy task. We need to not only make sure the infrastructure is available, but also the artifacts like Docker images, and then the application itself. In addition, the observability dashboards have to be updated to reflect multiple regions. Some logical things to think about are how do I understand the state of my application in both regions? How do I know when I need to failover into a secondary region? How do I test my secondary region deployment?
 
@@ -33,19 +31,9 @@ These are the things that we will need to replicate and/or also automate:
 * Application Deployment Pipeline
 * Application(s)
 
-<!-- Here's a reference architecture for what you'll be building:
+### Instructions
 
-[TODO] CREATE REF ARCHITECTURE PICTURE
-![CodeBuild Create](images/arch-codebuild.png)
-
-Here's what you'll be doing:
-
-[TODO] CREATE TOC
-* [Create AWS CodeBuild Project](#create-aws-codebuild-project)
-* [Create BuildSpec File](#create-buildspec-file)
-* [Test your AWS CodeBuild Project](#test-your-aws-codebuild-project) -->
-
-### Infrastructure Replication
+### [1] Infrastructure Replication
 At the beginning of the workshop, you used [AWS CloudFormation](https://aws.amazon.com/cloudformation/) to launch a stack and create the Lab-0 base infrastructure. We'll do the same thing now to replicate it, but we'll enter in a different parameter.
 
 <details>
@@ -56,14 +44,14 @@ What you are about to do is quite likely the simplest way of deploying another C
 There are a number of different ways to achieve this, like using [AWS CloudFormation Stacksets](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/what-is-cfnstacksets.html) or using [AWS CodePipeline to trigger CloudFormation in a CI/CD pipeline](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/continuous-delivery-codepipeline.html). Both of these are a much more automated way of deploying into multiple regions, but for simplicity's sake, in this lab you will use the simplest method of using the CLI.
 </details>
 
-Navigate back to the [AWS Cloud9 console](http://console.aws.amazon.com/cloud9) and access your working environment. Run these commands:
+1. Navigate back to the [AWS Cloud9 console](http://console.aws.amazon.com/cloud9) and access your working environment. Run these commands:
 
-<pre>
-$ cd ~/environment/aws-multi-region-bc-dr-workshop
-$ aws cloudformation deploy --stack-name mm-secondary-region --template-file cfn/core.yml \
-  --capabilities CAPABILITY_NAMED_IAM CAPABILITY_AUTO_EXPAND --parameter-overrides \
-  IsSecondary=true --region us-east-1
-</pre>
+    ```
+    $ cd ~/environment/aws-multi-region-bc-dr-workshop
+    $ aws cloudformation deploy --stack-name mm-secondary-region --template-file cfn/core.yml \
+      --capabilities CAPABILITY_NAMED_IAM CAPABILITY_AUTO_EXPAND --parameter-overrides \
+      IsSecondary=true --region us-east-1
+    ```
 
 <details>
 <summary>Learn more: What did you just do</summary>

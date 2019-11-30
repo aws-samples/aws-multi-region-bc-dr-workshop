@@ -10,11 +10,11 @@
 
 [Lab 2: Operationalize Observability - Aggregate Metrics](../lab-2-agg)
 
-[Lab 3: Prep for Multi-Region Deployments](../lab-3-mr-prep)
+[Lab 3: Preparing for Multi-Region Deployments](../lab-3-mr-prep)
 
-[Lab 4: Implement Traffic Management](../lab-4-globalacc)
+[Lab 4: Implement Traffic Management - Global Accelerator](../lab-4-globalacc)
 
-[Lab 5: Load Test and Failover](../lab-5-loadtest)
+[Lab 5: Load Test and Failover your multi-region application](../lab-5-loadtest)
 
 ## LAB 1 - Instrument Observability - Distributed Tracing with AWS X-Ray
 

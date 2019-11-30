@@ -1,19 +1,19 @@
 # Mythical Mysfits: Multi-Region-Workshop
 
 ## Workshop progress
-✅ Lab 0: Workshop Initialization
+✅ [Lab 0: Workshop Initialization](../lab-0-init)
 
-✅ Lab 1: Instrument Observability
+✅ [Lab 1: Instrument Observability - Distributed Tracing with AWS X-Ray](../lab-1-xray)
 
-✅ Lab 2: Operationalize Observability - Aggregate Metrics
+✅ [Lab 2: Operationalize Observability - Aggregate Metrics](../lab-2-agg)
 
-✅ Lab 3: Prep for Multi-Region Deployments
+✅ [Lab 3: Preparing for Multi-Region Deployments](../lab-3-mr-prep)
 
-✅ Lab 4: Implement Traffic Management
+✅ [Lab 4: Implement Traffic Management - Global Accelerator](../lab-4-globalacc)
 
-**Lab 5: Load Test and Failover**
+**Lab 5: Load Test and Failover your multi-region application**
 
-## Lab 5 - Load test your multi-region application
+## Lab 5 - Load Test and Failover your multi-region application
 Now that we have the Global Accelerator set up and targetting our two different Load Balancers residing in each region, lets send some test traffic to it. The aim of this lab is to learn how to use the Global Accelerator to manipulate traffic flows and then use this method to direct traffic for our **Like** service between regions. This will be useful when there is a need to failover between our regions to meet our Service Level Objectives.
 One of the benefits of using the Global Accelerator in this scenario is that we do not need to wait for DNS TTL's (Time To Live) to expire, nor rely on them. Instead the Global Accelerator provides a single DNS endpoint with two A-records behind it. We only need to send traffic to the single DNS endpoint for the traffic manipulation to be effective.
 In addition, we will learn how to use the Global Accelerator Health Checks to automatically direct traffic away from a region where the application is showing an unhealthy state over to another region where the app is healthy.
@@ -93,7 +93,7 @@ Example -
 
 <details>
   <summary>Hint: step by step instructions</summary>
-  
+
 1. Navigate to the Global Accelerator Listener and edit the Endpoint groups Traffic Dial to send 100% traffic to Primary region
 
 ![image](https://user-images.githubusercontent.com/23423809/69886941-61e64a80-1299-11ea-9d65-532218b2d2b3.png)
@@ -185,7 +185,7 @@ Before we trigger a failover of the application between regions, it is important
 
 <details>
   <summary>Option 1: Break the application by stopping the ECS tasks in one region.</summary>
-  
+
 Kick off the AB command to start sending some traffic to the Global Accelerator.
 
 Next, lets force the ALB within our Primary region into an unhealthy state by stopping the Mysfits and Like tasks in our ECS cluster. Once these are stopped, the ALB healthchecks will fail. To do this we need to set the "Desired Tasks" to 0 for each service.
@@ -205,9 +205,9 @@ Your Cloudwatch dashboard should now reflect the traffic pattern expected - with
 
 <details>
   <summary>Option 2: Modify the Access Control List (ACL) in a region to force the Application Load Balancer healthcheck to fail</summary>
-  
+
 We will simulate a configuration change in a region that results in the ALB being unable to contact the container instances for the application. This configuration change will force the ALB healthchecks to fail and therefore fail the Global Accelerator healthchecks for the endpoint in this region.  
-  
+
 1. Within the AWS Management Console, navigate to the ECS Service. Select the Cluster running our services
 2. Under the Services tab, Select the **Core** service.
 3. Click the security group un the Details tab which will bring you to the Security Groups section of EC2:
@@ -220,7 +220,7 @@ We will simulate a configuration change in a region that results in the ALB bein
 ![image](https://user-images.githubusercontent.com/23423809/69887974-5f3a2400-129e-11ea-8507-dabde34790fd.png)
 
 6. Save the rule.
-7. Wait about 30 seconds then, navigate to the Global Accelerator and select your Global Accelerator. You will see the console is informing you that there is a healthy endpoint *(this is correct, we did this in step 5 above)*. 
+7. Wait about 30 seconds then, navigate to the Global Accelerator and select your Global Accelerator. You will see the console is informing you that there is a healthy endpoint *(this is correct, we did this in step 5 above)*.
 
 ![image](https://user-images.githubusercontent.com/23423809/69888054-c0fa8e00-129e-11ea-9ec2-a94e7f570289.png)
 
@@ -228,5 +228,5 @@ At this time, the Global Accelerator will have redirected all incoming traffic t
 
 8. Revert the change you made to the security group in step 5 above to bring the application back online and the healthcheck into a healthy state by modifying the source CIDR block to reflect **10.0.0.0/16**.
 
-  
+
   </details>

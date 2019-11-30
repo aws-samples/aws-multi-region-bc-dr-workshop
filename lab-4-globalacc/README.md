@@ -1,13 +1,19 @@
 # Mythical Mysfits: Multi-Region-Workshop
 
-**To do list:**<br>
-✅ Distributed Tracing with AWS X-Ray<br>
-✅ Gather AWS Metrics<br>
-✅ Prepare for multi-region deployments<br>
----- Implement Global Accelerator<br>
----- Load test and failover<br>
+## Workshop progress
+✅ [Lab 0: Workshop Initialization](../lab-0-init)
 
-## Lab 4 - Global Accelerator
+✅ [Lab 1: Instrument Observability - Distributed Tracing with AWS X-Ray](../lab-1-xray)
+
+✅ [Lab 2: Operationalize Observability - Aggregate Metrics](../lab-2-agg)
+
+✅ [Lab 3: Preparing for Multi-Region Deployments](../lab-3-mr-prep)
+
+**Lab 4: Implement Traffic Management - Global Accelerator**
+
+[Lab 5: Load Test and Failover your multi-region application](../lab-5-loadtest)
+
+## Lab 4 - Implement Traffic Management - Global Accelerator
 
 AWS Global Accelerator is a network layer service that directs traffic to optimal regional endpoints based on health, client location, and policies that you configure. It provides you with static IP addresses that you associate with your accelerator which will act as a fixed entry point to your application endpoints in one or more AWS Regions.
 
@@ -29,9 +35,9 @@ Here's what you'll be doing:
 
 ### 4.1 Create an Accelerator
 
-* Open the [Global Accelerator](https://us-west-2.console.aws.amazon.com/ec2/v2/home?region=us-west-2#GlobalAcceleratorDashboard:) console. 
-* Choose **Create accelerator**. 
-* Provide a name for your accelerator. 
+* Open the [Global Accelerator](https://us-west-2.console.aws.amazon.com/ec2/v2/home?region=us-west-2#GlobalAcceleratorDashboard:) console.
+* Choose **Create accelerator**.
+* Provide a name for your accelerator.
 * Choose **Next**.
 
 ![image](images/04-global-accelerator-name.png)
@@ -89,7 +95,7 @@ Before testing your accelerator, wait for the Status of your Accelerator to go f
 
 ![image](images/04-global-accelerator-static-ip.png)
 
-# Checkpoint 
+# Checkpoint
 
 Congratulations!!! You've successfully created an accelerator to route traffic to both your primary and secondary region.
 
