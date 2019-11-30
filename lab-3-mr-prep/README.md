@@ -94,7 +94,7 @@ There's an easy way to do this - DynamoDB Global Tables. This feature will ensur
  * [DynamoDB Global Tables](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/GlobalTables.html)
 </details>
 
-### [3] Replication deployment infrastructure
+### [3] Replicate deployment infrastructure
 
 Now that you have all your artifacts replicated into the secondary region, you can automate the deployments too. The CICD infrastructure is already provisioned for you. To automate the deployments into the secondary region, we'll use [AWS CodePipeline's Cross-Region Actions](https://aws.amazon.com/about-aws/whats-new/2018/11/aws-codepipeline-now-supports-cross-region-actions/). This lets you see all your deployments across both regions in one place.
 
@@ -119,15 +119,15 @@ Now that you have all your artifacts replicated into the secondary region, you c
 
 4. Next we will configure the stage so that it deploys to ECS in the secondary region. In the new CrossRegionDeploy stage, click **Add Action Group**. Enter in the following details in the **Edit Action** popup:
 
-  **Edit Action**:
-  * Click on **Add Action Group** and enter the following details:
-  * Action name: **CrossRegionDeploy**
-  * Action provider: **Amazon ECS**
-  * Region: **Choose the secondary region you deployed into** - By default, this should be US East - (N. Virginia)
-  * Input artifacts: **BuildArtifact**
-  * Cluster name: **Choose the cluster that was created for you. It will start with Cluster-**
-  * Service name: **Select the service that includes "Core"**
-  * Image definitions file: **imagedefinitions_secondary.json** - The value of this will depend on what you output in your buildspec. Our default is imagedefinitions_secondary.json.
+    **Edit Action**:
+    * Click on **Add Action Group** and enter the following details:
+    * Action name: **CrossRegionDeploy**
+    * Action provider: **Amazon ECS**
+    * Region: **Choose the secondary region you deployed into** - By default, this should be US East - (N. Virginia)
+    * Input artifacts: **BuildArtifact**
+    * Cluster name: **Choose the cluster that was created for you. It will start with Cluster-**
+    * Service name: **Select the service that includes "Core"**
+    * Image definitions file: **imagedefinitions_secondary.json** - The value of this will depend on what you output in your buildspec. Our default is imagedefinitions_secondary.json.
 
 ![Create Action](images/03-cp-createactiongroup.png)
 
