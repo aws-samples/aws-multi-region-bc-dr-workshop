@@ -5,7 +5,7 @@
 
 ✅ [Lab 1: Instrument Observability - Distributed Tracing with AWS X-Ray](../lab-1-xray)
 
-**Lab 2: Operationalize Observability - Aggregate Metrics**
+### **Lab 2: Operationalize Observability - Aggregate Metrics**
 * [Explore pre-configured CloudWatch dashboard](#1-explore-pre-configured-cloudwatch-dashboard)
 * [Add newly instrumented error and fault metrics from X-Ray](#2-add-newly-instrumented-error-and-fault-metrics-from-x-ray)
 
