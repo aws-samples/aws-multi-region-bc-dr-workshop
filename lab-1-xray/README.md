@@ -5,6 +5,9 @@
 
 **Lab 1: Instrument Observability - Distributed Tracing with AWS X-Ray**
 
+- [Instrument the like service code using AWS X-Ray SDK and AWS Cloud9](#2-instrument-the-like-service-code-using-the-aws-x-ray-sdk-and-cloud9)
+- [Deploy like service changes](#3-deploy-the-changes-you-made-to-the-like-service)
+
 [Lab 2: Operationalize Observability - Aggregate Metrics](../lab-2-agg)
 
 [Lab 3: Prep for Multi-Region Deployments](../lab-3-mr-prep)
