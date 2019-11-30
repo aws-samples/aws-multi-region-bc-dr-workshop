@@ -62,7 +62,7 @@ First thing's first, we need to name the AWS Global Accelerator. You can name it
 3. Provide a name for your accelerator - in our case **mm-global-accelerator**
 4. Click **Next**.
 
-  ![image](images/04-global-accelerator-name.png)
+  ![image](images/04-global-acc-name.png)
 
 #### b. Configure your Global Accelerator - Add listeners
 
@@ -75,7 +75,7 @@ The next step in the AWS Global Accelerator is to add [listeners](https://docs.a
 * **Client affinity**: Leave as None.
 * Click **Next**.
 
-  ![image](images/04-global-accelerator-listeners.png)
+  ![image](images/04-global-acc-listeners.png)
 
 #### c. Configure your Global Accelerator - Add Endpoint Groups
 
@@ -92,7 +92,7 @@ At the **Add endpoint groups** step, enter the following:
 * **Traffic dial**: Leave as 100.
 * Click **Next**.
 
-![image](images/04-global-accelerator-endpoint-group.png)
+![image](images/04-global-acc-endpoint-group.png)
 
 #### d. Add Endpoints
 
@@ -110,7 +110,7 @@ The endpoints we’ll be using are the Application Load Balancers in the primary
 * **Endpoint**: Choose the load balancer associated with this application.
 * Click **Create accelerator**.
 
-![image](images/04-global-accelerator-endpoints.png)
+![image](images/04-global-acc-endpoints.png)
 
 ### [3] Test your Global Accelerator
 
