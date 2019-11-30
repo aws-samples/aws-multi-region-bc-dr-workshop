@@ -1,5 +1,7 @@
 # Mythical Mysfits: Multi-Region-Workshop
 
+![mysfits-welcome](../images/mysfits-welcome.png)
+
 ## Workshop progress
 **Lab 0: Workshop Initialization**
 - [Deploy Mythical CloudFormation Stack](#1-deploy-mythical-cloudformation-stack)
