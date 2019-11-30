@@ -336,7 +336,7 @@ As we are now adding in metrics from two different regions, we must navigate to 
     * Ensure the region you put in the label matches the region in the details
 
     <details>
-        <summary>Show screenshot:</summary>
+      <summary>Show screenshot:</summary>
 
         ![image](images/03-updated-alb-widgets.png)
 
