@@ -218,7 +218,6 @@ First, we will update the **core-service** app.
     ```
 **Note that in these labs we are hard coding values, but best practice is to use environment variables instead. This just simplifies the process for illustrative purposes.**
 
-
 4. Finally, add all the files to both repos and trigger new deployments:
 
     ```  
@@ -231,7 +230,6 @@ First, we will update the **core-service** app.
     $ git commit -m "Updating like buildspec for multi-region deploy"
     $ git push origin master
     ```
-
 
 </details>
 
@@ -280,16 +278,13 @@ You have (2) options at this point:
     $ bootstrap/dashboard/setup
     ```
 
-
     ![image](https://user-images.githubusercontent.com/23423809/69701838-bbd0ef80-10a2-11ea-8173-3e720b0efc69.png)
 
 3. Wait until you see **Successfully created/updated stack - Fully-Prepared-Dashboard**. This should take less than 30 seconds. Once complete, you can navigate to the [Cloudwatch Dashboards](https://console.aws.amazon.com/cloudwatch/home?#dashboards:) page where you will see a new dashboard with **Fully-Prepared-Dashboard** in the name. You can use this going forward and modify it as you wish to.
 
     ![image](https://user-images.githubusercontent.com/23423809/69702002-15d1b500-10a3-11ea-9e4f-86ba53e69054.png)
 
-
     ![image](https://user-images.githubusercontent.com/23423809/69792175-fa39dd80-117a-11ea-9465-ff7b459449aa.png)
-
 
 </details>
 
@@ -301,7 +296,7 @@ You have (2) options at this point:
 
 With Amazon Cloudwatch, we have the ability to stack metrics on top of each other in a widget that contains a graph. This will be useful in our case where we are viewing the same metric type, over two resources. We'll do this in the steps below in addition to adding the metrics from the other region.
 
-Hint - see documentation for [Editing a Graph on a Cloudwatch Dashboard](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/edit_graph_dashboard.html)
+Hint - see documentation for [Editing a Graph on a CloudWatch Dashboard](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/edit_graph_dashboard.html)
 
 #### a. Edit the ALB widgets
 
@@ -309,7 +304,7 @@ As we are now adding in metrics from two different regions, we must navigate to 
 
 1. Modify the ALB Requests Per Minute widget to show the metrics from the ALB in the secondary region:
 
-    * Open up the [Cloudwatch Dashboards](https://console.aws.amazon.com/cloudwatch/) page and select the dashboard from the previous lab
+    * Navigate to the [CloudWatch Dashboards](https://console.aws.amazon.com/cloudwatch/) console and select the dashboard from the previous lab
     * Change the region (top right of screen) to your Secondary region
     * Add in the **RequestCount** metric to this widget from the ALB
     * Add in the **ALB 2XX, 4XX and 5XX** metrics to this widget from the ALB
@@ -325,25 +320,27 @@ As we are now adding in metrics from two different regions, we must navigate to 
     ![image](https://user-images.githubusercontent.com/23423809/69883408-f09e9b80-1288-11ea-9605-79c0969666d8.png)
     * Select Graphed Metrics and change the label to match the region
     ![image](https://user-images.githubusercontent.com/23423809/69883467-3196b000-1289-11ea-884d-5cce782fe962.png)
-    * Click **Update widget**
+
 </details>
 
-#### b. Modify the ALB HTTP Responses widget to show the metrics from the ALB in the secondary region:
+2. Click **Update widget**
 
-1. Add in the **HTTP 2XX / 4XX / 5XX Count** metrics from the ALB. *Note: you may not see all the metrics above available to select, this is as the metric only becomes available after the Laod Balancer has seen these types of errors. If this is the case then move on as you can always come back and add the missing metric later.*
-2. Change the metric labels to identify the correct region for that metric
-3. Ensure the region you put in the label matches the region in the details
-4. Click **Update widget**
+3. Modify the ALB HTTP Responses widget to show the metrics from the ALB in the secondary region:
+
+    * Add in the **HTTP 2XX / 4XX / 5XX Count** metrics from the ALB. *Note: you may not see all the metrics above available to select, this is as the metric only becomes available after the Laod Balancer has seen these types of errors. If this is the case then move on as you can always come back and add the missing metric later.*
+    * Change the metric labels to identify the correct region for that metric
+    * Ensure the region you put in the label matches the region in the details
 
 <details>
     <summary>Show screenshot:</summary>
 
-    ![image](https://user-images.githubusercontent.com/23423809/69883777-7bcc6100-128a-11ea-9e2b-0505f55a5b37.png)
+    ![image](images/03-updated-alb-widgets.png)
 
 </details>
 
+4. Click **Update widget**
 
-#### c. Add widgets for the Like and Core Services from Secondary region
+#### b. Add widgets for the Like and Core Services from Secondary region
 
 Following the same process from Lab 2, add a new widget for each of the Like and Core services. Modify the titles to be able to easily identify which region they are populating from. You should end up with something like this:
 
@@ -352,7 +349,7 @@ Following the same process from Lab 2, add a new widget for each of the Like and
 Feel free to move the widgets around the dashboard to suit your style following the instructions in the [Cloudwatch documentation](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/move_resize_graph_dashboard.html).
 You can drag widgets around and move them into position wherever you like. You can also add a text widget to show a title, include links to a knowledgebase wiki or internal tooling. Get creative!
 
-## Important - Save your Cloudwatch Dashboard!
+## Important - Save your CloudWatch Dashboard!
 
 </details>
 
