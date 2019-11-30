@@ -8,6 +8,11 @@
 ✅ [Lab 2: Operationalize Observability - Aggregate Metrics](../lab-2-agg)
 
 **Lab 3: Preparing for Multi-Region Deployments**
+* [Replicate infrastructure](#1-replicate-infrastructure)
+* [Replicate data tier](#2-replicate-data-tier)
+* [Replicate deployment infrastructure](3-replicate-deployment-infrastructure)
+* [Replicate build artifacts](#4-replicate-build-artifacts)
+* [Enable CloudWatch dashboard to show multi-region metrics](#5-enable-cloudwatch-dashboard-to-show-multi-region-metrics)
 
 [Lab 4: Implement Traffic Management - Global Accelerator](../lab-4-globalacc)
 
@@ -55,7 +60,7 @@ There are a number of different ways to achieve this, like using [AWS CloudForma
 <details>
    <summary>Learn more: What did you just do</summary>
    In Lab-0, we deployed a CloudFormation stack that had all the core components of the infrastructure, such as:
-   
+
    * VPC (subnets, route tables, routes, etc)
    * ECS (task definitions, services, etc)
    * CICD Stack (AWS CodePipeline, AWS CodeBuild)
