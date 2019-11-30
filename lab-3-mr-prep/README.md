@@ -55,6 +55,7 @@ There are a number of different ways to achieve this, like using [AWS CloudForma
 <details>
    <summary>Learn more: What did you just do</summary>
    In Lab-0, we deployed a CloudFormation stack that had all the core components of the infrastructure, such as:
+   
    * VPC (subnets, route tables, routes, etc)
    * ECS (task definitions, services, etc)
    * CICD Stack (AWS CodePipeline, AWS CodeBuild)
