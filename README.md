@@ -1,7 +1,5 @@
 # Mythical Mysfits: Building Multi-Region Applications that Align with BC/DR Objectives
 
-![mysfits-welcome](../images/mysfits-welcome.png)
-
 ## Overview
 ![mysfits-welcome](/images/mysfits-welcome.png)
 
@@ -30,7 +28,7 @@ The labs in the workshop are designed to be completed in sequence, and the full 
 * **[Lab 3](lab-3-mr-prep):** Prepare the app for multi-region deployments
 * **[Lab 4](lab-4-globalacc):** Implement AWS Global Accelerator and test traffic management
 * **[Lab 5](lab-5-loadtest):** Load test the system to test manual failover based on operational metrics
-* **[Bonus Lab](/):** [DOES NOT EXIST YET] Implement automated failover and active-active
+<!-- * **[Bonus Lab](/):** [DOES NOT EXIST YET] Implement automated failover and active-active-->
 * **Workshop Cleanup** [Cleanup working environment](#important-workshop-cleanup)
 
 ### Conventions
