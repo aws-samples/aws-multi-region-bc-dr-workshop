@@ -1,5 +1,7 @@
 # Mythical Mysfits: Building Multi-Region Applications that Align with BC/DR Objectives
 
+![mysfits-welcome](../images/mysfits-welcome.png)
+
 ## Workshop progress
 ✅ [Lab 0: Workshop Initialization](../lab-0-init)
 
