@@ -2,18 +2,21 @@
 
 ## Workshop progress
 **Lab 0: Workshop Initialization**
+- [Deploy Mythical CloudFormation Stack](#1-deploy-mythical-cloudformation-stack)
+- [Familiarize yourself with the workshop environment and tips](#2-familiarize-yourself-with-the-workshop-environment-and-tips)
+- [Bootstrap the workshop environment](#3-bootstrap-the-workshop-environment)
 
-Lab 1: Instrument Observability
+[Lab 1: Instrument Observability - Distributed Tracing with AWS X-Ray](../lab-1-xray)
 
-Lab 2: Operationalize Observability - Aggregate Metrics
+[Lab 2: Operationalize Observability - Aggregate Metrics](../lab-2-agg)
 
-Lab 3: Prep for Multi-Region Deployments
+[Lab 3: Preparing for Multi-Region Deployments](../lab-3-mr-prep)
 
-Lab 4: Implement Traffic Management
+[Lab 4: Implement Traffic Management - Global Accelerator](../lab-4-globalacc)
 
-Lab 5: Load Test and Failover
+[Lab 5: Load Test and Failover your multi-region application](../lab-5-loadtest)
 
-## Lab 0 - Deploy Existing Mythical Stack
+## Lab 0 - Workshop Initialization
 
 In this lab, you'll launch the core infrastructure for the workshop and get familiar with the Cloud9 integrated development environment (IDE) where you'll edit code and run commands.
 
@@ -85,7 +88,7 @@ If you're not attending an AWS event, you will need to use your own account. Mak
 
     </details>
 
-7. Click **Create** to launch the CloudFormation stack.
+7. Click **Create Stack** to launch the CloudFormation stack.
 
     The CloudFormation stack will take a few minutes to launch. You can check on the stack creation process in the CloudFormation Dashboard. Your stack should show status **CREATE\_COMPLETE** in roughly 5-10 minutes. If you select box next to your stack and click on the **Events** tab, you can see what steps it's on.
 

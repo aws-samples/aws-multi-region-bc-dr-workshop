@@ -1,19 +1,24 @@
-# Mythical Mysfits: Multi-Region-Workshop
+# Mythical Mysfits: Building Multi-Region Applications that Align with BC/DR Objectives
+
+![mysfits-welcome](../images/mysfits-welcome.png)
 
 ## Workshop progress
-✅ Lab 0: Workshop Initialization
+✅ [Lab 0: Workshop Initialization](../lab-0-init)
 
-**Lab 1: Instrument Observability**
+**Lab 1: Instrument Observability - Distributed Tracing with AWS X-Ray**
 
-Lab 2: Operationalize Observability - Aggregate Metrics
+- [Instrument the like service code using AWS X-Ray SDK and AWS Cloud9](#2-instrument-the-like-service-code-using-the-aws-x-ray-sdk-and-cloud9)
+- [Deploy like service changes](#3-deploy-the-changes-you-made-to-the-like-service)
 
-Lab 3: Prep for Multi-Region Deployments
+[Lab 2: Operationalize Observability - Aggregate Metrics](../lab-2-agg)
 
-Lab 4: Implement Traffic Management
+[Lab 3: Preparing for Multi-Region Deployments](../lab-3-mr-prep)
 
-Lab 5: Load Test and Failover
+[Lab 4: Implement Traffic Management - Global Accelerator](../lab-4-globalacc)
 
-## LAB 1 - Distributed Tracing with AWS X-Ray
+[Lab 5: Load Test and Failover your multi-region application](../lab-5-loadtest)
+
+## LAB 1 - Instrument Observability - Distributed Tracing with AWS X-Ray
 
 Observability helps quantify how we are able to meet our availability requirements. An important aspect of observability especially in a microservices architecture is distributed tracing. This enables the ability to profile a request as it passes through our application architecture which may involve one or more services and potentially interactions with backend data stores. Data captured from traces helps teams understand how the application behaves under various conditions and can be incredibly helpful when issues arise. For example, developers can use the data to identify inefficiencies in code and prioritize their sprints. Operations or SRE (site reliability engineering) teams can use the data to diagnose or triage unusual latencies or failures. Infrastructure engineers can use the data to make adjustments to resident scaling policies or resources supporting particular services.
 
@@ -186,7 +191,7 @@ Further reading:
     ```
 
     Note: In case you're wondering why there's a trailing comma after `'ecs_plugin'`, it's because plugins is a tuple, and in Python a single value tuple or singleton requires a comma.
-    
+
     </details>
 
 #### c. Patch AWS SDK clients to enable tracing of downstream calls to DynamoDB

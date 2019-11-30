@@ -18,7 +18,9 @@ phases:
       - echo Tagging Image for primary region
       - docker tag core-service:$CODEBUILD_RESOLVED_SOURCE_VERSION $PRIMARY_CORE_REPO_URI:$CODEBUILD_RESOLVED_SOURCE_VERSION
       # In the previous 3 2 commands, we issued a build and then a tag. How would you tag this for a second region?
-      # [TODO]: Implement tagging the same docker container to a different ECR repo
+      # Take a look at these docs for a refresher on how pushing images to ECR works:
+      # https://docs.aws.amazon.com/AmazonECR/latest/userguide/docker-push-ecr-image.html
+      # - [TODO]: Implement tagging the same docker container to a different ECR repo
   post_build:
     commands:
       - echo Build completed on `date`
@@ -29,6 +31,14 @@ phases:
       - docker push $PRIMARY_CORE_REPO_URI:$CODEBUILD_RESOLVED_SOURCE_VERSION
       - echo Printing the container name in taskdef and passing it a new Docker image.
       - printf '[{"name":"service","imageUri":"%s"}]' $PRIMARY_CORE_REPO_URI:$CODEBUILD_RESOLVED_SOURCE_VERSION > imagedefinitions_primary.json
+      # For a rundown of what the above commands do, see: https://docs.aws.amazon.com/AmazonECR/latest/userguide/docker-push-ecr-image.html
+      # To understand what imagedefinitions_primary.json is for, see: https://docs.aws.amazon.com/codepipeline/latest/userguide/file-reference.html
+      # Now we have to do the same thing for our $SECONDARY_REGION
+      # - [TODO]: Log into ECR in the $SECONDARY_REGION
+      # - [TODO]: Push the image tagged for the Secondary Region repo
+      # - [TODO]: output an imagedefinitions_secondary.json file for CodePipeline to consume
 artifacts:
     files:
       - imagedefinitions_primary.json
+      # Imagedefinitions is the file where we put in a container and an ECR URI for CodePipeline to update an ECS Service.
+      # - [TODO]: Add imagedefinitions_secondary.json to the build artifact for CodePipeline to consume
