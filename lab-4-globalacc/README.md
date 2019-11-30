@@ -116,7 +116,7 @@ The endpoints we’ll be using are the Application Load Balancers in the primary
 
 Before testing your accelerator, wait for the Status of your Accelerator to go from In progress to **Deployed**. Once it’s deployed, click on the name of your Accelerator. Check that the Status of the Listener is **All healthy**. Drill down to your endpoints and check that their Health status is **Healthy**. Now that your accelerator is deployed and your listener and endpoints are healthy, go back to your accelerator and copy one of the IP addresses. You can find the IP addresses in the configuration panel under **Static IP address set**. Test the static IP address in your browser. You should see the your Mythical Mysfits!
 
-![image](images/04-global-accelerator-static-ip.png)
+![image](images/04-global-acc-static-ip.png)
 
 # Checkpoint
 
