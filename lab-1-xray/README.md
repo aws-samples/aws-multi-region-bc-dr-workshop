@@ -1,4 +1,4 @@
-# Mythical Mysfits: Multi-Region BC/DR Workshop
+# Mythical Mysfits: Building Multi-Region Applications that Align with BC/DR Objectives
 
 ## Workshop progress
 ✅ [Lab 0: Workshop Initialization](../lab-0-init)
