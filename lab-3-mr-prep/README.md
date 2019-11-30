@@ -315,15 +315,15 @@ As we are now adding in metrics from two different regions, we must navigate to 
 
   * Hover over the widget and select Edit in the top right hand corner
 
-  ![image](https://user-images.githubusercontent.com/23423809/69710628-951bb480-10b4-11ea-9a0c-ca8e8b603030.png)
+    ![image](https://user-images.githubusercontent.com/23423809/69710628-951bb480-10b4-11ea-9a0c-ca8e8b603030.png)
 
   * Select the All Metrics tab and add in the **requestcount** metric from the ALB
 
-  ![image](https://user-images.githubusercontent.com/23423809/69883408-f09e9b80-1288-11ea-9605-79c0969666d8.png)
+    ![image](https://user-images.githubusercontent.com/23423809/69883408-f09e9b80-1288-11ea-9605-79c0969666d8.png)
 
   * Select Graphed Metrics and change the label to match the region
 
-  ![image](https://user-images.githubusercontent.com/23423809/69883467-3196b000-1289-11ea-884d-5cce782fe962.png)
+    ![image](https://user-images.githubusercontent.com/23423809/69883467-3196b000-1289-11ea-884d-5cce782fe962.png)
 
 </details>
 
