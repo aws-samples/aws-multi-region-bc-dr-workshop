@@ -142,21 +142,22 @@ Now that you have all your artifacts replicated into the secondary region, you c
 6. **Do this again for the Like Service**
   <details>
     <summary>Hint: Click here for screenshots and expected values:</summary>
-    ![Do it again](images/03-codepipeline-like.png)
 
-    **Edit Action**:
-    * Click on **Add Action Group** and enter the following details:
-    * Action name: **CrossRegionDeploy**
-    * Action provider: **Amazon ECS**
-    * Region: **Choose the secondary region you deployed into** - By default, this should be US East - (N. Virginia)
-    * Input artifacts: **BuildArtifact**
-    * Cluster name: **Choose the cluster that was created for you. It will start with Cluster-**
-    * Service name: **Select the service that includes "Like"**
-    * Image definitions file: **imagedefinitions_secondary.json** - The value of this will depend on what you output in your buildspec. Our default is imagedefinitions_secondary.json.
+      ![Do it again](images/03-codepipeline-like.png)
 
-    ![Do it again with the like](images/03-cp-createactiongroup-like.png)
+      **Edit Action**:
+      * Click on **Add Action Group** and enter the following details:
+      * Action name: **CrossRegionDeploy**
+      * Action provider: **Amazon ECS**
+      * Region: **Choose the secondary region you deployed into** - By default, this should be US East - (N. Virginia)
+      * Input artifacts: **BuildArtifact**
+      * Cluster name: **Choose the cluster that was created for you. It will start with Cluster-**
+      * Service name: **Select the service that includes "Like"**
+      * Image definitions file: **imagedefinitions_secondary.json** - The value of this will depend on what you output in your buildspec. Our default is imagedefinitions_secondary.json.
+
+      ![Do it again with the like](images/03-cp-createactiongroup-like.png)
   </details>
-  
+
 ### [4] Replicate build artifacts
 
 There are a number of ways to replicate your artifacts to another region. For S3, we could use [S3 Cross Region Replication](), for ECR, there are solutions like [some solution](). In this case, we will update our build scripts to push the same Docker container to another region. In the previous section, we automated the deployments into another region and as part of the workshop initialization, we gave you the application for both **core** and **like** services. We will now have to update the buildspec_prod.yml file of both services to upload the container images to the secondary region.
