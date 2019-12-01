@@ -327,7 +327,7 @@ Run the `bootstrap/dashboard/setup` script. This will deploy a fully prepared Cl
 <details>
 <summary>Option 2: Step-by-step manual instructions</summary>
 
-### 3. Edit the widgets to show metrics from the other region
+### 3. Edit the widgets to show metrics from the secondary region
 
 With Amazon Cloudwatch, we have the ability to stack metrics on top of each other in a widget that contains a graph. This will be useful in our case where we are viewing the same metric type, over two resources. We'll do this in the steps below in addition to adding the metrics from the other region.
 
@@ -341,8 +341,8 @@ Modify the ALB Requests Per Minute widget to show the metrics from the ALB in th
 
 * Open up the [Cloudwatch Dashboards](https://console.aws.amazon.com/cloudwatch/) page and select the dashboard from the previous lab
 * Change the region (top right of screen) to your Secondary region
-* Add in the **RequestCount** metric to this widget from the ALB
-* Add in the **ALB 2XX, 4XX and 5XX** metrics to this widget from the ALB
+* Add in the **RequestCount** metric for the ALB in the secondary region (default us-east-1)
+* Add in the **ALB 2XX, 4XX and 5XX** metrics for the ALB in the secondary region (default us-east-1)
 * Change the metric labels to identify the correct region for specified metric
 
 <details>
@@ -351,7 +351,7 @@ Modify the ALB Requests Per Minute widget to show the metrics from the ALB in th
 * Hover over the widget and select Edit in the top right hand corner
 
 ![image](https://user-images.githubusercontent.com/23423809/69710628-951bb480-10b4-11ea-9a0c-ca8e8b603030.png)
-* Select the All Metrics tab and add in the **requestcount** metric from the ALB
+* Select the All Metrics tab -> ApplicationELB -> Per AppELB Metrics and add in the **requestcount** metric from the ALB
 ![image](https://user-images.githubusercontent.com/23423809/69883408-f09e9b80-1288-11ea-9605-79c0969666d8.png)
 * Select Graphed Metrics and change the label to match the region
 ![image](https://user-images.githubusercontent.com/23423809/69883467-3196b000-1289-11ea-884d-5cce782fe962.png)
@@ -360,7 +360,7 @@ Modify the ALB Requests Per Minute widget to show the metrics from the ALB in th
 
 Modify the ALB HTTP Responses widget to show the metrics from the ALB in the secondary region:
 
-* Add in the **HTTP 2XX / 4XX / 5XX Count** metrics from the ALB. *Note: you may not see all the metrics above available to select, this is as the metric only becomes available after the Laod Balancer has seen these types of errors. If this is the case then move on as you can always come back and add the missing metric later.*
+* Add in the **HTTP 2XX / 4XX / 5XX Count** metrics from the ALB. *Note: you may not see all the metrics above available to select, this is as the metric only becomes available after the Load Balancer has seen these types of errors. If this is the case then move on as you can always come back and add the missing metric later.*
 * Change the metric labels to identify the correct region for that metric
 * Ensure the region you put in the label matches the region in the details
 * Click **Update widget**
@@ -375,13 +375,75 @@ Modify the ALB HTTP Responses widget to show the metrics from the ALB in the sec
 
 ## b. Add widgets for the Like and Core Services from Secondary region
 
-Following the same process from Lab 2, add a new widget for each of the Like and Core services. Modify the titles to be able to easily identify which region they are populating from. You should end up with something like this:
+Add a new widget for each of the Like and Core services running in the secondary region. This will allow you to view the Service metrics across both regions. To do this, follow these steps from within your CloudWatch dashboard:
+
+* Click **Add widget**, select **Number** and press **Configure**
+* Click the pencil next to *Untitled graph*, type in `us-east-1 Core Service Metrics` and press Enter
+* From the **All metrics** tab, select **ECS** and then **ClusterName, ServiceName**
+* Select the two metrics for **CPUUtilization** and **Memory Utilization** for the **Core** Service
+* Click the tab marked **Graphed metrics** and change the statistic period to 1 Minute for both metrics
+* Click Create widget
+* Move this new widget into place under the others of the same type
+* Repeat the above steps to create another widget, this time for the **Like** service
 
 ![image](https://user-images.githubusercontent.com/23423809/69884310-9c95b600-128c-11ea-9516-97727607869e.png)
+
+<details>
+ <summary>Hint with screenshots:</summary>
+ 
+ * Click **Add widget**, select **Number** and press **Configure**
+ 
+ ![image](https://user-images.githubusercontent.com/23423809/69911902-0621db80-13d7-11ea-9c49-64c14d078d95.png)
+ 
+ * Click the pencil next to *Untitled graph*, type in `us-east-1 Core Service Metrics` and press Enter
+ * From the **All metrics** tab, select **ECS** and then **ClusterName, ServiceName**
+ * Select the two metrics for **CPUUtilization** and **Memory Utilization** for the **Core** Service
+
+ ![image](https://user-images.githubusercontent.com/23423809/69911993-4766bb00-13d8-11ea-8ada-77314c809956.png)
+
+* Click the tab marked **Graphed metrics** and change the statistic period to 1 Minute for both metrics
+
+![image](https://user-images.githubusercontent.com/23423809/69911965-e808ab00-13d7-11ea-8960-189e789a1e3a.png)
+
+* Click Create widget
+ 
+ </details>
+
+* Repeat the above steps to create another widget, this time for the **Like** service.
 
 Feel free to move the widgets around the dashboard to suit your style following the instructions in the [Cloudwatch documentation](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/move_resize_graph_dashboard.html).
 Youc can drag widgets around and move them into position wherever you like. You can also add a text widget to show a title, include links to a knowledgebase wiki or internal tooling. Get creative!
 
+
+## c. Add X-Ray groupings to capture faults and errors
+
+Refer back to [Lab 1, section 5](https://github.com/aws-samples/aws-multi-region-bc-dr-workshop/tree/master/lab-1-xray#5-reduce-the-signal-from-the-noise) for instructions on how to implement X-Ray filter expressions. Just make sure that you’re in the secondary region when creating the groups within the X-Ray console.
+
+
+## d. Update X-Ray widget on CloudWatch dashboard to show faults and errors metrics
+
+THIS NEEDS TO BE UPDATED
+
+Modify the X-Ray widget on the CloudWatch dashboard Per Minute widget to show the metrics from the ALB in the secondary region:
+
+* Open up the [Cloudwatch Dashboards](https://console.aws.amazon.com/cloudwatch/) page and select the dashboard from the previous lab
+* Change the region (top right of screen) to your Secondary region
+* Add in the **RequestCount** metric for the ALB in the secondary region (default us-east-1)
+* Add in the **ALB 2XX, 4XX and 5XX** metrics for the ALB in the secondary region (default us-east-1)
+* Change the metric labels to identify the correct region for specified metric
+
+<details>
+    <summary>Hint with screenshots:</summary>
+
+* Hover over the widget and select Edit in the top right hand corner
+
+![image](https://user-images.githubusercontent.com/23423809/69710628-951bb480-10b4-11ea-9a0c-ca8e8b603030.png)
+* Select the All Metrics tab -> ApplicationELB -> Per AppELB Metrics and add in the **requestcount** metric from the ALB
+![image](https://user-images.githubusercontent.com/23423809/69883408-f09e9b80-1288-11ea-9605-79c0969666d8.png)
+* Select Graphed Metrics and change the label to match the region
+![image](https://user-images.githubusercontent.com/23423809/69883467-3196b000-1289-11ea-884d-5cce782fe962.png)
+* Click **Update widget**
+    </details>
 
 ## Important - Save your Cloudwatch Dashboard! ##
 
