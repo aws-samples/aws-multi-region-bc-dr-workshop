@@ -211,21 +211,23 @@ First, we will update the **core-service** app.
     ```
 
 3. Find the **buildspec_prod** file and open it. Within the file, you will see a number of [TODO] lines. Effectively, we are looking to replicate what we did for the primary region into the secondary region. In this case, one of our interns wasn't able to finish this before their intership ended, so you'll have to:
-   * Assign `SecondaryCoreServiceEcrRepo` that you copied down in step 1 to SECONDARY_CORE_REPO_URI
-   * Assign `SecondaryRegion` that you copied down in step 1 to SECONDARY_REGION
-   * Tag the already built container to use the secondary region's ECR repo - Make sure you still use the CODEBUILD_RESOLVED_SOURCE_VERSION
+   * Assign **SecondaryCoreServiceEcrRepo** that you copied down in step 1 to **SECONDARY_CORE_REPO_URI**
+   * Assign **SecondaryRegion** that you copied down in step 1 to **SECONDARY_REGION**
+   * Tag the already built container to use the secondary region's ECR repo - Make sure you still use the **CODEBUILD_RESOLVED_SOURCE_VERSION**
    * Log into ECR in the secondary region
    * Push the image to the secondary region
-   * Output an imagedefinitions_secondary.json file
+   * Output an **imagedefinitions_secondary.json** file
 
    The buildspec file has a number of hints and links to help you figure out what to do.
 
    <details>
    <summary>Hint: What is this buildspec file doing and what, exactly are you updating?</summary>
-   * In the `pre_build` section assigns a number of variables that we will use later on.
-   * In the `build` section, this is where AWS CodeBuild is actually going to build the container. `docker build -t core-service:$CODEBUILD_RESOLVED_SOURCE_VERSION .` will build a docker container named core-service and tagged with the CODEBUILD_RESOLVED_SOURCE_VERSION. The CODEBUILD_RESOLVED_SOURCE_VERSION is a unique tag for the container image and in this case, is the commit ID as the commit is coming from CodeCommit. See AWS [CodeBuild Environment Variables](https://docs.aws.amazon.com/codebuild/latest/userguide/build-env-ref-env-vars.html) for more information.
-   * In the `post-build` section, AWS CodeBuild will push the images to an ECR repo. First it has to log in to ECR, then push the previous image. Afterwards, it outputs a file named imagedefinitions_primary.json. This file is to instruct AWS CodePipeline in the next stage, what to deploy. Specifically, what container to replace. In our case, we will be replacing the container named 'service' with the new container image that we just built. So it will output a json file with the contents [{"name":"service","imageUri":"YourContainer:YourTag"}]. In the secondary region, we named the file imagedefinitions_secondary.json.
-   * Finally, in the `artifacts` section, AWS CodeBuild will output some files into a Zip file for AWS CodePipeline or any other service to consume. In our case, we are outputting a file called imagedefinitions_primary.json for AWS CodePipeline to consume. In this portion of the lab, we will also need to output an imagedefinitions_secondary.json
+
+   * In the **pre_build** section assigns a number of variables that we will use later on.
+   * In the **build** section, this is where AWS CodeBuild is actually going to build the container. `docker build -t core-service:$CODEBUILD_RESOLVED_SOURCE_VERSION .` will build a docker container named core-service and tagged with the **CODEBUILD_RESOLVED_SOURCE_VERSION**. The **CODEBUILD_RESOLVED_SOURCE_VERSION** is a unique tag for the container image and in this case, is the commit ID as the commit is coming from CodeCommit. See AWS [CodeBuild Environment Variables](https://docs.aws.amazon.com/codebuild/latest/userguide/build-env-ref-env-vars.html) for more information.
+   * In the **post-build** section, AWS CodeBuild will push the images to an ECR repo. First it has to log in to ECR, then push the previous image. Afterwards, it outputs a file named **imagedefinitions_primary.json**. This file is to instruct AWS CodePipeline in the next stage, what to deploy. Specifically, what container to replace. In our case, we will be replacing the container named 'service' with the new container image that we just built. So it will output a json file with the contents `[{"name":"service","imageUri":"YourContainer:YourTag"}]`. In the secondary region, we named the file **imagedefinitions_secondary.json**.
+   * Finally, in the **artifacts** section, AWS CodeBuild will output some files into a Zip file for AWS CodePipeline or any other service to consume. In our case, we are outputting a file called **imagedefinitions_primary.json** for AWS CodePipeline to consume. In this portion of the lab, we will also need to output an **imagedefinitions_secondary.json**.
+
    </details>
 
    <details>
