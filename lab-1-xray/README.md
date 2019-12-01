@@ -7,8 +7,11 @@
 
 **Lab 1: Instrument Observability - Distributed Tracing with AWS X-Ray**
 
-- [Instrument the like service code using AWS X-Ray SDK and AWS Cloud9](#2-instrument-the-like-service-code-using-the-aws-x-ray-sdk-and-cloud9)
-- [Deploy like service changes](#3-deploy-the-changes-you-made-to-the-like-service)
+- [Note about the X-Ray daemon](#1-quick-note-about-the-x-ray-daemon)
+- [Instrument the Like service code using AWS X-Ray SDK and AWS Cloud9](#2-instrument-the-like-service-code-using-the-aws-x-ray-sdk-and-aws-cloud9)
+- [Deploy Like service changes](#3-deploy-the-changes-you-made-to-the-like-service)
+- [Test your configuration](#4-test-your-configuration)
+- [Reduce the signal from the noise](#5-reduce-the-signal-from-the-noise)
 
 [Lab 2: Operationalize Observability - Aggregate Metrics](../lab-2-agg)
 
@@ -57,7 +60,7 @@ Similar to how an actual sidecar is attached to a motorocycle, a sidecar contain
 
 </details>
 
-### [2] Instrument the Like service code using the AWS X-Ray SDK and Cloud9
+### [2] Instrument the Like service code using the AWS X-Ray SDK and AWS Cloud9
 
 <details>
 <summary>Learn more: The AWS X-Ray SDK</summary>
