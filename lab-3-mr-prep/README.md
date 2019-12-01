@@ -30,7 +30,7 @@ These are the things that we will need to replicate and/or also automate:
 * Infrastructure
   * Network
   * Docker Repositories
-  * ECS
+  * ECS resources (e.g. task definitions, services)
   * Monitoring
 * Data tier
 * Container images
@@ -76,7 +76,7 @@ Once you see **Waiting for changeset to be created..Waiting for stack create/upd
 
 The most difficult part of a multi-region application is typically data synchronization. Now that you have a separate stack in the Secondary region, we need to set up DynamoDB so that it automatically replicates any data created using the app in the primary region.
 
-There's an easy way to do this - DynamoDB Global Tables. This feature will ensure we always have a copy of our data in both our primary and failover region by continuously replicating changes using DynamoDB Streams. We'll set this up now.
+There's an easy way to do this - [DynamoDB Global Tables](https://aws.amazon.com/dynamodb/global-tables/). This feature will ensure we always have a copy of our data in both our primary and failover region by continuously replicating changes using [DynamoDB Streams](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Streams.html). We'll set this up now.
 
 1. Open up the [DynamoDB console](https://console.aws.amazon.com/dynamodb/) and ensure the region selected is your Primary region
 2. Select **Tables** from the menu on the left and select the table **mm-ddbtable**
@@ -121,7 +121,7 @@ Now that you have all your artifacts replicated into the secondary region, you c
 
     ![Edit Core {Pipeline}](images/03-codepipeline-edit.png)
 
-3. Type in **CrossRegionDeploy** for the stage name.
+3. Type in `CrossRegionDeploy` for the stage name.
 
     ![Edit Core {Pipeline}](images/03-codepipeline-cross-region-deploy.png)
 
