@@ -14,7 +14,7 @@
 **Lab 5: Load Test and Failover**
 
 ## Lab 5 - Load test your multi-region application
-Now that we have the Global Accelerator set up and targetting our two different Load Balancers residing in each region, lets send some test traffic to it. The aim of this lab is to learn how to use the Global Accelerator to manipulate traffic flows and then use this method to direct traffic for our **Like** service between regions. This will be useful when there is a need to failover between our regions to meet our Service Level Objectives.
+Now that we have the Global Accelerator set up and targetting our two different Load Balancers residing in each region, let's send some test traffic to it. The aim of this lab is to learn how to use the Global Accelerator to manipulate traffic flows and then use this method to direct traffic for our **Like** service between regions. This will be useful when there is a need to failover between our regions to meet our Service Level Objectives.
 One of the benefits of using the Global Accelerator in this scenario is that we do not need to wait for DNS TTL's (Time To Live) to expire, nor rely on them. Instead the Global Accelerator provides a single DNS endpoint with two A-records behind it. We only need to send traffic to the single DNS endpoint for the traffic manipulation to be effective.
 In addition, we will learn how to use the Global Accelerator Health Checks to automatically direct traffic away from a region where the application is showing an unhealthy state over to another region where the app is healthy.
 
@@ -36,10 +36,10 @@ In order to easily run a continuous load test, we need to be able to simulate a 
 
 ### Instructions
 
-First, lets do some quick quality control on our environments. You will send some test traffic to each region through the Global Accelerator. This will test a number of things:
+First, let's do some quick quality control on our environments. You will send some test traffic to each region through the Global Accelerator. This will test a number of things:
 1. The Global Accelerator is configured correctly and is directing traffic to the correct region.
 2. The stack is functionally working in each region and able to serve back valid responses.
-3. The Cloudwatch dashboard is showing us good data as it updates to reflect the traffic serving each region.
+3. The CloudWatch dashboard is showing us good data as it updates to reflect the traffic serving each region.
 
 ### [1] Create the pre-requisites required for the Apache Bench command to work correctly
 
@@ -69,7 +69,7 @@ watch ab -p postfile.txt http://<Insert your Global Accelerator Endpoint>/mysfit
 
 AB will only send a single POST request once every 2s to our endpoint so we will preface it with the linux command **[watch](https://linux.die.net/man/1/watch)**. The use of Watch is helpful here - as it will execute the AB command repeatedly until we instruct it to stop, keeping things simple for the purposes of testing.
 
-Taking this into account, lets make sure we understand what the full command is doing:
+Taking this into account, let's make sure we understand what the full command is doing:
 
 Example -<br>
 ```
@@ -87,7 +87,7 @@ Example -
 
   </details>
 
-3. Confirm the Cloudwatch dashboard is updating accordingly
+3. Confirm the CloudWatch dashboard is updating accordingly
 
 <details>
   <summary>Hint: step by step instructions</summary>
@@ -108,18 +108,18 @@ Press enter:
 
 ![image](https://user-images.githubusercontent.com/23423809/69886679-ff407f00-1297-11ea-892a-890a26c7abd1.png)
 
-Apache Bench is now sending HTTP POST requests to our endpoint and will continue to do so until we stop the watch process. Lets leave this running for a couple of minutes - the aim is to see that our Cloudwatch metrics are populating. *(Note - you can press **Control+C** to stop the test now if you want and resume later)*
+Apache Bench is now sending HTTP POST requests to our endpoint and will continue to do so until we stop the watch process. Let's leave this running for a couple of minutes - the aim is to see that our CloudWatch metrics are populating. *(Note - you can press **Control+C** to stop the test now if you want and resume later)*
 
 If you encounter an error that says:
 *ab: Could not open POST data file (postfile.txt): No such file or directory*, then you have not specified an empty postfile. See the Important Note in a previous step.
 
-3. Navigate to the Cloudwatch Dashboard that was created in Lab 2. You should see the different widgets that you have set up within your dashboard begin to have data points in them for the Primary region. You may need to change the refresh intervel to auto-refresh every 10s and the timeframe to **custom (30m)** to see the new metrics come in.
+3. Navigate to the CloudWatch Dashboard that was created in Lab 2. You should see the different widgets that you have set up within your dashboard begin to have data points in them for the Primary region. You may need to change the refresh intervel to auto-refresh every 10s and the timeframe to **custom (30m)** to see the new metrics come in.
 
 ![image](https://user-images.githubusercontent.com/23423809/68569556-3c40f080-0413-11ea-8364-c2b9759b5c90.png)
 
 </details>
 
-Once you see the widgets come to life within the Cloudwatch dashboard, this step is complete. You have confirmed that the application in Region A is working correctly *and* that your Cloudwatch dashboard is populating with data correctly. Horray! Now navigate back to Cloud9 and stop the test by pressing **Control+C** in the terminal window.
+Once you see the widgets come to life within the CloudWatch dashboard, this step is complete. You have confirmed that the application in Region A is working correctly *and* that your CloudWatch dashboard is populating with data correctly. Horray! Now navigate back to Cloud9 and stop the test by pressing **Control+C** in the terminal window.
 
 ### 5.2 Run AB against the stack in the Secondary region to test it is working correctly
 Next, we will run the same tests as in the previous step, but for the Secondary region.
@@ -129,7 +129,7 @@ Next, we will run the same tests as in the previous step, but for the Secondary 
 
 `watch ab -p postfile.txt http://<Insert your Global Accelerator Endpoint>/mysfits/da5303ae-5aba-495c-b5d6-eb5c4a66b941/like`
 
-3. Confirm the Cloudwatch dashboard is updating accordingly
+3. Confirm the CloudWatch dashboard is updating accordingly
 
 <details>
   <summary>Hint: step by step instructions</summary>
@@ -142,17 +142,17 @@ Next, we will run the same tests as in the previous step, but for the Secondary 
 
 `watch ab -p postfile.txt http://<Insert your Global Accelerator Endpoint>/mysfits/da5303ae-5aba-495c-b5d6-eb5c4a66b941/like`
 
-Apache Bench is now sending HTTP requests to our Global Accelerator endpoint and will continue to do so until we stop the watch process. Lets leave this running for a couple of minutes - the aim is to see that our Cloudwatch metrics are populating. *(Note - you can press **Control+C** to stop the test now if you want and resume later)*
+Apache Bench is now sending HTTP requests to our Global Accelerator endpoint and will continue to do so until we stop the watch process. Let's leave this running for a couple of minutes - the aim is to see that our CloudWatch metrics are populating. *(Note - you can press **Control+C** to stop the test now if you want and resume later)*
 
-3. Navigate to the Cloudwatch Dashboard that was created in Lab 2. You should see the different widgets that you have set up within your dashboard begin to have data points in them for the Secondary region. At the same time, you'll see traffic drop-off for the Primary region widgets.
+3. Navigate to the CloudWatch Dashboard that was created in Lab 2. You should see the different widgets that you have set up within your dashboard begin to have data points in them for the Secondary region. At the same time, you'll see traffic drop-off for the Primary region widgets.
 
 </details>
 
-Once you see the widgets come to life for the Secondary region within the Cloudwatch dashboard, this step is complete. You have confirmed that the application in this region is working correctly *and* that your Cloudwatch dashboard is populating with data correctly. Double horray! Now navigate back to Cloud9 and stop the test by pressing **Control+C** in the terminal window.
+Once you see the widgets come to life for the Secondary region within the CloudWatch dashboard, this step is complete. You have confirmed that the application in this region is working correctly *and* that your CloudWatch dashboard is populating with data correctly. Double horray! Now navigate back to Cloud9 and stop the test by pressing **Control+C** in the terminal window.
 
 ### 5.3 Set the Traffic Dials within our Global Accelerator Endpoint group to split traffic 50% to each region
 
-Once you are happy that the Cloudwatch dashboard is showing the correct data, you will split traffic equally between the two regions.  By sending half the traffic to one region and half the traffic to the other, we are creating a simple yet effective multi-region setup and using the Global Accelerator as a method of easily directing traffic between the two regions. This can be useful if you need to switch between a Primary and Secondary region for DR purposes, or if you want to test out a modified version of your architecture in a different region with a limited amount of traffic passing through it.
+Once you are happy that the CloudWatch dashboard is showing the correct data, you will split traffic equally between the two regions.  By sending half the traffic to one region and half the traffic to the other, we are creating a simple yet effective multi-region setup and using the Global Accelerator as a method of easily directing traffic between the two regions. This can be useful if you need to switch between a Primary and Secondary region for DR purposes, or if you want to test out a modified version of your architecture in a different region with a limited amount of traffic passing through it.
 
 1. Navigate back to the Global Accelerator Listener and modify the Endpoint groups to send 50% of traffic to the Primary region and 50% to the Secondary region.
 
@@ -162,7 +162,7 @@ Once you are happy that the Cloudwatch dashboard is showing the correct data, yo
 
 `watch ab -p postfile.txt http://<Insert your Global Accelerator Endpoint>/mysfits/da5303ae-5aba-495c-b5d6-eb5c4a66b941/like`
 
-3. Go back to the Cloudwatch dashboard, wait a few minutes and you should see metrics populate the dashboard widgets across both regions.
+3. Go back to the CloudWatch dashboard, wait a few minutes and you should see metrics populate the dashboard widgets across both regions.
 
 ![image](https://user-images.githubusercontent.com/23423809/69887455-d7ebb100-129b-11ea-8f6c-1f091dacfde5.png)
 
@@ -170,7 +170,7 @@ Once you are happy that the Cloudwatch dashboard is showing the correct data, yo
 
 ### 5.4 Manually failover the Traffic Dial between Regions (optional)
 
-If you want to test out the Traffic Dial feature of the Global Accelerator some more, in order to become more familiar with it, now is a good time. To do this, navigate back to the Global Accelerator Listener page and modify the Traffic Dials and watch how the Cloudwatch dashboard metrics respond. For example, if you set the Primary region to 90% and the Secondary region to 10%, after a few minutes you should notice substantially more traffic being served from the Primary region's metrics in the Cloudwatch dashboard. While in theory this sounds obvious, it is good to see it working in practice.
+If you want to test out the Traffic Dial feature of the Global Accelerator some more, in order to become more familiar with it, now is a good time. To do this, navigate back to the Global Accelerator Listener page and modify the Traffic Dials and watch how the CloudWatch dashboard metrics respond. For example, if you set the Primary region to 90% and the Secondary region to 10%, after a few minutes you should notice substantially more traffic being served from the Primary region's metrics in the CloudWatch dashboard. While in theory this sounds obvious, it is good to see it working in practice.
 
 ### 5.5 Artificially "break" the application in Primary region to force failover to Secondary
 
@@ -186,7 +186,7 @@ Before we trigger a failover of the application between regions, it is important
   
 Kick off the AB command to start sending some traffic to the Global Accelerator.
 
-Next, lets force the ALB within our Primary region into an unhealthy state by stopping the Mysfits and Like tasks in our ECS cluster. Once these are stopped, the ALB healthchecks will fail. To do this we need to set the "Desired Tasks" to 0 for each service.
+Next, let's force the ALB within our Primary region into an unhealthy state by stopping the Mysfits and Like tasks in our ECS cluster. Once these are stopped, the ALB healthchecks will fail. To do this we need to set the "Desired Tasks" to 0 for each service.
 
 1. Within the AWS Management Console, navigate to the ECS Service. Select the Cluster running our services
 2. Under the Services tab, select the Like-Service, click **Update*
@@ -197,7 +197,7 @@ Repeat the above steps for the Core-Service.
 
 ECS will update the service and drain any existing connections from the running tasks. This will cause the ALB to fail its healthchecks and therefore fail the Global Accelerator healthchecks for the endpoint in this region.
 
-Your Cloudwatch dashboard should now reflect the traffic pattern expected - within a couple of minutes, you should see that the Primary region is no longer serving requests for the Like service and that the Secondary region is accepting all the traffic.
+Your CloudWatch dashboard should now reflect the traffic pattern expected - within a couple of minutes, you should see that the Primary region is no longer serving requests for the Like service and that the Secondary region is accepting all the traffic.
 
 </details>
 
