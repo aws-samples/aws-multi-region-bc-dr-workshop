@@ -107,10 +107,11 @@ There's an easy way to do this - [DynamoDB Global Tables](https://aws.amazon.com
 Now that you have all your artifacts replicated into the secondary region, you can automate the deployments too. The CICD infrastructure is already provisioned for you. To automate the deployments into the secondary region, we'll use [AWS CodePipeline's Cross-Region Actions](https://aws.amazon.com/about-aws/whats-new/2018/11/aws-codepipeline-now-supports-cross-region-actions/). This lets you see all your deployments across both regions in one place.
 
 <details>
-    <summary>Learn more: Deployment pipeline options</summary>
-    You may be thinking. Why didn't we create a deployment pipeline in the secondary region? This is one way of doing things. Having a single pipeline in one region lets you ensure your application is consistent in both regions. With this method, you can still roll back to previous deployments manually in the event that there's an issue in the primary and you want to do that.
+<summary>Learn more: Deployment pipeline options</summary><br>
 
-    Isolation could also be another reason to have a second pipeline in a second region, but what you should think about is risk. How will you also deploy to the primary region? What if there's an outage? Do you want to be triggering deployments at that time? Inconsistent states are what you want to avoid, and this is one of the challenges with multi-region applications.
+You may be thinking. Why didn't we create a deployment pipeline in the secondary region? This is one way of doing things. Having a single pipeline in one region lets you ensure your application is consistent in both regions. With this method, you can still roll back to previous deployments manually in the event that there's an issue in the primary and you want to do that.
+
+Isolation could also be another reason to have a second pipeline in a second region, but what you should think about is risk. How will you also deploy to the primary region? What if there's an outage? Do you want to be triggering deployments at that time? Inconsistent states are what you want to avoid, and this is one of the challenges with multi-region applications.
 </details>
 
 1. Navigate to the [CodePipeline console](http://console.aws.amazon.com/codepipeline) of the **PRIMARY** region. Click on the pipeline that starts with *Core*. Note that if your pipelines are not in a **Succeeded** state, there was a problem. Try to get your deployments into a **Succeeded** state before proceeding. You may have to re-run some setup scripts.
@@ -163,7 +164,6 @@ Now that you have all your artifacts replicated into the secondary region, you c
     * Service name: **Select the service that includes "Like"**
     * Image definitions file: **imagedefinitions_secondary.json** - The value of this will depend on what you output in your buildspec. Our default is imagedefinitions_secondary.json.
 
-
     ![Do it again with the like](images/03-cp-createactiongroup-like.png)
     </details>
 
@@ -172,11 +172,11 @@ Now that you have all your artifacts replicated into the secondary region, you c
 There are a number of ways to replicate your artifacts to another region. For S3, we could use [S3 Cross Region Replication](), for ECR, there are solutions like [some solution](). In this case, we will update our build scripts to push the same Docker container to another region. In the previous section, we automated the deployments into another region and as part of the workshop initialization, we gave you the application for both **core** and **like** services. We will now have to update the buildspec_prod.yml file of both services to upload the container images to the secondary region.
 
 <details>
-    <summary>Learn more: What is a buildspec file?</summary>
+  <summary>Learn more: What is a buildspec file?</summary><br>
 
-    In this workshop, we created an [AWS CodePipeline](https://aws.amazon.com/codepipeline/) stage that calls [AWS CodeBuild](https://aws.amazon.com/codebuild/),  which is a fully managed continuous integration service that compiles source code, runs tests, and produces software packages that are ready to deploy.
+  In this workshop, we created an [AWS CodePipeline](https://aws.amazon.com/codepipeline/) stage that calls [AWS CodeBuild](https://aws.amazon.com/codebuild/),  which is a fully managed continuous integration service that compiles source code, runs tests, and produces software packages that are ready to deploy.
 
-    AWS CodeBuild uses a definition file called a buildspec yaml file. The contents of the buildspec will determine what AWS actions CodeBuild should perform. The key parts of the buildspec are Environment Variables, Phases, and Artifacts. See [Build Specification Reference for AWS CodeBuild](http://docs.aws.amazon.com/codebuild/latest/userguide/build-spec-ref.html).
+  AWS CodeBuild uses a definition file called a buildspec yaml file. The contents of the buildspec will determine what AWS actions CodeBuild should perform. The key parts of the buildspec are Environment Variables, Phases, and Artifacts. See [Build Specification Reference for AWS CodeBuild](http://docs.aws.amazon.com/codebuild/latest/userguide/build-spec-ref.html).
 
 </details>
 
@@ -191,7 +191,7 @@ You have (2) options at this point:
 **Choose your adventure!**
 
 <details>
-<summary>Option 1: Step-by-step manual instructions (Don't do this right now)</summary>
+<summary>Option 1: Step-by-step manual instructions</summary>
 
 First, we will update the **core-service** app.
 
@@ -232,12 +232,13 @@ First, we will update the **core-service** app.
 
    <details>
    <summary>Final Hint: We recommend that you don't spend more than 5-10 minutes on this. Click here for the answer.</summary>
-   If you're spending more than 5 to 10 minutes updating the buildspec file, we'd recommend coming back to this at a later time on your own as the fun part of the workshop is still to come! Hence, at this point, we'd recommend running the automated bootstrap script for the second region. To do this, scroll down a bit until you see **Option 2: Run the automated secondary region bootstrap script**
 
-   If you're adamant on just getting hints and not using automation, take a look at the hint file for the core buildspec [here](https://github.com/aws-samples/aws-multi-region-bc-dr-workshop/blob/master/app/hints/core-buildspec_prod.yml). That will show you the answers without any values filled in.
+   * If you're spending more than 5 to 10 minutes updating the buildspec file, we'd recommend coming back to this at a later time on your own as the fun part of the workshop is still to come! Hence, at this point, we'd recommend running the automated bootstrap script for the second region. To do this, scroll down a bit until you see **Option 2: Run the automated secondary region bootstrap script**
+
+   * If you're adamant on just getting hints and not using automation, take a look at the hint file for the core buildspec [here](https://github.com/aws-samples/aws-multi-region-bc-dr-workshop/blob/master/app/hints/core-buildspec_prod.yml). That will show you the answers without any values filled in.
    </details>
 
-4. Repeat steps 2 and 3 for the **like** service. Remember, at any time, you can follow option 2 and run the automated secondary region bootstrap script below.
+4. Repeat steps 2 and 3 for the **like** service. Remember, at any time, you can follow option 2 and run the automated secondary region bootstrap script below. Note that there's a separate **like** service hint file.
 
 5. Finally, add all the files to both repos and trigger new deployments:
 
@@ -265,10 +266,10 @@ First, we will update the **core-service** app.
     ```
 
 </details>
-
+<br />
 The last step of both of the options above will commit and push your new application code. Take a look at your pipelines in the AWS CodePipeline Console and you should see the deployments start. Wait until all deployments are complete.
 
-![Todo: screenshot of finished cp deploy multi-region](images/03-codepipeline-complete.png)
+![finished cp deploy multi-region](images/03-codepipeline-complete.png)
 
 ### [5] Enable Cloudwatch Dashboard to show multi-region metrics
 
