@@ -29,7 +29,7 @@ At a high-level, during this lab we will -
 
 ### Quick note about invoking the Like service via the CLI
 
-In order to easily run a continuous load test, we need to be able to simulate a user clicking on the heart for a Mysfit to Like them. Thankfully, this is straight forward. When you click Like within the UI of the webapp [example here](![image](https://user-images.githubusercontent.com/23423809/69885348-91915480-1291-11ea-8b21-dd53350d2781.png)
+In order to easily run a continuous load test, we need to be able to simulate a user clicking on the heart for a Mysfit to Like them. Thankfully, this is straight forward. When you click Like within the UI of the webapp [example here](https://user-images.githubusercontent.com/23423809/69885348-91915480-1291-11ea-8b21-dd53350d2781.png)
 ), it sends a HTTP POST request to the Mysfits Like service. The ID of the Mysfit is the GUID contained within the URI of the request and the Like service uses this Mysfits ID in order to know which Mysfit to apply the Like to within the DDB table. You will use the Mysfit ID in the lab guide below during our testing.
 
 
@@ -42,8 +42,6 @@ First, lets do some quick quality control on our environments. You will send som
 3. The Cloudwatch dashboard is showing us good data as it updates to reflect the traffic serving each region.
 
 ### [1] Create the pre-requisites required for the Apache Bench command to work correctly
-
-Instructions for creating the postfile are located here.
 
 AB requires that we specify a "[postfile](https://httpd.apache.org/docs/2.4/programs/ab.html)" as part of our POST request, which would normally contain the HTTP payload. We do not need to send a payload as part of this test, however AB still expects it. Therefore, we need to ceate a blank postfile otherwise AB will error.
 
@@ -115,7 +113,7 @@ Apache Bench is now sending HTTP POST requests to our endpoint and will continue
 If you encounter an error that says:
 *ab: Could not open POST data file (postfile.txt): No such file or directory*, then you have not specified an empty postfile. See the Important Note in a previous step.
 
-3. Navigate to the Cloudwatch Dashboard that you created in Lab 2. You should see the different widgets that you have set up within your dashboard begin to have data points in them for the Primary region. You may need to change the refresh intervel to auto-refresh every 10s and the timeframe to **custom (30m)** to see the new metrics come in.
+3. Navigate to the Cloudwatch Dashboard that was created in Lab 2. You should see the different widgets that you have set up within your dashboard begin to have data points in them for the Primary region. You may need to change the refresh intervel to auto-refresh every 10s and the timeframe to **custom (30m)** to see the new metrics come in.
 
 ![image](https://user-images.githubusercontent.com/23423809/68569556-3c40f080-0413-11ea-8364-c2b9759b5c90.png)
 
@@ -146,7 +144,7 @@ Next, we will run the same tests as in the previous step, but for the Secondary 
 
 Apache Bench is now sending HTTP requests to our Global Accelerator endpoint and will continue to do so until we stop the watch process. Lets leave this running for a couple of minutes - the aim is to see that our Cloudwatch metrics are populating. *(Note - you can press **Control+C** to stop the test now if you want and resume later)*
 
-3. Navigate to the Cloudwatch Dashboard that you created in Lab 2. You should see the different widgets that you have set up within your dashboard begin to have data points in them for the Secondary region. At the same time, you'll see traffic drop-off for the Primary region widgets.
+3. Navigate to the Cloudwatch Dashboard that was created in Lab 2. You should see the different widgets that you have set up within your dashboard begin to have data points in them for the Secondary region. At the same time, you'll see traffic drop-off for the Primary region widgets.
 
 </details>
 
@@ -230,3 +228,24 @@ At this time, the Global Accelerator will have redirected all incoming traffic t
 
   
   </details>
+
+## The workshop is complete!
+
+
+
+### IMPORTANT: Workshop Cleanup
+
+If you're attending an AWS event and are provided an account to use, you can ignore this section because we'll destroy the account once the workshop concludes. Feel free to proceed to [Lab-0 to get started](lab-0-init).
+
+**If you are using your own account**, it is **VERY** important you clean up resources created during the workshop. Follow these steps to delete the main workshop CloudFormation stack once you're done going through the workshop:
+
+1. Navigate to the [CloudFormation dashboard](https://console.aws.amazon.com/cloudformation/home#/stacks) and click on your workshop stack name to load stack details
+2. Click **Delete** to delete the stack
+
+There are helper Lambda functions that should clean things up when you delete the main stack. However, if there's a stack deletion failure due to a race condition, follow these steps:
+
+1. In the CloudFormation dashboard, click on the **Events** section, and review the event stream to see what failed to delete
+2. Manually delete those resources by visiting the respective service's dashboard in the management console
+3. Once you've manually deleted the resources, try to delete the main workshop CloudFormation stack again. Repeat steps 1-3 if you still see deletion failures
+
+***
