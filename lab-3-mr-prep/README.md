@@ -30,7 +30,7 @@ These are the things that we will need to replicate and/or also automate:
 * Infrastructure
   * Network
   * Docker Repositories
-  * ECS
+  * ECS resources (e.g. task definitions, services)
   * Monitoring
 * Data tier
 * Container images
@@ -76,7 +76,7 @@ Once you see **Waiting for changeset to be created..Waiting for stack create/upd
 
 The most difficult part of a multi-region application is typically data synchronization. Now that you have a separate stack in the Secondary region, we need to set up DynamoDB so that it automatically replicates any data created using the app in the primary region.
 
-There's an easy way to do this - DynamoDB Global Tables. This feature will ensure we always have a copy of our data in both our primary and failover region by continuously replicating changes using DynamoDB Streams. We'll set this up now.
+There's an easy way to do this - [DynamoDB Global Tables](https://aws.amazon.com/dynamodb/global-tables/). This feature will ensure we always have a copy of our data in both our primary and failover region by continuously replicating changes using [DynamoDB Streams](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Streams.html). We'll set this up now.
 
 1. Open up the [DynamoDB console](https://console.aws.amazon.com/dynamodb/) and ensure the region selected is your Primary region
 2. Select **Tables** from the menu on the left and select the table **mm-ddbtable**
@@ -121,7 +121,7 @@ Now that you have all your artifacts replicated into the secondary region, you c
 
     ![Edit Core {Pipeline}](images/03-codepipeline-edit.png)
 
-3. Type in **CrossRegionDeploy** for the stage name.
+3. Type in `CrossRegionDeploy` for the stage name.
 
     ![Edit Core {Pipeline}](images/03-codepipeline-cross-region-deploy.png)
 
@@ -210,27 +210,34 @@ First, we will update the **core-service** app.
     $ cd ~/environment/core-service-[PRESS TAB TO AUTO COMPLETE AND PRESS ENTER]
     ```
 
-3. Find the **buildspec_prod** file in both **core-service** and **like-service** git repos. Update them to push your built containers to both your primary and secondary regions. Within both of the buildspec files there are [TODO] lines to guide you through what you'll need to do. It's your choice if you want to understand how the build process works.
+3. Find the **buildspec_prod** file and open it. Within the file, you will see a number of [TODO] lines. Effectively, we are looking to replicate what we did for the primary region into the secondary region. In this case, one of our interns wasn't able to finish this before their intership ended, so you'll have to:
+   * Assign `SecondaryCoreServiceEcrRepo` that you copied down in step 1 to SECONDARY_CORE_REPO_URI
+   * Assign `SecondaryRegion` that you copied down in step 1 to SECONDARY_REGION
+   * Tag the already built container to use the secondary region's ECR repo - Make sure you still use the CODEBUILD_RESOLVED_SOURCE_VERSION
+   * Log into ECR in the secondary region
+   * Push the image to the secondary region
+   * Output an imagedefinitions_secondary.json file
 
-    We have created some completed buildspec files if you want to skip this portion. They are in the app/hints folder.
+   The buildspec file has a number of hints and links to help you figure out what to do.
 
-    ```
-    $ cd ~/environment/<b>core-service-[PRESS TAB TO AUTO COMPLETE AND PRESS ENTER]</b>
-    $ cp ~/environment/multi-region-workshop/app/hints/core-buildspec_prod.yml buildspec_prod.yml
-    $ cd ~/environment/<b>like-service-[PRESS TAB TO AUTO COMPLETE AND PRESS ENTER]</b>
-    $ cp ~/environment/multi-region-workshop/app/hints/like-buildspec_prod.yml buildspec_prod.yml
+   <details>
+   <summary>Hint: What is this buildspec file doing and what, exactly are you updating?</summary>
+   * In the `pre_build` section assigns a number of variables that we will use later on.
+   * In the `build` section, this is where AWS CodeBuild is actually going to build the container. `docker build -t core-service:$CODEBUILD_RESOLVED_SOURCE_VERSION .` will build a docker container named core-service and tagged with the CODEBUILD_RESOLVED_SOURCE_VERSION. The CODEBUILD_RESOLVED_SOURCE_VERSION is a unique tag for the container image and in this case, is the commit ID as the commit is coming from CodeCommit. See AWS [CodeBuild Environment Variables](https://docs.aws.amazon.com/codebuild/latest/userguide/build-env-ref-env-vars.html) for more information.
+   * In the `post-build` section, AWS CodeBuild will push the images to an ECR repo. First it has to log in to ECR, then push the previous image. Afterwards, it outputs a file named imagedefinitions_primary.json. This file is to instruct AWS CodePipeline in the next stage, what to deploy. Specifically, what container to replace. In our case, we will be replacing the container named 'service' with the new container image that we just built. So it will output a json file with the contents [{"name":"service","imageUri":"YourContainer:YourTag"}]. In the secondary region, we named the file imagedefinitions_secondary.json.
+   * Finally, in the `artifacts` section, AWS CodeBuild will output some files into a Zip file for AWS CodePipeline or any other service to consume. In our case, we are outputting a file called imagedefinitions_primary.json for AWS CodePipeline to consume. In this portion of the lab, we will also need to output an imagedefinitions_secondary.json
+   </details>
 
-    Open the <b>buildspec_prod.yml</b> file in the <b>core service</b> repository. Replace these variables:
-    * REPLACEME_SECONDARY_REGION with your secondary region (default <b>us-east-1</b>)
+   <details>
+   <summary>Final Hint: We recommend that you don't spend more than 5-10 minutes on this. Click here for the answer.</summary>
+   If you're spending more than 5 to 10 minutes updating the buildspec file, we'd recommend coming back to this at a later time on your own as the fun part of the workshop is still to come! Hence, at this point, we'd recommend running the automated bootstrap script for the second region. To do this, scroll down a bit until you see **Option 2: Run the automated secondary region bootstrap script**
 
-    * REPLACEME_SECONDARY_REPO_URI with the value of <b>SecondaryCoreServiceEcrRepo</b>
-    from the Cloudformation outputs in the <b>Core service</b> buildspec_prod.yml
-    * REPLACEME_SECONDARY_REPO_URI with the value of <b>SecondaryLikeServiceEcrRepo</b>
-    from the CloudFormation outputs in the <b>Like service</b> buildspec_prod.yml
-    ```
-**Note that in these labs we are hard coding values, but best practice is to use environment variables instead. This just simplifies the process for illustrative purposes.**
+   If you're adamant on just getting hints and not using automation, take a look at the hint file for the core buildspec [here](https://github.com/aws-samples/aws-multi-region-bc-dr-workshop/blob/master/app/hints/core-buildspec_prod.yml). That will show you the answers without any values filled in.
+   </details>
 
-4. Finally, add all the files to both repos and trigger new deployments:
+4. Repeat steps 2 and 3 for the **like** service. Remember, at any time, you can follow option 2 and run the automated secondary region bootstrap script below.
+
+5. Finally, add all the files to both repos and trigger new deployments:
 
     ```  
     $ cd ~/environment/<b>core-service-[PRESS TAB TO AUTO COMPLETE AND PRESS ENTER]</b>
