@@ -271,22 +271,22 @@ The last step of both of the options above will commit and push your new applica
 
 ![finished cp deploy multi-region](images/03-codepipeline-complete.png)
 
-### [5] Enable Cloudwatch Dashboard to show multi-region metrics
+### [3] Enabling Cloudwatch Dashboard to show multi-region metrics
 
 Now that you have deployed the stack in the secondary region, lets adjust the Cloudwatch dashboard that you created in the previous lab to include these new resources. This will provide visibility to the Core and Like services running across both regions on the same dashboard.
 
 You have (2) options at this point:
 
-1. Run the `bootstrap/dashboard/setup` script. This will deploy a fully prepared Cloudwatch dashboard for you showing metrics from both stacks in both regions. If you're short on time or would rather focus on the traffic management bits later in the workshop, reveal and follow the Option 1 step by step below.
+Follow the steps below, using the provided documentation (and hints if you get stuck), to add the additional metrics to the Cloudwatch dashboard manually. If you go this route, try not spend more than 5 min on each step if you're at an AWS event with a time limit. We want you to be able to get through as many of the labs as possible.
 
-    OR
+OR
 
-2. Follow the steps below, using the provided documentation (and hints if you get stuck), to add the additional metrics to the Cloudwatch dashboard manually. If you go this route, try not spend more than 5 min on each step if you're at an AWS event with a time limit. We want you to be able to get through as many of the labs as possible.
+Run the `bootstrap/dashboard/setup` script. This will deploy a fully prepared Cloudwatch dashboard for you showing metrics from both stacks in both regions. If you're short on time or would rather focus on the traffic management bits later in the workshop, reveal and follow the Option 1 step by step below.
 
 **Choose your adventure!**
 
 <details>
-    <summary>Option 1: Use the script to build the dashboard</summary>
+ <summary>Option 1: Use the script to build the dashboard</summary>
 
 1. In the Cloud9 IDE terminal window, navigate to the root of the working directory that was cloned from Github.
 
@@ -300,13 +300,16 @@ You have (2) options at this point:
     $ bootstrap/dashboard/setup
     ```
 
-    ![image](https://user-images.githubusercontent.com/23423809/69701838-bbd0ef80-10a2-11ea-8173-3e720b0efc69.png)
+
+![image](https://user-images.githubusercontent.com/23423809/69701838-bbd0ef80-10a2-11ea-8173-3e720b0efc69.png)
 
 3. Wait until you see **Successfully created/updated stack - Fully-Prepared-Dashboard**. This should take less than 30 seconds. Once complete, you can navigate to the [Cloudwatch Dashboards](https://console.aws.amazon.com/cloudwatch/home?#dashboards:) page where you will see a new dashboard with **Fully-Prepared-Dashboard** in the name. You can use this going forward and modify it as you wish to.
 
-    ![image](https://user-images.githubusercontent.com/23423809/69702002-15d1b500-10a3-11ea-9e4f-86ba53e69054.png)
+![image](https://user-images.githubusercontent.com/23423809/69702002-15d1b500-10a3-11ea-9e4f-86ba53e69054.png)
 
-    ![image](https://user-images.githubusercontent.com/23423809/69792175-fa39dd80-117a-11ea-9465-ff7b459449aa.png)
+
+![image](https://user-images.githubusercontent.com/23423809/69792175-fa39dd80-117a-11ea-9465-ff7b459449aa.png)
+
 
 </details>
 
@@ -314,68 +317,125 @@ You have (2) options at this point:
 <details>
 <summary>Option 2: Step-by-step manual instructions</summary>
 
-### Edit the widgets to show metrics from the other region (Step-by-step)
+### 3. Edit the widgets to show metrics from the secondary region
 
 With Amazon Cloudwatch, we have the ability to stack metrics on top of each other in a widget that contains a graph. This will be useful in our case where we are viewing the same metric type, over two resources. We'll do this in the steps below in addition to adding the metrics from the other region.
 
-Hint - see documentation for [Editing a Graph on a CloudWatch Dashboard](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/edit_graph_dashboard.html)
+Hint - see documentation for [Editing a Graph on a Cloudwatch Dashboard](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/edit_graph_dashboard.html)
 
-#### a. Edit the ALB widgets
+## a. Edit the ALB widgets
 
 As we are now adding in metrics from two different regions, we must navigate to the secondary region and load the dashboard from there. This is because when referring to metrics within a dashboard, Cloudwatch can only see resources local to that region.
 
-1. Modify the ALB Requests Per Minute widget to show the metrics from the ALB in the secondary region:
+Modify the ALB Requests Per Minute widget to show the metrics from the ALB in the secondary region:
 
-    * Navigate to the [CloudWatch Dashboards](https://console.aws.amazon.com/cloudwatch/) console and select the dashboard from the previous lab
-    * Change the region (top right of screen) to your Secondary region
-    * Add in the **RequestCount** metric to this widget from the ALB
-    * Add in the **ALB 2XX, 4XX and 5XX** metrics to this widget from the ALB
-    * Change the metric labels to identify the correct region for specified metric
+* Open up the [Cloudwatch Dashboards](https://console.aws.amazon.com/cloudwatch/) page and select the dashboard from the previous lab
+* Change the region (top right of screen) to your Secondary region
+* Add in the **RequestCount** metric for the ALB in the secondary region (default us-east-1)
+* Add in the **ALB 2XX, 4XX and 5XX** metrics for the ALB in the secondary region (default us-east-1)
+* Change the metric labels to identify the correct region for specified metric
 
-    <details>
-      <summary>Hint with screenshots:</summary>
+<details>
+    <summary>Hint with screenshots:</summary>
 
-      * Hover over the widget and select Edit in the top right hand corner
+* Hover over the widget and select Edit in the top right hand corner
 
-        ![image](https://user-images.githubusercontent.com/23423809/69710628-951bb480-10b4-11ea-9a0c-ca8e8b603030.png)
-
-      * Select the All Metrics tab and add in the **requestcount** metric from the ALB
-
-        ![image](https://user-images.githubusercontent.com/23423809/69883408-f09e9b80-1288-11ea-9605-79c0969666d8.png)
-
-      * Select Graphed Metrics and change the label to match the region
-
-        ![image](https://user-images.githubusercontent.com/23423809/69883467-3196b000-1289-11ea-884d-5cce782fe962.png)
-
+![image](https://user-images.githubusercontent.com/23423809/69710628-951bb480-10b4-11ea-9a0c-ca8e8b603030.png)
+* Select the All Metrics tab -> ApplicationELB -> Per AppELB Metrics and add in the **requestcount** metric from the ALB
+![image](https://user-images.githubusercontent.com/23423809/69883408-f09e9b80-1288-11ea-9605-79c0969666d8.png)
+* Select Graphed Metrics and change the label to match the region
+![image](https://user-images.githubusercontent.com/23423809/69883467-3196b000-1289-11ea-884d-5cce782fe962.png)
+* Click **Update widget**
     </details>
 
-2. Click **Update widget**
+Modify the ALB HTTP Responses widget to show the metrics from the ALB in the secondary region:
 
-3. Modify the ALB HTTP Responses widget to show the metrics from the ALB in the secondary region:
+* Add in the **HTTP 2XX / 4XX / 5XX Count** metrics from the ALB. *Note: you may not see all the metrics above available to select, this is as the metric only becomes available after the Load Balancer has seen these types of errors. If this is the case then move on as you can always come back and add the missing metric later.*
+* Change the metric labels to identify the correct region for that metric
+* Ensure the region you put in the label matches the region in the details
+* Click **Update widget**
 
-    * Add in the **HTTP 2XX / 4XX / 5XX Count** metrics from the ALB. *Note: you may not see all the metrics above available to select, this is as the metric only becomes available after the Laod Balancer has seen these types of errors. If this is the case then move on as you can always come back and add the missing metric later.*
-    * Change the metric labels to identify the correct region for that metric
-    * Ensure the region you put in the label matches the region in the details
+<details>
+<summary>Show screenshot:</summary>
 
-    <details>
-      <summary>Show screenshot:</summary>
+![image](https://user-images.githubusercontent.com/23423809/69883777-7bcc6100-128a-11ea-9e2b-0505f55a5b37.png)
 
-      ![image](images/03-updated-alb-widgets.png)
+</details>
 
-    </details>
 
-4. Click **Update widget**
+## b. Add widgets for the Like and Core Services from Secondary region
 
-#### b. Add widgets for the Like and Core Services from Secondary region
+Add a new widget for each of the Like and Core services running in the secondary region. This will allow you to view the Service metrics across both regions. To do this, follow these steps from within your CloudWatch dashboard:
 
-Following the same process from Lab 2, add a new widget for each of the Like and Core services. Modify the titles to be able to easily identify which region they are populating from. You should end up with something like this:
+* Click **Add widget**, select **Number** and press **Configure**
+* Click the pencil next to *Untitled graph*, type in `us-east-1 Core Service Metrics` and press Enter
+* From the **All metrics** tab, select **ECS** and then **ClusterName, ServiceName**
+* Select the two metrics for **CPUUtilization** and **Memory Utilization** for the **Core** Service
+* Click the tab marked **Graphed metrics** and change the statistic period to 1 Minute for both metrics
+* Click Create widget
+* Move this new widget into place under the others of the same type
+* Repeat the above steps to create another widget, this time for the **Like** service
 
 ![image](https://user-images.githubusercontent.com/23423809/69884310-9c95b600-128c-11ea-9516-97727607869e.png)
 
-Feel free to move the widgets around the dashboard to suit your style following the instructions in the [Cloudwatch documentation](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/move_resize_graph_dashboard.html).
-You can drag widgets around and move them into position wherever you like. You can also add a text widget to show a title, include links to a knowledgebase wiki or internal tooling. Get creative!
+<details>
+ <summary>Hint with screenshots:</summary>
+ 
+ * Click **Add widget**, select **Number** and press **Configure**
+ 
+ ![image](https://user-images.githubusercontent.com/23423809/69911902-0621db80-13d7-11ea-9c49-64c14d078d95.png)
+ 
+ * Click the pencil next to *Untitled graph*, type in `us-east-1 Core Service Metrics` and press Enter
+ * From the **All metrics** tab, select **ECS** and then **ClusterName, ServiceName**
+ * Select the two metrics for **CPUUtilization** and **Memory Utilization** for the **Core** Service
 
-## Important - Save your CloudWatch Dashboard!
+ ![image](https://user-images.githubusercontent.com/23423809/69911993-4766bb00-13d8-11ea-8ada-77314c809956.png)
+
+* Click the tab marked **Graphed metrics** and change the statistic period to 1 Minute for both metrics
+
+![image](https://user-images.githubusercontent.com/23423809/69911965-e808ab00-13d7-11ea-8960-189e789a1e3a.png)
+
+* Click Create widget
+ 
+ </details>
+
+* Repeat the above steps to create another widget, this time for the **Like** service.
+
+Feel free to move the widgets around the dashboard to suit your style following the instructions in the [Cloudwatch documentation](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/move_resize_graph_dashboard.html).
+Youc can drag widgets around and move them into position wherever you like. You can also add a text widget to show a title, include links to a knowledgebase wiki or internal tooling. Get creative!
+
+
+## c. Add X-Ray groupings to capture faults and errors
+
+Refer back to [Lab 1, section 5](https://github.com/aws-samples/aws-multi-region-bc-dr-workshop/tree/master/lab-1-xray#5-reduce-the-signal-from-the-noise) for instructions on how to implement X-Ray filter expressions. Just make sure that you’re in the secondary region when creating the groups within the X-Ray console.
+
+
+## d. Update X-Ray widget on CloudWatch dashboard to show faults and errors metrics
+
+THIS NEEDS TO BE UPDATED
+
+Modify the X-Ray widget on the CloudWatch dashboard Per Minute widget to show the metrics from the ALB in the secondary region:
+
+* Open up the [Cloudwatch Dashboards](https://console.aws.amazon.com/cloudwatch/) page and select the dashboard from the previous lab
+* Change the region (top right of screen) to your Secondary region
+* Add in the **RequestCount** metric for the ALB in the secondary region (default us-east-1)
+* Add in the **ALB 2XX, 4XX and 5XX** metrics for the ALB in the secondary region (default us-east-1)
+* Change the metric labels to identify the correct region for specified metric
+
+<details>
+    <summary>Hint with screenshots:</summary>
+
+* Hover over the widget and select Edit in the top right hand corner
+
+![image](https://user-images.githubusercontent.com/23423809/69710628-951bb480-10b4-11ea-9a0c-ca8e8b603030.png)
+* Select the All Metrics tab -> ApplicationELB -> Per AppELB Metrics and add in the **requestcount** metric from the ALB
+![image](https://user-images.githubusercontent.com/23423809/69883408-f09e9b80-1288-11ea-9605-79c0969666d8.png)
+* Select Graphed Metrics and change the label to match the region
+![image](https://user-images.githubusercontent.com/23423809/69883467-3196b000-1289-11ea-884d-5cce782fe962.png)
+* Click **Update widget**
+    </details>
+
+## Important - Save your Cloudwatch Dashboard! ##
 
 </details>
 

@@ -54,7 +54,7 @@ Further reading:
 
 #### a. Name your AWS Global Accelerator
 
-First thing's first, we need to name the AWS Global Accelerator. You can name it anything you like, but to the follow the rest of the workshop's naming conventions, we'll name it **mm-global-accelerator**.
+First thing's first, we need to name the AWS Global Accelerator. You can name it anything you like, but to follow the rest of the workshop's naming conventions, we'll name it **mm-global-accelerator**.
 
 1. Navigate to the [AWS Global Accelerator dashboard](https://us-west-2.console.aws.amazon.com/ec2/v2/home?region=us-west-2#GlobalAcceleratorDashboard:).
 2. Choose **Create accelerator**.
@@ -69,53 +69,68 @@ The next step in the AWS Global Accelerator is to add [listeners](https://docs.a
 
 1. With AWS Global Accelerator, you add listeners that process inbound connections from clients based on the ports and protocols that you specify. At the **Add Listeners** step, enter the following:
 
-* **Ports**: Enter 80.
-* **Protocol**: Choose TCP.
-* **Client affinity**: Leave as None.
-* Click **Next**.
+  * **Ports**: Enter `80`
+  * **Protocol**: Choose **TCP**
+  * **Client affinity**: Leave as **None**
+  * Click **Next**
 
   ![image](images/04-global-acc-listeners.png)
 
 #### c. Configure your Global Accelerator - Add Endpoint Groups
 
-Now that the AWS Global Accelerator is aware of what kind of traffic is going to come in, it has to know where to route the traffic once it receives it. An endpoint group routes traffic to one or more registered endpoints in AWS Global Accelerator. When you add a listener, you specify the endpoint groups for Global Accelerator to direct traffic to. An endpoint group, and all the endpoints in it, must be in one AWS Region. You can add different endpoint groups for different purposes, for example, for blue/green deployment testing.
+<details>
+<summary>Learn more: What is an endpoint group?</summary>
+
+Now that the AWS Global Accelerator is aware of what kind of traffic is going to come in, it has to know where to route the traffic once it receives it. An [endpoint group](https://docs.aws.amazon.com/global-accelerator/latest/dg/about-endpoint-groups.html) routes traffic to one or more registered endpoints in AWS Global Accelerator. When you add a listener, you specify the endpoint groups for Global Accelerator to direct traffic to. An endpoint group, and all the endpoints in it, must be in one AWS Region. You can add different endpoint groups for different purposes, for example, for blue/green deployment testing.
 
 Global Accelerator directs traffic to endpoint groups based on the location of the client and the health of the endpoint group. You can also set the percentage of traffic to send to an endpoint group. You do that by using the traffic dial to increase (dial up) or decrease (dial down) traffic to the group. The percentage is applied only to the traffic that Global Accelerator is already directing to the endpoint group, not all traffic coming to a listener.
+</details>
 
 At the **Add endpoint groups** step, enter the following:
 
-* **Region**: Choose the primary region that you deployed the application in - If you followed defaults, us-west-2
-* **Traffic dial**: Leave as 100.
-* Choose **Add endpoint group**.
-* **Region**: Choose the secondary region that you deployed the application in - If you followed defaults, us-east-1.
-* **Traffic dial**: Leave as 100.
-* Click **Next**.
+* **Region**: Choose the primary region that you deployed the application in - If you followed defaults, **us-west-2**
+* **Traffic dial**: Leave as 100
+* Choose **Add endpoint group**
+* **Region**: Choose the secondary region that you deployed the application in - If you followed defaults, **us-east-1**
+* **Traffic dial**: Leave as 100
+* Click **Next**
 
 ![image](images/04-global-acc-endpoint-group.png)
 
 #### d. Add Endpoints
 
-Endpoints in AWS Global Accelerator can be Network Load Balancers, Application Load Balancers, EC2 instances, or Elastic IP addresses. A static IP address serves as a single point of contact for clients, and Global Accelerator then distributes incoming traffic across healthy endpoints. Global Accelerator directs traffic to endpoints by using the port (or port range) that you specify for the listener that the endpoint group for the endpoint belongs to.
+<details>
+<summary>Learn more: What is an endpoint?</summary>
 
-Each endpoint group can have multiple endpoints. You can add each endpoint to multiple endpoint groups, but the endpoint groups must be associated with different listeners.
+[Endpoints](https://docs.aws.amazon.com/global-accelerator/latest/dg/about-endpoints.html) in AWS Global Accelerator can be Network Load Balancers, Application Load Balancers, EC2 instances, or Elastic IP addresses. A static IP address serves as a single point of contact for clients, and Global Accelerator then distributes incoming traffic across healthy endpoints. Global Accelerator directs traffic to endpoints by using the port (or port range) that you specify for the listener that the endpoint group for the endpoint belongs to.
+
+*Each endpoint group can have multiple endpoints. You can add each endpoint to multiple endpoint groups, but the endpoint groups must be associated with different listeners.*
+
+</details>
 
 The endpoints we’ll be using are the Application Load Balancers in the primary and secondary region. At the **Add endpoints** step, do the following:
 
-* Under the primary region endpoint group, choose **Add endpoint**.
-* **Endpoint type**: Choose Application Load Balancer.
-* **Endpoint**: Choose the load balancer associated with this application.
-* Under the secondary region endpoint group, choose **Add endpoint**.
-* **Endpoint type**: Choose Application Load Balancer.
-* **Endpoint**: Choose the load balancer associated with this application.
-* Click **Create accelerator**.
+* Under the primary region endpoint group, choose **Add endpoint**
+* **Endpoint type**: Choose **Application Load Balancer**
+* **Endpoint**: Choose the workshop load balancer associated with the mythical mysfits application
+* Under the secondary region endpoint group, choose **Add endpoint**
+* **Endpoint type**: Choose **Application Load Balancer**
+* **Endpoint**: Choose the workshop load balancer associated with the mythical mysfits application
+* Click **Create accelerator**
 
 ![image](images/04-global-acc-endpoints.png)
 
 ### [2] Test your Global Accelerator
 
-Before testing your accelerator, wait for the Status of your Accelerator to go from In progress to **Deployed**. Once it’s deployed, click on the name of your Accelerator. Check that the Status of the Listener is **All healthy**. Drill down to your endpoints and check that their Health status is **Healthy**. Now that your accelerator is deployed and your listener and endpoints are healthy, go back to your accelerator and copy one of the IP addresses. You can find the IP addresses in the configuration panel under **Static IP address set**. Test the static IP address in your browser. You should see the your Mythical Mysfits!
+1. Before testing your accelerator, wait for the "Status" of your Accelerator to go from **In progress** to **Deployed**.
 
-![image](images/04-global-acc-static-ip.png)
+2. Click on the name of your Accelerator, you'll also see the "Provisioning Status" noted here. Once the Acclerator is deployed, check that the "Status" of the Listener is **All healthy**. Also note down the (2) static IP addresses of the Acclerator.
+
+  ![image](images/04-global-acc-all-healthy.png)
+
+3. Drill down to your endpoints by clicking on the "Listener ID", then clicking on one of the "Endpoint groups". You'll see the ALB endpoint; check that its health status is **Healthy**. Now that your accelerator is deployed and your listener and endpoints are healthy, load one of the static IP addresses in your browser. You should see the your Mythical Mysfits!
+
+  ![image](images/04-global-acc-endpoint-drilldown.png)
 
 # Checkpoint
 
