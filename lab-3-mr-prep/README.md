@@ -94,12 +94,13 @@ There's an easy way to do this - [DynamoDB Global Tables](https://aws.amazon.com
 5. The replica will take a few minutes to create and populate in the Secondary region. While this is happening, you can proceed to the next step.
 
 <details>
-    <summary>Learn more: What did I just do?</summary>
-    You have just converted a regional DynamoDB table to a Global DynamoDB table. Doing this will automatically replicate the items in the table to any region that has a replica table configured using the above process. This ensures that our database tier (our DynamoDB table in this case) will remain in sync between the regions and is both writable and readable from any region that has a replica configured.
+  <summary>Learn more: What did I just do?</summary><br>
 
-    * [Blog - converting a Single-Regional DynamoDB table to a Global Table](https://aws.amazon.com/blogs/aws/new-convert-your-single-region-amazon-dynamodb-tables-to-global-tables/)
-    * [DynamoDB Core Components](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.CoreComponents.html)
-    * [DynamoDB Global Tables](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/GlobalTables.html)
+  You have just converted a regional DynamoDB table to a Global DynamoDB table. Doing this will automatically replicate the items in the table to any region that has a replica table configured using the above process. This ensures that our database tier (our DynamoDB table in this case) will remain in sync between the regions and is both writable and readable from any region that has a replica configured.
+
+  * [Blog - converting a Single-Regional DynamoDB table to a Global Table](https://aws.amazon.com/blogs/aws/new-convert-your-single-region-amazon-dynamodb-tables-to-global-tables/)
+  * [DynamoDB Core Components](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.CoreComponents.html)
+  * [DynamoDB Global Tables](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/GlobalTables.html)
 </details>
 
 ### [3] Replicate deployment infrastructure
@@ -271,17 +272,17 @@ The last step of both of the options above will commit and push your new applica
 
 ![finished cp deploy multi-region](images/03-codepipeline-complete.png)
 
-### [3] Enabling Cloudwatch Dashboard to show multi-region metrics
+### [3] Enabling CloudWatch Dashboard to show multi-region metrics
 
-Now that you have deployed the stack in the secondary region, lets adjust the Cloudwatch dashboard that you created in the previous lab to include these new resources. This will provide visibility to the Core and Like services running across both regions on the same dashboard.
+Now that you have deployed the stack in the secondary region, lets adjust the CloudWatch dashboard that you created in the previous lab to include these new resources. This will provide visibility to the Core and Like services running across both regions on the same dashboard.
 
 You have (2) options at this point:
 
-Follow the steps below, using the provided documentation (and hints if you get stuck), to add the additional metrics to the Cloudwatch dashboard manually. If you go this route, try not spend more than 5 min on each step if you're at an AWS event with a time limit. We want you to be able to get through as many of the labs as possible.
+Run the `bootstrap/dashboard/setup` script. This will deploy a fully prepared CloudWatch dashboard for you showing metrics from both stacks in both regions. If you're short on time or would rather focus on the traffic management bits later in the workshop, reveal and follow the Option 1 step by step below.
 
-OR
+  OR
 
-Run the `bootstrap/dashboard/setup` script. This will deploy a fully prepared Cloudwatch dashboard for you showing metrics from both stacks in both regions. If you're short on time or would rather focus on the traffic management bits later in the workshop, reveal and follow the Option 1 step by step below.
+Follow the steps below, using the provided documentation (and hints if you get stuck), to add the additional metrics to the CloudWatch dashboard manually. If you go this route, try not spend more than 5 min on each step if you're at an AWS event with a time limit. We want you to be able to get through as many of the labs as possible.
 
 **Choose your adventure!**
 
@@ -303,7 +304,7 @@ Run the `bootstrap/dashboard/setup` script. This will deploy a fully prepared Cl
 
 ![image](https://user-images.githubusercontent.com/23423809/69701838-bbd0ef80-10a2-11ea-8173-3e720b0efc69.png)
 
-3. Wait until you see **Successfully created/updated stack - Fully-Prepared-Dashboard**. This should take less than 30 seconds. Once complete, you can navigate to the [Cloudwatch Dashboards](https://console.aws.amazon.com/cloudwatch/home?#dashboards:) page where you will see a new dashboard with **Fully-Prepared-Dashboard** in the name. You can use this going forward and modify it as you wish to.
+3. Wait until you see **Successfully created/updated stack - Fully-Prepared-Dashboard**. This should take less than 30 seconds. Once complete, you can navigate to the [CloudWatch Dashboards](https://console.aws.amazon.com/cloudwatch/home?#dashboards:) page where you will see a new dashboard with **Fully-Prepared-Dashboard** in the name. You can use this going forward and modify it as you wish to.
 
 ![image](https://user-images.githubusercontent.com/23423809/69702002-15d1b500-10a3-11ea-9e4f-86ba53e69054.png)
 
@@ -319,17 +320,17 @@ Run the `bootstrap/dashboard/setup` script. This will deploy a fully prepared Cl
 
 ### 3. Edit the widgets to show metrics from the secondary region
 
-With Amazon Cloudwatch, we have the ability to stack metrics on top of each other in a widget that contains a graph. This will be useful in our case where we are viewing the same metric type, over two resources. We'll do this in the steps below in addition to adding the metrics from the other region.
+With Amazon CloudWatch, we have the ability to stack metrics on top of each other in a widget that contains a graph. This will be useful in our case where we are viewing the same metric type, over two resources. We'll do this in the steps below in addition to adding the metrics from the other region.
 
-Hint - see documentation for [Editing a Graph on a Cloudwatch Dashboard](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/edit_graph_dashboard.html)
+Hint - see documentation for [Editing a Graph on a CloudWatch Dashboard](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/edit_graph_dashboard.html)
 
 ## a. Edit the ALB widgets
 
-As we are now adding in metrics from two different regions, we must navigate to the secondary region and load the dashboard from there. This is because when referring to metrics within a dashboard, Cloudwatch can only see resources local to that region.
+As we are now adding in metrics from two different regions, we must navigate to the secondary region and load the dashboard from there. This is because when referring to metrics within a dashboard, CloudWatch can only see resources local to that region.
 
 Modify the ALB Requests Per Minute widget to show the metrics from the ALB in the secondary region:
 
-* Open up the [Cloudwatch Dashboards](https://console.aws.amazon.com/cloudwatch/) page and select the dashboard from the previous lab
+* Open up the [CloudWatch Dashboards](https://console.aws.amazon.com/cloudwatch/) page and select the dashboard from the previous lab
 * Change the region (top right of screen) to your Secondary region
 * Add in the **RequestCount** metric for the ALB in the secondary region (default us-east-1)
 * Add in the **ALB 2XX, 4XX and 5XX** metrics for the ALB in the secondary region (default us-east-1)
@@ -380,11 +381,11 @@ Add a new widget for each of the Like and Core services running in the secondary
 
 <details>
  <summary>Hint with screenshots:</summary>
- 
+
  * Click **Add widget**, select **Number** and press **Configure**
- 
+
  ![image](https://user-images.githubusercontent.com/23423809/69911902-0621db80-13d7-11ea-9c49-64c14d078d95.png)
- 
+
  * Click the pencil next to *Untitled graph*, type in `us-east-1 Core Service Metrics` and press Enter
  * From the **All metrics** tab, select **ECS** and then **ClusterName, ServiceName**
  * Select the two metrics for **CPUUtilization** and **Memory Utilization** for the **Core** Service
@@ -396,12 +397,12 @@ Add a new widget for each of the Like and Core services running in the secondary
 ![image](https://user-images.githubusercontent.com/23423809/69911965-e808ab00-13d7-11ea-8960-189e789a1e3a.png)
 
 * Click Create widget
- 
+
  </details>
 
 * Repeat the above steps to create another widget, this time for the **Like** service.
 
-Feel free to move the widgets around the dashboard to suit your style following the instructions in the [Cloudwatch documentation](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/move_resize_graph_dashboard.html).
+Feel free to move the widgets around the dashboard to suit your style following the instructions in the [CloudWatch documentation](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/move_resize_graph_dashboard.html).
 Youc can drag widgets around and move them into position wherever you like. You can also add a text widget to show a title, include links to a knowledgebase wiki or internal tooling. Get creative!
 
 
@@ -416,7 +417,7 @@ THIS NEEDS TO BE UPDATED
 
 Modify the X-Ray widget on the CloudWatch dashboard Per Minute widget to show the metrics from the ALB in the secondary region:
 
-* Open up the [Cloudwatch Dashboards](https://console.aws.amazon.com/cloudwatch/) page and select the dashboard from the previous lab
+* Open up the [CloudWatch Dashboards](https://console.aws.amazon.com/cloudwatch/) page and select the dashboard from the previous lab
 * Change the region (top right of screen) to your Secondary region
 * Add in the **RequestCount** metric for the ALB in the secondary region (default us-east-1)
 * Add in the **ALB 2XX, 4XX and 5XX** metrics for the ALB in the secondary region (default us-east-1)
@@ -435,7 +436,7 @@ Modify the X-Ray widget on the CloudWatch dashboard Per Minute widget to show th
 * Click **Update widget**
     </details>
 
-## Important - Save your Cloudwatch Dashboard! ##
+## Important - Save your CloudWatch Dashboard! ##
 
 </details>
 
