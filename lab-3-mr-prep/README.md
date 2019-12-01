@@ -94,12 +94,13 @@ There's an easy way to do this - [DynamoDB Global Tables](https://aws.amazon.com
 5. The replica will take a few minutes to create and populate in the Secondary region. While this is happening, you can proceed to the next step.
 
 <details>
-    <summary>Learn more: What did I just do?</summary>
-    You have just converted a regional DynamoDB table to a Global DynamoDB table. Doing this will automatically replicate the items in the table to any region that has a replica table configured using the above process. This ensures that our database tier (our DynamoDB table in this case) will remain in sync between the regions and is both writable and readable from any region that has a replica configured.
+  <summary>Learn more: What did I just do?</summary><br>
 
-    * [Blog - converting a Single-Regional DynamoDB table to a Global Table](https://aws.amazon.com/blogs/aws/new-convert-your-single-region-amazon-dynamodb-tables-to-global-tables/)
-    * [DynamoDB Core Components](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.CoreComponents.html)
-    * [DynamoDB Global Tables](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/GlobalTables.html)
+  You have just converted a regional DynamoDB table to a Global DynamoDB table. Doing this will automatically replicate the items in the table to any region that has a replica table configured using the above process. This ensures that our database tier (our DynamoDB table in this case) will remain in sync between the regions and is both writable and readable from any region that has a replica configured.
+
+  * [Blog - converting a Single-Regional DynamoDB table to a Global Table](https://aws.amazon.com/blogs/aws/new-convert-your-single-region-amazon-dynamodb-tables-to-global-tables/)
+  * [DynamoDB Core Components](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.CoreComponents.html)
+  * [DynamoDB Global Tables](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/GlobalTables.html)
 </details>
 
 ### [3] Replicate deployment infrastructure
@@ -107,10 +108,11 @@ There's an easy way to do this - [DynamoDB Global Tables](https://aws.amazon.com
 Now that you have all your artifacts replicated into the secondary region, you can automate the deployments too. The CICD infrastructure is already provisioned for you. To automate the deployments into the secondary region, we'll use [AWS CodePipeline's Cross-Region Actions](https://aws.amazon.com/about-aws/whats-new/2018/11/aws-codepipeline-now-supports-cross-region-actions/). This lets you see all your deployments across both regions in one place.
 
 <details>
-    <summary>Learn more: Deployment pipeline options</summary>
-    You may be thinking. Why didn't we create a deployment pipeline in the secondary region? This is one way of doing things. Having a single pipeline in one region lets you ensure your application is consistent in both regions. With this method, you can still roll back to previous deployments manually in the event that there's an issue in the primary and you want to do that.
+<summary>Learn more: Deployment pipeline options</summary><br>
 
-    Isolation could also be another reason to have a second pipeline in a second region, but what you should think about is risk. How will you also deploy to the primary region? What if there's an outage? Do you want to be triggering deployments at that time? Inconsistent states are what you want to avoid, and this is one of the challenges with multi-region applications.
+You may be thinking. Why didn't we create a deployment pipeline in the secondary region? This is one way of doing things. Having a single pipeline in one region lets you ensure your application is consistent in both regions. With this method, you can still roll back to previous deployments manually in the event that there's an issue in the primary and you want to do that.
+
+Isolation could also be another reason to have a second pipeline in a second region, but what you should think about is risk. How will you also deploy to the primary region? What if there's an outage? Do you want to be triggering deployments at that time? Inconsistent states are what you want to avoid, and this is one of the challenges with multi-region applications.
 </details>
 
 1. Navigate to the [CodePipeline console](http://console.aws.amazon.com/codepipeline) of the **PRIMARY** region. Click on the pipeline that starts with *Core*. Note that if your pipelines are not in a **Succeeded** state, there was a problem. Try to get your deployments into a **Succeeded** state before proceeding. You may have to re-run some setup scripts.
@@ -163,7 +165,6 @@ Now that you have all your artifacts replicated into the secondary region, you c
     * Service name: **Select the service that includes "Like"**
     * Image definitions file: **imagedefinitions_secondary.json** - The value of this will depend on what you output in your buildspec. Our default is imagedefinitions_secondary.json.
 
-
     ![Do it again with the like](images/03-cp-createactiongroup-like.png)
     </details>
 
@@ -172,11 +173,11 @@ Now that you have all your artifacts replicated into the secondary region, you c
 There are a number of ways to replicate your artifacts to another region. For S3, we could use [S3 Cross Region Replication](), for ECR, there are solutions like [some solution](). In this case, we will update our build scripts to push the same Docker container to another region. In the previous section, we automated the deployments into another region and as part of the workshop initialization, we gave you the application for both **core** and **like** services. We will now have to update the buildspec_prod.yml file of both services to upload the container images to the secondary region.
 
 <details>
-    <summary>Learn more: What is a buildspec file?</summary>
+  <summary>Learn more: What is a buildspec file?</summary><br>
 
-    In this workshop, we created an [AWS CodePipeline](https://aws.amazon.com/codepipeline/) stage that calls [AWS CodeBuild](https://aws.amazon.com/codebuild/),  which is a fully managed continuous integration service that compiles source code, runs tests, and produces software packages that are ready to deploy.
+  In this workshop, we created an [AWS CodePipeline](https://aws.amazon.com/codepipeline/) stage that calls [AWS CodeBuild](https://aws.amazon.com/codebuild/),  which is a fully managed continuous integration service that compiles source code, runs tests, and produces software packages that are ready to deploy.
 
-    AWS CodeBuild uses a definition file called a buildspec yaml file. The contents of the buildspec will determine what AWS actions CodeBuild should perform. The key parts of the buildspec are Environment Variables, Phases, and Artifacts. See [Build Specification Reference for AWS CodeBuild](http://docs.aws.amazon.com/codebuild/latest/userguide/build-spec-ref.html).
+  AWS CodeBuild uses a definition file called a buildspec yaml file. The contents of the buildspec will determine what AWS actions CodeBuild should perform. The key parts of the buildspec are Environment Variables, Phases, and Artifacts. See [Build Specification Reference for AWS CodeBuild](http://docs.aws.amazon.com/codebuild/latest/userguide/build-spec-ref.html).
 
 </details>
 
@@ -191,7 +192,7 @@ You have (2) options at this point:
 **Choose your adventure!**
 
 <details>
-<summary>Option 1: Step-by-step manual instructions (Don't do this right now)</summary>
+<summary>Option 1: Step-by-step manual instructions</summary>
 
 First, we will update the **core-service** app.
 
@@ -210,27 +211,37 @@ First, we will update the **core-service** app.
     $ cd ~/environment/core-service-[PRESS TAB TO AUTO COMPLETE AND PRESS ENTER]
     ```
 
-3. Find the **buildspec_prod** file in both **core-service** and **like-service** git repos. Update them to push your built containers to both your primary and secondary regions. Within both of the buildspec files there are [TODO] lines to guide you through what you'll need to do. It's your choice if you want to understand how the build process works.
+3. Find the **buildspec_prod** file and open it. Within the file, you will see a number of [TODO] lines. Effectively, we are looking to replicate what we did for the primary region into the secondary region. In this case, one of our interns wasn't able to finish this before their intership ended, so you'll have to:
+   * Assign **SecondaryCoreServiceEcrRepo** that you copied down in step 1 to **SECONDARY_CORE_REPO_URI**
+   * Assign **SecondaryRegion** that you copied down in step 1 to **SECONDARY_REGION**
+   * Tag the already built container to use the secondary region's ECR repo - Make sure you still use the **CODEBUILD_RESOLVED_SOURCE_VERSION**
+   * Log into ECR in the secondary region
+   * Push the image to the secondary region
+   * Output an **imagedefinitions_secondary.json** file
 
-    We have created some completed buildspec files if you want to skip this portion. They are in the app/hints folder.
+   The buildspec file has a number of hints and links to help you figure out what to do.
 
-    ```
-    $ cd ~/environment/<b>core-service-[PRESS TAB TO AUTO COMPLETE AND PRESS ENTER]</b>
-    $ cp ~/environment/multi-region-workshop/app/hints/core-buildspec_prod.yml buildspec_prod.yml
-    $ cd ~/environment/<b>like-service-[PRESS TAB TO AUTO COMPLETE AND PRESS ENTER]</b>
-    $ cp ~/environment/multi-region-workshop/app/hints/like-buildspec_prod.yml buildspec_prod.yml
+   <details>
+   <summary>Hint: What is this buildspec file doing and what, exactly are you updating?</summary>
 
-    Open the <b>buildspec_prod.yml</b> file in the <b>core service</b> repository. Replace these variables:
-    * REPLACEME_SECONDARY_REGION with your secondary region (default <b>us-east-1</b>)
+   * In the **pre_build** section assigns a number of variables that we will use later on.
+   * In the **build** section, this is where AWS CodeBuild is actually going to build the container. `docker build -t core-service:$CODEBUILD_RESOLVED_SOURCE_VERSION .` will build a docker container named core-service and tagged with the **CODEBUILD_RESOLVED_SOURCE_VERSION**. The **CODEBUILD_RESOLVED_SOURCE_VERSION** is a unique tag for the container image and in this case, is the commit ID as the commit is coming from CodeCommit. See AWS [CodeBuild Environment Variables](https://docs.aws.amazon.com/codebuild/latest/userguide/build-env-ref-env-vars.html) for more information.
+   * In the **post-build** section, AWS CodeBuild will push the images to an ECR repo. First it has to log in to ECR, then push the previous image. Afterwards, it outputs a file named **imagedefinitions_primary.json**. This file is to instruct AWS CodePipeline in the next stage, what to deploy. Specifically, what container to replace. In our case, we will be replacing the container named 'service' with the new container image that we just built. So it will output a json file with the contents `[{"name":"service","imageUri":"YourContainer:YourTag"}]`. In the secondary region, we named the file **imagedefinitions_secondary.json**.
+   * Finally, in the **artifacts** section, AWS CodeBuild will output some files into a Zip file for AWS CodePipeline or any other service to consume. In our case, we are outputting a file called **imagedefinitions_primary.json** for AWS CodePipeline to consume. In this portion of the lab, we will also need to output an **imagedefinitions_secondary.json**.
 
-    * REPLACEME_SECONDARY_REPO_URI with the value of <b>SecondaryCoreServiceEcrRepo</b>
-    from the Cloudformation outputs in the <b>Core service</b> buildspec_prod.yml
-    * REPLACEME_SECONDARY_REPO_URI with the value of <b>SecondaryLikeServiceEcrRepo</b>
-    from the CloudFormation outputs in the <b>Like service</b> buildspec_prod.yml
-    ```
-**Note that in these labs we are hard coding values, but best practice is to use environment variables instead. This just simplifies the process for illustrative purposes.**
+   </details>
 
-4. Finally, add all the files to both repos and trigger new deployments:
+   <details>
+   <summary>Final Hint: We recommend that you don't spend more than 5-10 minutes on this. Click here for the answer.</summary>
+
+   * If you're spending more than 5 to 10 minutes updating the buildspec file, we'd recommend coming back to this at a later time on your own as the fun part of the workshop is still to come! Hence, at this point, we'd recommend running the automated bootstrap script for the second region. To do this, scroll down a bit until you see **Option 2: Run the automated secondary region bootstrap script**
+
+   * If you're adamant on just getting hints and not using automation, take a look at the hint file for the core buildspec [here](https://github.com/aws-samples/aws-multi-region-bc-dr-workshop/blob/master/app/hints/core-buildspec_prod.yml). That will show you the answers without any values filled in.
+   </details>
+
+4. Repeat steps 2 and 3 for the **like** service. Remember, at any time, you can follow option 2 and run the automated secondary region bootstrap script below. Note that there's a separate **like** service hint file.
+
+5. Finally, add all the files to both repos and trigger new deployments:
 
     ```  
     $ cd ~/environment/<b>core-service-[PRESS TAB TO AUTO COMPLETE AND PRESS ENTER]</b>
@@ -256,22 +267,22 @@ First, we will update the **core-service** app.
     ```
 
 </details>
-
+<br />
 The last step of both of the options above will commit and push your new application code. Take a look at your pipelines in the AWS CodePipeline Console and you should see the deployments start. Wait until all deployments are complete.
 
-![Todo: screenshot of finished cp deploy multi-region](images/03-codepipeline-complete.png)
+![finished cp deploy multi-region](images/03-codepipeline-complete.png)
 
-### [3] Enabling Cloudwatch Dashboard to show multi-region metrics
+### [3] Enabling CloudWatch Dashboard to show multi-region metrics
 
-Now that you have deployed the stack in the secondary region, lets adjust the Cloudwatch dashboard that you created in the previous lab to include these new resources. This will provide visibility to the Core and Like services running across both regions on the same dashboard.
+Now that you have deployed the stack in the secondary region, lets adjust the CloudWatch dashboard that you created in the previous lab to include these new resources. This will provide visibility to the Core and Like services running across both regions on the same dashboard.
 
 You have (2) options at this point:
 
-Follow the steps below, using the provided documentation (and hints if you get stuck), to add the additional metrics to the Cloudwatch dashboard manually. If you go this route, try not spend more than 5 min on each step if you're at an AWS event with a time limit. We want you to be able to get through as many of the labs as possible.
+Run the `bootstrap/dashboard/setup` script. This will deploy a fully prepared CloudWatch dashboard for you showing metrics from both stacks in both regions. If you're short on time or would rather focus on the traffic management bits later in the workshop, reveal and follow the Option 1 step by step below.
 
-OR
+  OR
 
-Run the `bootstrap/dashboard/setup` script. This will deploy a fully prepared Cloudwatch dashboard for you showing metrics from both stacks in both regions. If you're short on time or would rather focus on the traffic management bits later in the workshop, reveal and follow the Option 1 step by step below.
+Follow the steps below, using the provided documentation (and hints if you get stuck), to add the additional metrics to the CloudWatch dashboard manually. If you go this route, try not spend more than 5 min on each step if you're at an AWS event with a time limit. We want you to be able to get through as many of the labs as possible.
 
 **Choose your adventure!**
 
@@ -293,7 +304,7 @@ Run the `bootstrap/dashboard/setup` script. This will deploy a fully prepared Cl
 
 ![image](https://user-images.githubusercontent.com/23423809/69701838-bbd0ef80-10a2-11ea-8173-3e720b0efc69.png)
 
-3. Wait until you see **Successfully created/updated stack - Fully-Prepared-Dashboard**. This should take less than 30 seconds. Once complete, you can navigate to the [Cloudwatch Dashboards](https://console.aws.amazon.com/cloudwatch/home?#dashboards:) page where you will see a new dashboard with **Fully-Prepared-Dashboard** in the name. You can use this going forward and modify it as you wish to.
+3. Wait until you see **Successfully created/updated stack - Fully-Prepared-Dashboard**. This should take less than 30 seconds. Once complete, you can navigate to the [CloudWatch Dashboards](https://console.aws.amazon.com/cloudwatch/home?#dashboards:) page where you will see a new dashboard with **Fully-Prepared-Dashboard** in the name. You can use this going forward and modify it as you wish to.
 
 ![image](https://user-images.githubusercontent.com/23423809/69702002-15d1b500-10a3-11ea-9e4f-86ba53e69054.png)
 
@@ -309,17 +320,17 @@ Run the `bootstrap/dashboard/setup` script. This will deploy a fully prepared Cl
 
 ### 3. Edit the widgets to show metrics from the secondary region
 
-With Amazon Cloudwatch, we have the ability to stack metrics on top of each other in a widget that contains a graph. This will be useful in our case where we are viewing the same metric type, over two resources. We'll do this in the steps below in addition to adding the metrics from the other region.
+With Amazon CloudWatch, we have the ability to stack metrics on top of each other in a widget that contains a graph. This will be useful in our case where we are viewing the same metric type, over two resources. We'll do this in the steps below in addition to adding the metrics from the other region.
 
-Hint - see documentation for [Editing a Graph on a Cloudwatch Dashboard](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/edit_graph_dashboard.html)
+Hint - see documentation for [Editing a Graph on a CloudWatch Dashboard](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/edit_graph_dashboard.html)
 
 ## a. Edit the ALB widgets
 
-As we are now adding in metrics from two different regions, we must navigate to the secondary region and load the dashboard from there. This is because when referring to metrics within a dashboard, Cloudwatch can only see resources local to that region.
+As we are now adding in metrics from two different regions, we must navigate to the secondary region and load the dashboard from there. This is because when referring to metrics within a dashboard, CloudWatch can only see resources local to that region.
 
 Modify the ALB Requests Per Minute widget to show the metrics from the ALB in the secondary region:
 
-* Open up the [Cloudwatch Dashboards](https://console.aws.amazon.com/cloudwatch/) page and select the dashboard from the previous lab
+* Open up the [CloudWatch Dashboards](https://console.aws.amazon.com/cloudwatch/) page and select the dashboard from the previous lab
 * Change the region (top right of screen) to your Secondary region
 * Add in the **RequestCount** metric for the ALB in the secondary region (default us-east-1)
 * Add in the **ALB 2XX, 4XX and 5XX** metrics for the ALB in the secondary region (default us-east-1)
@@ -370,11 +381,11 @@ Add a new widget for each of the Like and Core services running in the secondary
 
 <details>
  <summary>Hint with screenshots:</summary>
- 
+
  * Click **Add widget**, select **Number** and press **Configure**
- 
+
  ![image](https://user-images.githubusercontent.com/23423809/69911902-0621db80-13d7-11ea-9c49-64c14d078d95.png)
- 
+
  * Click the pencil next to *Untitled graph*, type in `us-east-1 Core Service Metrics` and press Enter
  * From the **All metrics** tab, select **ECS** and then **ClusterName, ServiceName**
  * Select the two metrics for **CPUUtilization** and **Memory Utilization** for the **Core** Service
@@ -386,12 +397,12 @@ Add a new widget for each of the Like and Core services running in the secondary
 ![image](https://user-images.githubusercontent.com/23423809/69911965-e808ab00-13d7-11ea-8960-189e789a1e3a.png)
 
 * Click Create widget
- 
+
  </details>
 
 * Repeat the above steps to create another widget, this time for the **Like** service.
 
-Feel free to move the widgets around the dashboard to suit your style following the instructions in the [Cloudwatch documentation](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/move_resize_graph_dashboard.html).
+Feel free to move the widgets around the dashboard to suit your style following the instructions in the [CloudWatch documentation](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/move_resize_graph_dashboard.html).
 Youc can drag widgets around and move them into position wherever you like. You can also add a text widget to show a title, include links to a knowledgebase wiki or internal tooling. Get creative!
 
 
@@ -406,7 +417,7 @@ THIS NEEDS TO BE UPDATED
 
 Modify the X-Ray widget on the CloudWatch dashboard Per Minute widget to show the metrics from the ALB in the secondary region:
 
-* Open up the [Cloudwatch Dashboards](https://console.aws.amazon.com/cloudwatch/) page and select the dashboard from the previous lab
+* Open up the [CloudWatch Dashboards](https://console.aws.amazon.com/cloudwatch/) page and select the dashboard from the previous lab
 * Change the region (top right of screen) to your Secondary region
 * Add in the **RequestCount** metric for the ALB in the secondary region (default us-east-1)
 * Add in the **ALB 2XX, 4XX and 5XX** metrics for the ALB in the secondary region (default us-east-1)
@@ -425,7 +436,7 @@ Modify the X-Ray widget on the CloudWatch dashboard Per Minute widget to show th
 * Click **Update widget**
     </details>
 
-## Important - Save your Cloudwatch Dashboard! ##
+## Important - Save your CloudWatch Dashboard! ##
 
 </details>
 
