@@ -129,7 +129,7 @@ In this section, you will use the Cloud9 IDE, which should still be open from th
     * [Patching libraries](https://docs.aws.amazon.com/xray/latest/devguide/xray-sdk-python-patching.html)
     * [General AWS X-Ray SDK for Python API reference](https://docs.aws.amazon.com/xray-sdk-for-python/latest/reference/index.html)
 
-4. Once you feel like you've added the correct code, save your work in Cloud9 (**Command-S** if using a Mac, **Ctrl-S** if using Windows, or **File->Save** in the Cloud9 UI menu), and compare your work with the hint below.
+4. Once you feel like you've added the correct code, save your work in Cloud9 (**Command-s** if using a Mac, **Ctrl-s** if using Windows, or **File->Save** in the Cloud9 UI menu), and compare your work with the hint below.
 
     <details>
     <summary>HINT: Completed imports</summary>
@@ -173,7 +173,7 @@ Further reading:
     * [Recorder Configuration in Code](https://docs.aws.amazon.com/xray/latest/devguide/xray-sdk-python-configuration.html#xray-sdk-python-middleware-configuration-code)
     * [AWS X-Ray SDK API Reference - Configure Global Recorder](https://docs.aws.amazon.com/xray-sdk-for-python/latest/reference/configurations.html)
 
-2. Once you feel like you've added the correct code, save your work in Cloud9 (**Command-S** if using a Mac, **Ctrl-S** if using Windows, or **File->Save** in the Cloud9 UI menu), and compare your work with the hint below.
+2. Once you feel like you've added the correct code, save your work in Cloud9 (**Command-s** if using a Mac, **Ctrl-s** if using Windows, or **File->Save** in the Cloud9 UI menu), and compare your work with the hint below.
 
     <details>
     <summary>HINT: Completed xray_recorder configuration</summary>
