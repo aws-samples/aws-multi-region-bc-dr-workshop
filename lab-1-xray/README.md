@@ -84,7 +84,7 @@ Further reading:
 **Choose your adventure!**
 
 <details>
-<summary>Option 2 step by step</summary>
+<summary>OPTION 2: step by step</summary>
 
 1. In the Cloud9 IDE terminal window, navigate to the Like service working directory cloned from Code Commit.
 
@@ -103,13 +103,13 @@ Further reading:
 <br>
 </details>
 
-If you're choosing Option 1, read on...
+If you choose OPTION 1, read on...
 
 In this section, you will use the Cloud9 IDE, which should still be open from the last lab, to make edits to the Like service code. In each of the following activities, **you will be editing one file, `mysfits_like.py`**. The bootstrap script you ran in the last lab cloned the Like service code to your Cloud9 IDE
 
 #### a. Import necessary functions and classes from the X-Ray SDK to trace incoming HTTP requests for Flask applications and downstream calls to DynamoDB
 
-1. Expand the Like service folder in the directory tree to the left; the name will start with `like-service-` followed by the CloudFormation stack name and more text.
+1. Expand the cloned Like service folder in the directory tree to the left; the folder name will start with `like-service-` followed by the CloudFormation stack name and more text.
 
     ![Cloud9 Like Service Code](./images/01-02a-likeService.png)
 
@@ -129,7 +129,7 @@ In this section, you will use the Cloud9 IDE, which should still be open from th
     * [Patching libraries](https://docs.aws.amazon.com/xray/latest/devguide/xray-sdk-python-patching.html)
     * [General AWS X-Ray SDK for Python API reference](https://docs.aws.amazon.com/xray-sdk-for-python/latest/reference/index.html)
 
-4. Once you feel like you've added the appropriate lines, compare your work with the hint below.
+4. Once you feel like you've added the correct code, save your work in Cloud9 (**Command-S** if using a Mac, **Ctrl-S** if using Windows, or **File->Save** in the Cloud9 UI menu), and compare your work with the hint below.
 
     <details>
     <summary>HINT: Completed imports</summary>
@@ -173,7 +173,7 @@ Further reading:
     * [Recorder Configuration in Code](https://docs.aws.amazon.com/xray/latest/devguide/xray-sdk-python-configuration.html#xray-sdk-python-middleware-configuration-code)
     * [AWS X-Ray SDK API Reference - Configure Global Recorder](https://docs.aws.amazon.com/xray-sdk-for-python/latest/reference/configurations.html)
 
-2. Once you feel like you've added the appropriate lines, compare your work with the hint below.
+2. Once you feel like you've added the correct code, save your work in Cloud9 (**Command-S** if using a Mac, **Ctrl-S** if using Windows, or **File->Save** in the Cloud9 UI menu), and compare your work with the hint below.
 
     <details>
     <summary>HINT: Completed xray_recorder configuration</summary>
@@ -202,7 +202,7 @@ Further reading:
 
     * [Patching Libraries](https://docs.aws.amazon.com/xray/latest/devguide/xray-sdk-python-patching.html)
 
-2. Once you feel like you've added the appropriate lines, compare your work with the hint below.
+2. Once you feel like you've added the correct code, save your work in Cloud9, and compare your work with the hint below.
 
     <details>
     <summary>HINT: Completed boto3 patching</summary>
@@ -226,7 +226,7 @@ Further reading:
 
     * [Adding Flask Middleware](https://docs.aws.amazon.com/xray/latest/devguide/xray-sdk-python-middleware.html#xray-sdk-python-adding-middleware-flask)
 
-2. Once you feel like you've added the appropriate lines, compare your work with the hint below.
+2. Once you feel like you've added the correct code, save your work in Cloud9, and compare your work with the hint below.
 
     <details>
     <summary>HINT: Completed enabling Flask middleware</summary>
@@ -398,7 +398,15 @@ Now that you've instrumented the like service, you should see additional trace d
 
     ![Completed Service Map](./images/01-04a-completedServiceMap.png)
 
-4. Take some time to explore the service map a bit more. Note the information you can glean by clicking on each service. Also, explore the raw trace data by clicking on **Trace** in the left menu.
+    Note: It may take a minute for trace data to populate the service map. If you do not see a service map right away, keep generating requests in the app and refreshing the service map. If you do not see a service map appear after 5+ min, go back and review your Like service code to make sure it looks correct. Section 2-e has a hint with fully instrumented code for reference.
+
+4. Take some time to explore the service map a bit more. See what information you can glean by clicking on each service. Also, explore the raw trace data by clicking on **Trace** in the left menu.
+
+    <details>
+    <summary>Troubleshooting: Where did my service map go?</summary>
+
+    The X-Ray dashboard has a time range drop-down menu in the upper right hand corner. This can be a custom time period or a relative time period, e.g. Last 5 minutes. If your service map goes blank while you're exploring, you may have exceeded the specified time range. Use the drop-down menu to extend the time window if needed, i.e. try changing it to last 30 min so it displays older trace data. Or generate more traffic to the application which will populate the service map with fresh data.
+    </details>
 
 ### [5] Reduce the signal from the noise
 
@@ -431,31 +439,32 @@ Note: Throughout this workshop, we're going to focus purely on the Like service 
     Request 5 returned: <Response [404]>
     ```
 
-
-    `Ctrl-C` will kill the process.
+    The script will automatically stop after generating 1200 POST requests, so re-run as needed. `Ctrl-C` will kill the process, if desired.
 
     Here is some documentation to help you along. If you get stuck/confused or are short on time, reveal the hint below for step by step:
 
     * [Filter expression documentation](https://docs.aws.amazon.com/xray/latest/devguide/xray-console-filters.html)
 
-<details>
-<summary>HINT: Detailed step by step</summary>
+    <details>
+    <summary>HINT: Detailed step by step</summary>
 
-1. Click on **Create group** in the dropdown menu next to the X-Ray dashboard's filtering search bar.
+    1. Click on **Create group** in the dropdown menu next to the X-Ray dashboard's filtering search bar.
 
-    ![Create group](./images/01-05a_createGroup.png)
+        ![Create group](./images/01-05a_createGroup.png)
 
-2. Enter a name, e.g. `like-service`
+    2. Enter a name `like-service`
 
-3. Enter `service("Like Service") AND http.method = "POST"` into the filter expression field.
+    3. Enter `service("Like Service") AND http.method = "POST"` into the filter expression field.
 
-    **PLEASE READ:** if you copy/paste the expression above into the filter expression field, make sure you type a space at the end. We discovered a bug in the UI where field validation seems to expect some keyboard input; Ctrl-V alone will not work, hence adding the space. The product team has been made aware, and this will be fixed in a future release. Apologies for the inconvenience.
+        **PLEASE READ:** if you copy/paste the expression above into the filter expression field, make sure you type a space at the end. We discovered a bug in the UI where field validation seems to expect some keyboard input; Ctrl-V alone will not work, hence adding the space. The product team has been made aware, and this will be fixed in a future release. Apologies for the inconvenience.
 
-4. Click **Create**
+    4. Click **Create**
 
-    ![Create group answer](./images/01-05a_createGroupAnswer.png)
+        ![Create group answer](./images/01-05a_createGroupAnswer.png)
 
-</details>
+        Note: As noted earlier in the lab, it may take a minute for the service map to render the trace data. Make sure either there are requests being made against the app using either the ryder utility or by manually clicking around the site. Move on to the next task, and once complete, review the service maps and trace data based on the new filter expressions.
+
+    </details>
 
 #### b. Filter on HTTP error codes
 
@@ -465,24 +474,29 @@ Note: Throughout this workshop, we're going to focus purely on the Like service 
 
     * [Filter expression documentation](https://docs.aws.amazon.com/xray/latest/devguide/xray-console-filters.html)
 
-<details>
-<summary>HINT: Detailed step by step</summary>
+    <details>
+    <summary>HINT: Detailed step by step</summary>
 
-1. Click on **Create group** in the dropdown menu next to the X-Ray dashboard's filtering search bar.
+    1. Click on **Create group** in the dropdown menu next to the X-Ray dashboard's filtering search bar.
 
-    ![Create group](./images/01-05a_createGroup.png)
+        ![Create group](./images/01-05a_createGroup.png)
 
-2. Enter a name, e.g. `like-service-errors-faults`
+    2. Enter a name `like-service-errors-faults`
 
-3. Enter `service("Like Service") { error = true OR fault = true }` into the filter expression field.
+    3. Enter `service("Like Service") { error = true OR fault = true }` into the filter expression field.
 
-    **PLEASE READ:** if you copy/paste the expression above into the filter expression field, make sure you type a space at the end. We discovered a bug in the UI where field validation seems to expect some keyboard input; Ctrl-V alone will not work, hence adding the space. The product team has been made aware, and this will be fixed in a future release. Apologies for the inconvenience.
+        **PLEASE READ:** if you copy/paste the expression above into the filter expression field, make sure you type a space at the end. We discovered a bug in the UI where field validation seems to expect some keyboard input; Ctrl-V alone will not work, hence adding the space. The product team has been made aware, and this will be fixed in a future release. Apologies for the inconvenience.
 
-4. Click **Create**
+    4. Click **Create**
 
-</details>
+    </details>
+
+2. Review the (2) new filter expression groups you created. You can select each from the same drop-down menu used to create the groups. For example, your **like-service-errors-faults** should similar to below -
+
+    ![X-Ray Like service errors/faults](./images/01-05b_errors-faults.png)
 
 ### Checkpoint
+
 Congratulations!!!  You've successfully instrumented the Like service to enable tracing. You also used filter expressions to group important trace data. This data gets reported to CloudWatch as a metric which you can use for operational dashboards and setting up alarms. On to the next lab!
 
 Proceed to [Lab 2](../lab-2-agg)!

@@ -1,4 +1,4 @@
-# Mythical Mysfits: Multi-Region-Workshop
+# Mythical Mysfits: Building Multi-Region Applications that Align with BC/DR Objectives
 
 ![mysfits-welcome](../images/mysfits-welcome.png)
 
@@ -90,13 +90,25 @@ If you're not attending an AWS event, you will need to use your own account. Mak
 
     </details>
 
-7. Click **Create Stack** to launch the CloudFormation stack.
+7. Click **Create stack** to launch the CloudFormation stack.
 
-    The CloudFormation stack will take a few minutes to launch. You can check on the stack creation process in the CloudFormation Dashboard. Your stack should show status **CREATE\_COMPLETE** in roughly 5-10 minutes. If you select box next to your stack and click on the **Events** tab, you can see what steps it's on.
+    The CloudFormation stack will take a few minutes to launch. You can check on process in the CloudFormation Dashboard by clicking on your workshop stack and the **Stack info** tab. If the status shows **CREATE_COMPLETE**, otherwise it'll still show **CREATE_IN_PROGRESS**. If stack creation is still in progress, click on the **Events** tab where you can see what steps it's on.
 
     ![CloudFormation CREATE_COMPLETE](images/cfn-create-complete.png)
 
-    If there was an [error](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/troubleshooting.html#troubleshooting-errors) during the stack creation process, CloudFormation will rollback and terminate. You can investigate and troubleshoot by looking in the Events tab. Any errors encountered during stack creation will appear in the event stream as a failure.
+    <details>
+    <summary>Troubleshooting: What if I see a CloudFormation error?</summary>
+
+    If you're at an AWS event, raise your hand and session support will help you.
+
+    If there was a problem during stack creation, CloudFormation will rollback changes. Click on the **Events** tab and look through the event stream to find the failure(s) encountered during stack creation. You'll see **CREATE_FAILED** for the resource(s) it had problems with. Use the error message(s) reported in the event stream to see if you can figure out how to fix the issue. Once you think you've worked out the problem, delete the stack, then try to re-create it.
+
+    Helpful links:
+
+    * [CloudFormation stack status codes](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-describing-stacks.html#w2ab1c15c15c17c11)
+    * [CloudFormation troubleshooting](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/troubleshooting.html#troubleshooting-errors)
+
+    </details>
 
     Move on to the next section while the stack creation is in progress.
 
