@@ -433,12 +433,13 @@ Modify the X-Ray widget on the CloudWatch dashboard to include X-Ray metrics fro
 
 * Click Update widget
 
+## Important - Save your CloudWatch Dashboard! ##
 </details>
 
-## Important - Save your CloudWatch Dashboard! ##
+</details>
 
 # Checkpoint
 
-At this time, your application should be running in both regions and you have some visibility into the underlying infrastructure in both regions. Hit the secondary **SecondaryLoadBalancerDNS** that you copied earlier. You should see the exact same site you had before, but the **region** at the top right should show your Secondary region.
+At this time, your application should be running in both regions and you have some visibility into the underlying infrastructure in both regions. Hit the secondary **SecondaryLoadBalancerDNS** that you copied earlier. You should see the exact same site you had before, but the **region** at the top left should show your Secondary region.
 
 Proceed to [Lab 4](../lab-4-globalacc)!
