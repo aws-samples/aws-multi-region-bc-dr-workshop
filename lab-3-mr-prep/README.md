@@ -14,7 +14,7 @@
 * [Replicate data tier](#2-replicate-data-tier)
 * [Replicate deployment infrastructure](3-replicate-deployment-infrastructure)
 * [Replicate build artifacts](#4-replicate-build-artifacts)
-* [Enable CloudWatch dashboard to show multi-region metrics](#5-enable-cloudwatch-dashboard-to-show-multi-region-metrics)
+* [Enable CloudWatch dashboard to show multi-region metrics](#5-enabling-CloudWatch-Dashboard-to-show-multi-region-metrics)
 
 [Lab 4: Implement Traffic Management - Global Accelerator](../lab-4-globalacc)
 
@@ -272,7 +272,7 @@ The last step of both of the options above will commit and push your new applica
 
 ![finished cp deploy multi-region](images/03-codepipeline-complete.png)
 
-### [3] Enabling CloudWatch Dashboard to show multi-region metrics
+### [5] Enabling CloudWatch Dashboard to show multi-region metrics
 
 Now that you have deployed the stack in the secondary region, lets adjust the CloudWatch dashboard that you created in the previous lab to include these new resources. This will provide visibility to the Core and Like services running across both regions on the same dashboard.
 
@@ -318,7 +318,7 @@ Follow the steps below, using the provided documentation (and hints if you get s
 <details>
 <summary>Option 2: Step-by-step manual instructions</summary>
 
-### 3. Edit the widgets to show metrics from the secondary region
+### 5. Edit the widgets to show metrics from the secondary region
 
 With Amazon CloudWatch, we have the ability to stack metrics on top of each other in a widget that contains a graph. This will be useful in our case where we are viewing the same metric type, over two resources. We'll do this in the steps below in addition to adding the metrics from the other region.
 
@@ -413,32 +413,29 @@ Refer back to [Lab 1, section 5](https://github.com/aws-samples/aws-multi-region
 
 ## d. Update X-Ray widget on CloudWatch dashboard to show faults and errors metrics
 
-THIS NEEDS TO BE UPDATED
+Modify the X-Ray widget on the CloudWatch dashboard to include X-Ray metrics from the secondary region. To do this, follow these steps from within your CloudWatch dashboard:
 
-Modify the X-Ray widget on the CloudWatch dashboard Per Minute widget to show the metrics from the ALB in the secondary region:
-
-* Open up the [CloudWatch Dashboards](https://console.aws.amazon.com/cloudwatch/) page and select the dashboard from the previous lab
-* Change the region (top right of screen) to your Secondary region
-* Add in the **RequestCount** metric for the ALB in the secondary region (default us-east-1)
-* Add in the **ALB 2XX, 4XX and 5XX** metrics for the ALB in the secondary region (default us-east-1)
-* Change the metric labels to identify the correct region for specified metric
+* Hover over the top of the X-Ray widget and select and select Edit in the top right corner
+* From the **All metrics** tab, select **X-Ray**, then **Group Metrics**
+* Select the tickbox for the metric with **like-service-errors-faults** in the GroupName
+* Click Update widget
 
 <details>
     <summary>Hint with screenshots:</summary>
 
-* Hover over the widget and select Edit in the top right hand corner
+* Hover over the top of the X-Ray widget and select and select Edit in the top right corner
 
-![image](https://user-images.githubusercontent.com/23423809/69710628-951bb480-10b4-11ea-9a0c-ca8e8b603030.png)
-* Select the All Metrics tab -> ApplicationELB -> Per AppELB Metrics and add in the **requestcount** metric from the ALB
-![image](https://user-images.githubusercontent.com/23423809/69883408-f09e9b80-1288-11ea-9605-79c0969666d8.png)
-* Select Graphed Metrics and change the label to match the region
-![image](https://user-images.githubusercontent.com/23423809/69883467-3196b000-1289-11ea-884d-5cce782fe962.png)
-* Click **Update widget**
-    </details>
+![image](https://user-images.githubusercontent.com/23423809/69912670-7cc3d680-13e1-11ea-8193-1ac4b880b714.png)
 
-## Important - Save your CloudWatch Dashboard! ##
+* From the **All metrics** tab, select **X-Ray**, then **Group Metrics**
+* Select the tickbox for the metric with **like-service-errors-faults** in the GroupName
+![image](https://user-images.githubusercontent.com/23423809/69912706-e04e0400-13e1-11ea-9725-62879766f6af.png)
+
+* Click Update widget
 
 </details>
+
+## Important - Save your CloudWatch Dashboard! ##
 
 # Checkpoint
 
