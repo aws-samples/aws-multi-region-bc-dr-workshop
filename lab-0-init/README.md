@@ -196,3 +196,7 @@ The script takes less than a minute to run. When you see **"Profile associated s
 # Checkpoint
 
 You now have an operational workshop environment to work with. [Proceed to Lab 1](../lab-1-xray)
+
+## Participation
+
+We encourage participation; if you find anything, please submit an [issue](https://github.com/aws-samples/aws-multi-region-bc-dr-workshop/issues). However, if you want to help raise the bar, submit a [PR](https://github.com/aws-samples/aws-multi-region-bc-dr-workshop/pulls)!
