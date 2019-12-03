@@ -510,6 +510,7 @@ Proceed to [Lab 2](../lab-2-agg)!
 
 We encourage participation; if you find anything, please submit an [issue](https://github.com/aws-samples/aws-multi-region-bc-dr-workshop/issues). However, if you want to help raise the bar, submit a [PR](https://github.com/aws-samples/aws-multi-region-bc-dr-workshop/pulls)!
 
-## License
+<!--## License
 
 This library is licensed under the Apache 2.0 License.
+-->
