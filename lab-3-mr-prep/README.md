@@ -26,6 +26,8 @@ Moving to a multi-region application is no easy task. We need to not only make s
 
 In this lab, you will begin preparations for moving your application to multiple regions. It's very common to forget a number of steps along the way as many people will mainly think of infrastructure and the application itself to move over, but there are a number of assets that also need to be referenced.
 
+![Lab-3-Architecture](images/lab-3-arch.png)
+
 These are the things that we will need to replicate and/or also automate:
 * Infrastructure
   * Network
