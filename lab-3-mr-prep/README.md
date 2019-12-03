@@ -69,7 +69,7 @@ There are a number of different ways to achieve this, like using [AWS CloudForma
    * ECS (task definitions, services, etc)
    * CICD Stack (AWS CodePipeline, AWS CodeBuild)
 
-   What you just did was replicate a portion of that based on the `IsDrRegion=true` flag. We set the flag to true this time to spin up some additional resources and not spin up others.
+   What you just did was replicate a portion of that based on the `IsSecondary=true` flag. We set the flag to true this time to spin up some additional resources and not spin up others.
 </details>
 
 Once you see **Waiting for changeset to be created..Waiting for stack create/update to complete**, you can continue on. This doesn't mean the stack is done, but you can do the Database Replication portion in parallel. Check back later and make sure you see **Successfully created/updated stack - mm-secondary-region**.
