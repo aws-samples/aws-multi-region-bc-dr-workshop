@@ -172,7 +172,7 @@ Isolation could also be another reason to have a second pipeline in a second reg
 
 ### [4] Replicate build artifacts
 
-There are a number of ways to replicate your artifacts to another region. For S3, we could use [S3 Cross Region Replication](), for ECR, there are solutions like [some solution](). In this case, we will update our build scripts to push the same Docker container to another region. In the previous section, we automated the deployments into another region and as part of the workshop initialization, we gave you the application for both **core** and **like** services. We will now have to update the buildspec_prod.yml file of both services to upload the container images to the secondary region.
+There are a number of ways to replicate your artifacts to another region. For S3, we could use [S3 Cross Region Replication](https://docs.aws.amazon.com/AmazonS3/latest/dev/replication.html), for ECR, there are solutions like the [Amazon ECR repositories cross-region replication solution](https://github.com/aws-samples/amazon-ecr-cross-region-replication). There's also a [feature request](https://github.com/aws/containers-roadmap/issues/140) with the ECR team. In this case, we will update our build scripts to push the same Docker container to another region. In the previous section, we automated the deployments into another region and as part of the workshop initialization, we gave you the application for both **core** and **like** services. We will now have to update the buildspec_prod.yml file of both services to upload the container images to the secondary region.
 
 <details>
   <summary>Learn more: What is a buildspec file?</summary><br>
