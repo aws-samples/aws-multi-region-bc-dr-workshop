@@ -238,3 +238,22 @@ At this time, the Global Accelerator will have redirected all incoming traffic t
 
 
   </details>
+
+### Congratulations - you have completed this workshop!
+
+### IMPORTANT: Workshop Cleanup
+
+If you're attending an AWS event and are provided an account to use, you can ignore this section because we'll destroy the account once the workshop concludes.
+
+**If you are using your own account**, it is **VERY** important you clean up resources created during the workshop. Follow these steps to delete the main workshop CloudFormation stack once you're done going through the workshop:
+
+1. Navigate to the [CloudFormation dashboard](https://console.aws.amazon.com/cloudformation/home#/stacks) and click on your workshop stack name to load stack details
+2. Click **Delete** to delete the stack
+
+There are helper Lambda functions that should clean things up when you delete the main stack. However, if there's a stack deletion failure due to a race condition, follow these steps:
+
+1. In the CloudFormation dashboard, click on the **Events** section, and review the event stream to see what failed to delete
+2. Manually delete those resources by visiting the respective service's dashboard in the management console
+3. Once you've manually deleted the resources, try to delete the main workshop CloudFormation stack again. Repeat steps 1-3 if you still see deletion failures
+
+***
