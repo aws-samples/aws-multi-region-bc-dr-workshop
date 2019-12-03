@@ -85,3 +85,7 @@ There are helper Lambda functions that should clean things up when you delete th
 ## Let's Begin!
 
 [Go to Lab-0 to set up your environment](lab-0-init)
+
+## Participation
+
+We encourage participation; if you find anything, please submit an [issue](https://github.com/aws-samples/aws-multi-region-bc-dr-workshop/issues). However, if you want to help raise the bar, submit a [PR](https://github.com/aws-samples/aws-multi-region-bc-dr-workshop/pulls)!
