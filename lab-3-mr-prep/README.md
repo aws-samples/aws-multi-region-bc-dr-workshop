@@ -246,11 +246,11 @@ First, we will update the **core-service** app.
 5. Finally, add all the files to both repos and trigger new deployments:
 
     ```  
-    $ cd ~/environment/<b>core-service-[PRESS TAB TO AUTO COMPLETE AND PRESS ENTER]</b>
+    $ cd ~/environment/core-service-[PRESS TAB TO AUTO COMPLETE AND PRESS ENTER]
     $ git add -A
     $ git commit -m "Updating core buildspec for multi-region deploy"
     $ git push origin master
-    $ cd ~/environment/<b>like-service-[PRESS TAB TO AUTO COMPLETE AND PRESS ENTER]</b>
+    $ cd ~/environment/like-service-[PRESS TAB TO AUTO COMPLETE AND PRESS ENTER]
     $ git add -A
     $ git commit -m "Updating like buildspec for multi-region deploy"
     $ git push origin master
