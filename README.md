@@ -71,15 +71,20 @@ If you're attending an AWS event and are provided an account to use, you can ign
 
 **If you are using your own account**, it is **VERY** important you clean up resources created during the workshop. Follow these steps once you're done going through the workshop to delete resources that were created:
 
-1. Delete any manually created assets - for example, Global Accelerator from lab 4 (if you got to/past that point).
-2. Navigate to the [CloudFormation dashboard](https://console.aws.amazon.com/cloudformation/home#/stacks) and click on your workshop stack name to load stack details
-3. Click **Delete** to delete the stack
+1. Delete any manually created assets - for example, Global Accelerator from lab 4 (if you got to that point).
+2. Navigate to the [CloudFormation dashboard](https://console.aws.amazon.com/cloudformation/home#/stacks) in the primary region and click on your workshop stack name to load stack details.
+3. Click **Delete** to delete the stack.
+4. Repeat steps 2-3 for the secondary region.
 
+<details>
+<summary>Troubleshooting: Stack delete failed</summary>
 There are helper Lambda functions that should clean things up when you delete the main stack. However, if there's a stack deletion failure due to a race condition, follow these steps:
 
 1. In the CloudFormation dashboard, click on the **Events** section, and review the event stream to see what failed to delete
 2. Manually delete those resources by visiting the respective service's dashboard in the management console
 3. Once you've manually deleted the resources, try to delete the main workshop CloudFormation stack again. Repeat steps 1-3 if you still see deletion failures
+
+</details>
 
 * * *
 
