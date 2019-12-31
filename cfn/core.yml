@@ -666,6 +666,7 @@ Resources:
 
   MythicalLoadBalancer:
     Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    DependsOn: GatewayAttachement
     Properties:
       Name: !Sub alb-${AWS::StackName}
       Scheme: internet-facing
