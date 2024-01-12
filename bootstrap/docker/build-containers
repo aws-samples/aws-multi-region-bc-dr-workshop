@@ -13,7 +13,7 @@ fi
 sed_prog="s|REPLACE_ME_API_ENDPOINT|http://$API_ENDPOINT|;"
 $sed_cmd -i $sed_prog app/mysfits-service/service/mythicalMysfitsService.py
 
-$(aws ecr get-login --no-include-email)
+#$(aws ecr get-login --no-include-email)
 
 # Nov 27, 2019 - Mui
 # We used to build container images here, but that's now handled by the CI/CD

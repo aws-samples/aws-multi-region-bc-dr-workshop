@@ -4,7 +4,7 @@ set -eu
 
 echo "Installing dependencies..."
 sudo yum install -y jq
-sudo python36 -m pip install requests
+sudo python3 -m pip install requests
 echo "Fetching CloudFormation outputs..."
 bootstrap/fetch-outputs
 echo "Populating DynamoDB table..."

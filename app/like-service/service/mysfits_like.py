@@ -4,7 +4,7 @@ import os
 import sys
 import logging
 import random
-from urlparse import urlparse
+from urllib.parse import urlparse
 from flask import Flask, jsonify, json, Response, request, abort
 from flask_cors import CORS
 import mysfitsTableClient
